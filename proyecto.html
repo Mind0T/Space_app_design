@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ORBITAL · Descripción del Proyecto — Tacos de Asada</title>
+<meta name="description" content="Descripción del proyecto ORBITAL: monitoreo de salud física y mental para astronautas en misiones de larga duración. Equipo Tacos de Asada — NASA Space Apps CDMX 2026." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=Overpass:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy-900:#071428;--navy-800:#0a1a33;--navy-700:#0d2244;--navy-600:#102a55;
+    --royal:#1e52c8;--royal-bright:#2a66e6;--blue-soft:#4e8fe6;--blue-pale:#9cc1f2;
+    --lime:#d7e64b;--white:#f4f8ff;--mute:#a9bbd6;--line:rgba(156,193,242,.16);
+    --card:rgba(18,38,74,.6);--ok:#4ccb8f;--warn:#f2c14e;--crit:#ef6a5a;
+    --maxw:980px;--r:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"Overpass",system-ui,sans-serif;background:var(--navy-900);color:var(--white);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  h1,h2,h3{font-family:"Archivo",sans-serif;letter-spacing:-.01em}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .eyebrow{font-family:"Archivo";font-weight:800;text-transform:uppercase;letter-spacing:.14em;font-size:.74rem;color:var(--lime);display:inline-flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--lime);display:inline-block}
+  section{position:relative;padding:60px 0}
+  .divline{height:1px;background:var(--line);max-width:var(--maxw);margin:0 auto}
+  .rings{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .rings span{position:absolute;border-radius:50%;border:1px solid rgba(120,160,230,.10)}
+  .inner{position:relative;z-index:1}
+  .numtag{font-family:"Archivo";font-weight:900;color:var(--lime);font-size:1.4rem}
+  h2{font-size:clamp(1.7rem,3.6vw,2.4rem);font-weight:900;line-height:1.06;margin:10px 0 18px}
+  p{color:var(--mute);margin-bottom:14px;font-size:1.02rem}
+  p b,li b{color:var(--white);font-weight:600}
+  em{color:var(--blue-soft);font-style:normal}
+
+  /* HERO */
+  .hero{background:
+      radial-gradient(1000px 620px at 82% 12%, rgba(30,82,200,.42), transparent 60%),
+      radial-gradient(800px 500px at 8% 92%, rgba(20,50,130,.34), transparent 60%),
+      linear-gradient(180deg,var(--navy-800),var(--navy-900));padding:70px 0 54px}
+  .brandmark{display:flex;align-items:center;gap:14px;margin-bottom:30px}
+  .logo-ring{width:44px;height:44px;flex:0 0 auto}
+  .brandmark .bt small{display:block;font-size:.58rem;letter-spacing:.3em;color:var(--mute);font-weight:700;font-family:"Archivo"}
+  .brandmark .bt b{font-size:.98rem;letter-spacing:.04em;font-family:"Archivo";font-weight:900;text-transform:uppercase}
+  .hero h1{font-weight:900;font-size:clamp(2.6rem,6.4vw,4.6rem);line-height:.96;margin:14px 0 10px}
+  .hero h1 .hl{color:var(--lime)}
+  .hero .tag{font-family:"Archivo";font-weight:700;color:var(--blue-soft);font-size:clamp(1.05rem,2vw,1.4rem);margin-bottom:28px}
+
+  .team{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;margin-bottom:24px}
+  .team .lbl{font-family:"Archivo";font-weight:800;text-transform:uppercase;letter-spacing:.1em;font-size:.72rem;color:var(--lime);margin-bottom:6px}
+  .team .tname{font-family:"Archivo";font-weight:900;font-size:1.5rem;margin-bottom:14px}
+  .team .members{display:flex;flex-wrap:wrap;gap:8px}
+  .member{display:inline-flex;align-items:center;gap:8px;background:rgba(30,82,200,.16);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:.88rem;color:var(--white)}
+  .member .me{color:var(--lime);font-weight:700}
+  .member b{width:7px;height:7px;border-radius:50%;background:var(--blue-soft);display:inline-block}
+
+  .linkrow{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:6px}
+  .lnk{display:inline-flex;align-items:center;gap:9px;background:rgba(10,26,51,.5);border:1px solid var(--line);border-radius:12px;padding:11px 17px;text-decoration:none;color:var(--blue-pale);font-family:"Archivo";font-weight:700;font-size:.86rem;transition:.2s}
+  .lnk:hover{border-color:var(--blue-soft);color:var(--white)}
+  .lnk.prime{background:var(--lime);color:#071428;border-color:var(--lime)}
+
+  /* content */
+  .lead-block{font-size:1.14rem;color:var(--blue-pale);max-width:68ch;line-height:1.6}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+  .card h3{font-size:1.12rem;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+  .card p{margin:0;font-size:.96rem}
+  .sphere{border-top:4px solid var(--blue-soft)}
+  .sphere.mind{border-top-color:var(--lime)}
+  .feat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .feat .ic{font-size:1.4rem;margin-bottom:8px}
+  .feat h4{font-family:"Archivo";font-weight:800;font-size:.98rem;margin-bottom:6px}
+  .feat p{font-size:.9rem;margin:0}
+  .sub{font-family:"Archivo";font-weight:800;text-transform:uppercase;letter-spacing:.1em;font-size:.74rem;color:var(--blue-soft);margin:26px 0 12px}
+  ul.clean{list-style:none;display:grid;gap:10px;margin-bottom:12px}
+  ul.clean li{padding-left:22px;position:relative;color:var(--mute);font-size:.98rem}
+  ul.clean li::before{content:"";position:absolute;left:4px;top:10px;width:7px;height:7px;border-radius:50%;background:var(--lime)}
+
+  .flow{display:flex;flex-direction:column;gap:12px}
+  .step{display:flex;gap:16px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .step .k{font-family:"Archivo";font-weight:900;color:var(--lime);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;background:rgba(215,230,75,.1);border:1px solid rgba(215,230,75,.3);border-radius:8px;padding:5px 10px;flex:0 0 auto;white-space:nowrap}
+  .step p{margin:0;font-size:.95rem}
+  .step p b{color:var(--white)}
+
+  .stack{display:flex;flex-wrap:wrap;gap:9px}
+  .tech{background:rgba(10,26,51,.5);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:.84rem;color:var(--blue-pale)}
+  .tech b{color:var(--white)}
+
+  .value{background:linear-gradient(135deg,var(--navy-600),var(--navy-700));border:1px solid var(--line);border-left:4px solid var(--lime);border-radius:var(--r);padding:30px}
+  .value p{font-family:"Archivo";font-weight:600;font-size:clamp(1.15rem,2.3vw,1.6rem);line-height:1.34;color:var(--white);margin:0}
+  .value p .hl{color:var(--lime)}
+
+  footer{padding:44px 0;text-align:center;color:var(--mute);font-size:.82rem;border-top:1px solid var(--line)}
+  footer .logo-ring{width:36px;height:36px;margin:0 auto 12px;display:block}
+
+  @media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- HERO + EQUIPO -->
+<header class="hero">
+  <div class="rings">
+    <span style="width:700px;height:700px;top:-140px;right:-180px"></span>
+    <span style="width:1020px;height:1020px;top:-300px;right:-340px"></span>
+  </div>
+  <div class="wrap inner">
+    <div class="brandmark">
+      <span class="logo-ring"><svg viewBox="0 0 48 48" fill="none"><circle cx="22" cy="26" r="16" stroke="#f4f8ff" stroke-width="2.4"/><path d="M34 14 C 30 10, 24 9, 20 11" stroke="#d7e64b" stroke-width="2.4" stroke-linecap="round"/><circle cx="35" cy="13" r="2.4" fill="#ef6a5a"/></svg></span>
+      <span class="bt"><small>NASA Space Apps Challenge · CDMX 2026</small><b>Descripción del proyecto</b></span>
+    </div>
+
+    <div class="eyebrow">Reto · Health Monitoring Software for Astronauts</div>
+    <h1>ORBITAL</h1>
+    <div class="tag">Inteligencia de salud para la exploración espacial — cuerpo y mente</div>
+
+    <div class="team">
+      <div class="lbl">Equipo</div>
+      <div class="tname">🌮 Tacos de Asada</div>
+      <div class="members">
+        <span class="member"><b></b>Grace Rojas</span>
+        <span class="member"><b></b><span class="me">Irving Soriano</span></span>
+        <span class="member"><b></b>Jonathan Rodríguez</span>
+        <span class="member"><b></b>Rubén Silva</span>
+        <span class="member"><b></b>Rodrigo Roldán</span>
+        <span class="member"><b></b>Rodrigo Ramírez</span>
+      </div>
+    </div>
+
+    <div class="linkrow">
+      <a class="lnk prime" href="pitch.html">Ver la propuesta ampliada →</a>
+      <a class="lnk" href="reto.html">Análisis del reto</a>
+    </div>
+  </div>
+</header>
+
+<!-- RESUMEN -->
+<section>
+  <div class="wrap inner">
+    <span class="numtag">01</span>
+    <div class="eyebrow" style="margin-top:8px">Resumen</div>
+    <h2>Qué es ORBITAL</h2>
+    <p class="lead-block">ORBITAL es un sistema de monitoreo de salud diseñado para astronautas en misiones de larga duración, como un tránsito a Marte, donde la comunicación con la Tierra sufre retrasos de hasta 20 minutos y no existe un médico a bordo. El sistema aprende el comportamiento fisiológico y conductual individual de cada astronauta, detecta desviaciones respecto a su línea base y traduce esos datos en información clara y accionable para que la persona pueda <b>evaluar y actuar sobre su propia salud de forma autónoma</b> — atendiendo por igual la esfera física y la mental.</p>
+  </div>
+</section>
+<div class="divline"></div>
+
+<!-- PROBLEMA -->
+<section>
+  <div class="rings"><span style="width:900px;height:900px;top:-220px;left:-320px"></span></div>
+  <div class="wrap inner">
+    <span class="numtag">02</span>
+    <div class="eyebrow" style="margin-top:8px">El problema</div>
+    <h2>De la dependencia terrestre a la autonomía médica</h2>
+    <p>Las misiones de larga duración exponen a la tripulación a radiación, aislamiento, confinamiento, gravedad alterada y un entorno cerrado hostil, con consecuencias que van desde la pérdida ósea y los eventos cardiovasculares hasta los problemas de salud conductual. A diferencia de la Estación Espacial Internacional, en un viaje a Marte el astronauta debe convertirse en su propio médico de primer contacto: carga con la responsabilidad de <b>detectar los cambios en sí mismo</b> y decidir qué hacer, sin respuesta inmediata desde Tierra.</p>
+    <p>ORBITAL responde a esa necesidad con una herramienta que no solo recopila datos de sensores, sino que es <b>educativa, preventiva y fácil de interpretar</b>, apoyándose en diseño visual y en psicología conductual.</p>
+  </div>
+</section>
+<div class="divline"></div>
+
+<!-- DOS ESFERAS -->
+<section>
+  <div class="wrap inner">
+    <span class="numtag">03</span>
+    <div class="eyebrow" style="margin-top:8px">Nuestra solución</div>
+    <h2>Dos esferas, un mismo sistema</h2>
+    <p>ORBITAL monitorea la salud del astronauta como un todo integrado. La salud mental no es un complemento: es un pilar al mismo nivel que la fisiológica, porque un cuerpo sano no completa la misión si la mente entra en crisis.</p>
+    <div class="grid2">
+      <div class="card sphere">
+        <h3>🫀 Salud fisiológica y anatómica</h3>
+        <p>Frecuencia cardíaca en reposo y variabilidad, patrones de sueño, densidad ósea, masa muscular, respuesta inmune e hidratación. Indicadores que el sistema vigila y proyecta sobre una <b>figura anatómica interactiva</b>, para ubicar de un vistazo qué parte del cuerpo requiere atención.</p>
+      </div>
+      <div class="card sphere mind">
+        <h3>🧠 Salud mental y conductual</h3>
+        <p>Estrés, estado de ánimo, calidad del sueño y agudeza cognitiva, rastreados de forma indirecta (tiempo de sueño, velocidad de respuesta, diarios interactivos, mini-juegos). Un frente tratado como <b>indicador de primera clase</b>, no como un campo suelto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divline"></div>
+
+<!-- MOTOR -->
+<section>
+  <div class="rings"><span style="width:1000px;height:1000px;top:-260px;right:-360px"></span></div>
+  <div class="wrap inner">
+    <span class="numtag">04</span>
+    <div class="eyebrow" style="margin-top:8px">El motor tecnológico</div>
+    <h2>Aprende, detecta, explica</h2>
+    <p>El núcleo de ORBITAL es un motor de <em>forecasting</em> personalizado que aprende la línea base de cada astronauta, acompañado de un asistente conversacional que convierte sus resultados en información comprensible.</p>
+    <div class="flow">
+      <div class="step"><span class="k">Before · Baseline</span><p>El sistema recopila el historial del astronauta y, mediante modelos de series temporales, aprende su comportamiento habitual y <b>pronostica los valores esperados</b> de sus indicadores.</p></div>
+      <div class="step"><span class="k">During · Detección</span><p>Conforme llegan nuevas mediciones, compara lo observado contra lo pronosticado. Ante una desviación relevante y <b>persistente</b>, genera una alerta contextualizada: qué indicador, valor esperado vs. observado y desde cuándo.</p></div>
+      <div class="step"><span class="k">Triaje · ¿cuerpo o mente?</span><p>Antes de asumir lo peor, el sistema discierne el <b>componente psicofisiológico</b>: un dolor de pecho o una migraña pueden originarse en el estrés crónico. Cruza biométricos y contexto para orientar — sin descartar lo cardíaco — y guiar los siguientes pasos.</p></div>
+      <div class="step"><span class="k">After · Seguimiento</span><p>Registra el evento, evalúa otros indicadores, hace preguntas sobre síntomas y contexto, y propone acciones y protocolos de revisión, dando seguimiento a la evolución.</p></div>
+    </div>
+    <div class="sub">División de responsabilidades</div>
+    <div class="grid2">
+      <div class="card"><h3>📊 Machine Learning</h3><p>Procesa datos, pronostica valores y detecta anomalías (Rolling Mean/EWMA, Exponential Smoothing, ARIMA, Isolation Forest). Se empieza con modelos interpretables y se compara su desempeño.</p></div>
+      <div class="card"><h3>💬 Asistente (LLM)</h3><p>Explica las alertas, interpreta los cambios, da instrucciones simples para tomar mediciones, consulta protocolos documentados (RAG) y acompaña el seguimiento. No diagnostica: traduce y guía.</p></div>
+    </div>
+  </div>
+</section>
+<div class="divline"></div>
+
+<!-- PROPUESTA VISUAL -->
+<section>
+  <div class="wrap inner">
+    <span class="numtag">05</span>
+    <div class="eyebrow" style="margin-top:8px">La propuesta visual</div>
+    <h2>Un compañero, no un historial de hospital</h2>
+    <p>La interfaz traduce datos complejos en lectura inmediata. El dashboard se organiza en cinco secciones y se adapta al entorno de la misión mediante un selector (nave, estación, rover o base planetaria).</p>
+    <div class="grid3">
+      <div class="feat"><div class="ic">🧍</div><h4>Figura humana clicable</h4><p>Cada parte del cuerpo es interactiva y muestra su indicador, su función y su estado.</p></div>
+      <div class="feat"><div class="ic">🚦</div><h4>Código de colores</h4><p>Verde, amarillo y rojo para interpretar cada indicador de un vistazo, incluso bajo estrés.</p></div>
+      <div class="feat"><div class="ic">📈</div><h4>Gráficas dinámicas</h4><p>Tendencias, línea base y valores pronosticados a lo largo del tiempo.</p></div>
+      <div class="feat"><div class="ic">🧭</div><h4>Centro de anomalías</h4><p>Eventos detectados, prioridad y explicación clara de cada uno.</p></div>
+      <div class="feat"><div class="ic">🌍</div><h4>Ventana a la Tierra</h4><p>Ver la Tierra como recurso de bienestar (efecto salutogénico, respaldado por la NASA).</p></div>
+      <div class="feat"><div class="ic">📋</div><h4>Instrucciones simples</h4><p>Explicaciones de mediciones, indicadores y riesgos: no se asume conocimiento clínico.</p></div>
+    </div>
+  </div>
+</section>
+<div class="divline"></div>
+
+<!-- GAMIFICACION -->
+<section>
+  <div class="rings"><span style="width:900px;height:900px;top:-200px;left:-300px"></span></div>
+  <div class="wrap inner">
+    <span class="numtag">06</span>
+    <div class="eyebrow" style="margin-top:8px">Psicología conductual y gamificación</div>
+    <h2>Que cuidarse sea la acción de menor resistencia</h2>
+    <p>En el confinamiento extremo la fuerza de voluntad se desgasta y las tareas rutinarias se abandonan. ORBITAL aplica psicología conductual para que monitorearse se vuelva un hábito automático, no una carga.</p>
+    <div class="grid3">
+      <div class="feat"><div class="ic">👆</div><h4>Nudges</h4><p>Empujoncitos cognitivos que estructuran las tareas de salud para que requieran el mínimo esfuerzo.</p></div>
+      <div class="feat"><div class="ic">🔥</div><h4>Rachas y recompensas</h4><p>Streaks, hitos e insignias que combaten la monotonía — microdosis de dopamina que sostienen el hábito.</p></div>
+      <div class="feat"><div class="ic">🧩</div><h4>Mini-juegos cognitivos</h4><p>Detectan declive mental sutil sin que se sienta un examen psiquiátrico diario.</p></div>
+    </div>
+  </div>
+</section>
+<div class="divline"></div>
+
+<!-- ALCANCE + STACK -->
+<section>
+  <div class="wrap inner">
+    <span class="numtag">07</span>
+    <div class="eyebrow" style="margin-top:8px">Alcance y tecnología</div>
+    <h2>Un MVP pequeño, fundamentado y funcional</h2>
+    <p>Para el tiempo del hackathon nos concentramos en dos indicadores principales — <b>frecuencia cardíaca en reposo</b> y <b>patrones de sueño</b> — trabajando con datos sintéticos que simulan ~14 días de mediciones, con patrones habituales y escenarios de anomalía. La arquitectura queda preparada para integrar dispositivos reales (Actiwatch, smartwatch) posteriormente.</p>
+    <div class="sub">Stack tecnológico</div>
+    <div class="stack">
+      <span class="tech"><b>Python</b> · procesamiento</span>
+      <span class="tech"><b>Pandas / NumPy</b></span>
+      <span class="tech"><b>Scikit-learn / Statsmodels</b> · forecasting</span>
+      <span class="tech"><b>React</b> · interfaz</span>
+      <span class="tech"><b>FastAPI</b> · backend</span>
+      <span class="tech"><b>Plotly</b> · visualización</span>
+      <span class="tech"><b>SQLite</b> · almacenamiento</span>
+      <span class="tech"><b>LLM + RAG</b> · asistente</span>
+    </div>
+  </div>
+</section>
+<div class="divline"></div>
+
+<!-- VALOR -->
+<section>
+  <div class="wrap inner">
+    <span class="numtag">08</span>
+    <div class="eyebrow" style="margin-top:8px">Propuesta de valor</div>
+    <h2>Lo que nos distingue</h2>
+    <div class="value">
+      <p>Pasamos de monitorear indicadores aislados a <span class="hl">comprender la evolución individual de la salud</span> de cada astronauta — cuerpo y mente. Los sensores recopilan, el modelo aprende y detecta, el asistente interpreta y el sistema acompaña, convirtiendo un frío chequeo médico en un compañero que mantiene a la tripulación segura y comprometida a millones de kilómetros de casa.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="logo-ring"><svg viewBox="0 0 48 48" fill="none"><circle cx="22" cy="26" r="16" stroke="#9cc1f2" stroke-width="2.4"/><path d="M34 14 C 30 10, 24 9, 20 11" stroke="#d7e64b" stroke-width="2.4" stroke-linecap="round"/><circle cx="35" cy="13" r="2.4" fill="#ef6a5a"/></svg></span>
+  ORBITAL · Equipo Tacos de Asada — NASA Space Apps Challenge CDMX 2026<br/>
+  Reto <em>Health Monitoring Software for Astronauts on Space Missions</em>
+</footer>
+
+</body>
+</html>
