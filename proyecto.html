@@ -95,7 +95,16 @@
   footer{padding:44px 0;text-align:center;color:var(--mute);font-size:.82rem;border-top:1px solid var(--line)}
   footer .logo-ring{width:36px;height:36px;margin:0 auto 12px;display:block}
 
-  @media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr}}
+  .refs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .refs a{color:var(--mute);font-size:.86rem;text-decoration:none;padding:13px 15px;background:var(--card);border:1px solid var(--line);border-radius:12px;transition:.2s;display:block}
+  .refs a:hover{border-color:var(--blue-soft);color:var(--white)}
+  .refs a b{color:var(--white);font-weight:600;display:block;margin-bottom:2px}
+
+  @media(max-width:760px){
+    .grid2,.grid3,.refs{grid-template-columns:1fr}
+    .step{flex-direction:column;gap:10px}
+    .step .k{align-self:flex-start}
+  }
 </style>
 </head>
 <body>
@@ -269,6 +278,28 @@
     <h2>Lo que nos distingue</h2>
     <div class="value">
       <p>Pasamos de monitorear indicadores aislados a <span class="hl">comprender la evolución individual de la salud</span> de cada astronauta — cuerpo y mente. Los sensores recopilan, el modelo aprende y detecta, el asistente interpreta y el sistema acompaña, convirtiendo un frío chequeo médico en un compañero que mantiene a la tripulación segura y comprometida a millones de kilómetros de casa.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divline"></div>
+
+<!-- REFERENCIAS -->
+<section>
+  <div class="wrap inner">
+    <span class="numtag">09</span>
+    <div class="eyebrow" style="margin-top:8px">Referencias</div>
+    <h2>En qué nos basamos</h2>
+    <p style="margin-bottom:22px">Fuentes oficiales de la NASA y literatura científica que fundamentan nuestras decisiones de diseño.</p>
+    <div class="refs">
+      <a href="https://www.nasa.gov/humans-in-space/the-human-body-in-space/" target="_blank" rel="noopener"><b>The Human Body in Space (marco RIDGE)</b>NASA Human Research Program</a>
+      <a href="https://www.psychiatrictimes.com/view/psychiatric-issues-space" target="_blank" rel="noopener"><b>Psychiatric Issues in Space</b>N. Kanas · Psychiatric Times</a>
+      <a href="https://ntrs.nasa.gov/api/citations/20240000994/downloads/Behavioral%20Risk%20In%20Spaceflight_Picano.pdf" target="_blank" rel="noopener"><b>Behavioral Risk in Spaceflight</b>NASA BHP · Picano (PDF)</a>
+      <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12155433/" target="_blank" rel="noopener"><b>Circadian Disruption &amp; Sleep Disorders in Astronauts (2025)</b>Int. J. Mol. Sci.</a>
+      <a href="https://www.uh.edu/news-events/stories/2021/april-2021/04202021-candice-alfano-astronaut-antarctica-mental-health.php" target="_blank" rel="noopener"><b>Mental Health Checklist (autoreporte)</b>C. Alfano · University of Houston</a>
+      <a href="https://ntrs.nasa.gov/api/citations/20230003796/downloads/NASA-TP-2023003796%20SSRI%20Manuscript.pdf" target="_blank" rel="noopener"><b>SSRIs in Spaceflight (revisión 100+ estudios)</b>NASA Technical Paper</a>
+      <a href="https://www.nasa.gov/missions/station/human-research-studying-astronaut-physiology" target="_blank" rel="noopener"><b>Studying Astronaut Physiology (SANS, Twins Study)</b>NASA HRP</a>
+      <a href="https://ntrs.nasa.gov/api/citations/20220013418/downloads/ASCEND-Communication%20Delays%2C%20Disruptions%2C%20and%20Blackouts%20for%20Crewed%20Mars%20Missions.pdf" target="_blank" rel="noopener"><b>Communication Delays &amp; Blackouts for Crewed Mars Missions</b>NASA ASCEND</a>
     </div>
   </div>
 </section>
