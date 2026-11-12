@@ -6,7 +6,7 @@ Prepara las primeras fases (empatizar y definir) para aterrizar el problema ante
 
 ## Contenido
 - **Reto + reframe** — de monitorear indicadores a la autoevaluación del astronauta.
-- **Persona & empathy map** — Cmdr. Elena Ríos (misión a Marte).
+- **Persona & empathy map** — Katya E. (misión a Marte).
 - **Journey map** — Before / During / After (interactivo).
 - **POV + 3 How Might We**.
 - **Figura humana clicable** — prototipo conceptual de la feature estrella (interactivo).

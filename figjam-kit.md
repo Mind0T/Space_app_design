@@ -1,4 +1,4 @@
-# Kit express · FigJam — Mapa de empatía (Elena Ríos)
+# Kit express · FigJam — Mapa de empatía (Katya E.)
 
 Para montar el mapa de empatía en FigJam en ~3 minutos. (No se puede generar un `.fig` automáticamente; esto es para armarlo tú rápido y pegar los textos ya listos.)
 
@@ -13,8 +13,10 @@ Para montar el mapa de empatía en FigJam en ~3 minutos. (No se puede generar un
 Crea un cuadro de texto o sticky grande y pega:
 
 ```
-Cmdr. Elena Ríos · 38 años
-Ingeniera de vuelo · misión a Marte (~18 meses) · sin médico a bordo.
+Katya E. · 30 años
+Ingeniera electrónica y comunicadora científica · Guadalajara, México
+UCLA · NASA JPL (Europa Clipper) · vuelo suborbital NS-21 (2022)
+Misión a Marte (~18 meses) · sin médico a bordo.
 Competente con la tecnología, no es clínica. Detecta sus propios cambios
 con un delay de hasta 20 min con la Tierra.
 Miedo: no notar algo serio a tiempo.
@@ -40,10 +42,12 @@ Pega uno en cada zona y pide al equipo que agregue más:
 
 ## 5. Pasar a Definir
 De las necesidades más votadas, escribe:
-- **POV:** `Elena necesita [necesidad] porque [insight].`
+- **POV:** `Katya necesita [necesidad] porque [insight].`
 - **HMW (2–3):** `¿Cómo podríamos …?`
 
 Ejemplo ya armado:
 - **Necesidad:** interpretar sus propios cambios sin un médico cerca.
-- **POV:** Elena necesita interpretar sus cambios fisiológicos y anímicos con confianza porque no tiene a un médico del otro lado de la línea.
+- **POV:** Katya necesita interpretar sus cambios fisiológicos y anímicos con confianza porque no tiene a un médico del otro lado de la línea.
 - **HMW:** ¿Cómo podríamos distinguir una desviación normal de una alerta, por ella misma?
+
+> Persona inspirada en la trayectoria pública de Katya Echazarreta (https://es.wikipedia.org/wiki/Katya_Echazarreta). El escenario y lo que dice, piensa y siente son hipótesis del equipo, no declaraciones suyas.
