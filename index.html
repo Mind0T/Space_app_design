@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ORBITAL · Design Thinking Starter Kit</title>
+<meta name="description" content="Kit de arranque de Design Thinking para ORBITAL — reto de monitoreo de salud de astronautas, NASA Space Apps CDMX 2026." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=Overpass:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy-900:#071428;
+    --navy-800:#0a1a33;
+    --navy-700:#0d2244;
+    --navy-600:#102a55;
+    --royal:#1e52c8;
+    --royal-bright:#2a66e6;
+    --blue-soft:#4e8fe6;
+    --blue-pale:#9cc1f2;
+    --lime:#d7e64b;
+    --lime-dim:#aeb93a;
+    --white:#f4f8ff;
+    --mute:#a9bbd6;
+    --line:rgba(156,193,242,.16);
+    --card:rgba(18,38,74,.6);
+    --ok:#4ccb8f;
+    --warn:#f2c14e;
+    --crit:#ef6a5a;
+    --maxw:1180px;
+    --r:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Overpass",system-ui,sans-serif;
+    background:var(--navy-900);
+    color:var(--white);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{font-family:"Archivo",sans-serif;letter-spacing:-.01em}
+  a{color:inherit}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .eyebrow{
+    font-family:"Archivo",sans-serif;font-weight:800;text-transform:uppercase;
+    letter-spacing:.14em;font-size:.74rem;color:var(--lime);
+    display:inline-flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--lime);display:inline-block}
+  section{position:relative;padding:72px 0}
+  .divline{height:1px;background:var(--line);max-width:var(--maxw);margin:0 auto}
+
+  /* radar rings background motif */
+  .rings{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .rings span{
+    position:absolute;border-radius:50%;border:1px solid rgba(120,160,230,.10);
+  }
+  .inner{position:relative;z-index:1}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:
+      radial-gradient(1100px 680px at 82% 18%, rgba(30,82,200,.42), transparent 60%),
+      radial-gradient(900px 600px at 10% 90%, rgba(20,50,130,.35), transparent 60%),
+      linear-gradient(180deg,var(--navy-800),var(--navy-900));
+    padding:0;
+  }
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;min-height:86vh;padding:90px 0 70px}
+  .brandmark{display:flex;align-items:center;gap:14px;margin-bottom:34px}
+  .logo-ring{width:46px;height:46px;position:relative;flex:0 0 auto}
+  .logo-ring svg{width:100%;height:100%}
+  .brandmark .bt{font-family:"Archivo";font-weight:900;line-height:.98;text-transform:uppercase}
+  .brandmark .bt small{display:block;font-size:.58rem;letter-spacing:.3em;color:var(--mute);font-weight:700}
+  .brandmark .bt b{font-size:1.02rem;letter-spacing:.04em}
+  .hero h1{
+    font-weight:900;font-size:clamp(3rem,7vw,5.6rem);line-height:.92;margin:14px 0 8px;
+  }
+  .hero h1 .stroke{color:transparent;-webkit-text-stroke:2px var(--blue-soft)}
+  .hero .tag{font-family:"Archivo";font-weight:700;color:var(--blue-soft);font-size:clamp(1.1rem,2vw,1.5rem);margin-bottom:26px}
+  .hero p.lead{color:var(--mute);max-width:46ch;font-size:1.05rem;margin-bottom:30px}
+  .meta-row{display:flex;flex-wrap:wrap;gap:10px}
+  .chip{
+    border:1px solid var(--line);background:rgba(10,26,51,.5);border-radius:999px;
+    padding:8px 15px;font-size:.82rem;color:var(--blue-pale);display:inline-flex;gap:8px;align-items:center;
+  }
+  .chip b{color:var(--white);font-weight:600}
+  .role-badge{
+    margin-top:26px;display:inline-flex;align-items:center;gap:12px;
+    background:linear-gradient(90deg,rgba(215,230,75,.14),transparent);
+    border:1px solid rgba(215,230,75,.4);border-radius:14px;padding:12px 18px;
+  }
+  .role-badge .k{font-family:"Archivo";font-weight:900;color:var(--lime);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase}
+  .role-badge .v{font-size:.92rem;color:var(--white)}
+
+  /* hero planet */
+  .planet-wrap{position:relative;display:flex;align-items:center;justify-content:center;min-height:380px}
+  .planet{
+    width:min(380px,74%);aspect-ratio:1;border-radius:50%;
+    background:
+      radial-gradient(120px 120px at 32% 30%, rgba(90,150,240,.9), transparent 60%),
+      radial-gradient(circle at 60% 65%, #1b3f8f, #0c1f49 70%);
+    box-shadow:inset -30px -20px 70px rgba(0,0,0,.55), 0 0 90px rgba(30,90,220,.35);
+    position:relative;overflow:hidden;
+  }
+  .planet::after{
+    content:"";position:absolute;inset:0;border-radius:50%;
+    background:
+      radial-gradient(28px 16px at 40% 42%, rgba(12,30,70,.9),transparent 70%),
+      radial-gradient(44px 24px at 62% 60%, rgba(12,30,70,.85),transparent 72%),
+      radial-gradient(20px 14px at 52% 30%, rgba(12,30,70,.8),transparent 70%);
+  }
+  .orbit{position:absolute;border:1px solid rgba(120,160,230,.18);border-radius:50%}
+
+  .scroll-hint{display:flex;align-items:center;gap:10px;color:var(--mute);font-size:.8rem;margin-top:8px}
+
+  /* ---------- generic section head ---------- */
+  .shead{max-width:70ch;margin-bottom:40px}
+  .shead h2{font-size:clamp(1.9rem,4vw,2.9rem);font-weight:900;line-height:1.02;margin:12px 0 14px}
+  .shead p{color:var(--mute);font-size:1.02rem}
+  .numtag{font-family:"Archivo";font-weight:900;color:var(--lime);font-size:1.4rem}
+
+  /* reto / reframe */
+  .reframe{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .rcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px}
+  .rcard .lbl{font-family:"Archivo";font-weight:800;text-transform:uppercase;letter-spacing:.1em;font-size:.72rem;margin-bottom:12px}
+  .rcard.from .lbl{color:var(--mute)}
+  .rcard.to{border-color:rgba(215,230,75,.35);background:linear-gradient(180deg,rgba(215,230,75,.07),var(--card))}
+  .rcard.to .lbl{color:var(--lime)}
+  .rcard p{font-size:1.08rem;line-height:1.5}
+  .arrow-mid{display:flex;align-items:center;justify-content:center;color:var(--blue-soft)}
+
+  /* persona */
+  .persona{display:grid;grid-template-columns:300px 1fr;gap:30px;align-items:start}
+  .pcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px;text-align:center}
+  .avatar{width:96px;height:96px;border-radius:50%;margin:0 auto 16px;
+    background:radial-gradient(circle at 40% 35%,#3a6fd6,#122a55);display:flex;align-items:center;justify-content:center;
+    border:2px solid rgba(215,230,75,.4)}
+  .avatar svg{width:52px;height:52px}
+  .pcard h3{font-size:1.3rem;font-weight:800}
+  .pcard .sub{color:var(--blue-soft);font-size:.9rem;margin-bottom:14px}
+  .pcard ul{list-style:none;text-align:left;font-size:.9rem;color:var(--mute);display:grid;gap:9px;margin-top:8px}
+  .pcard ul li{display:flex;gap:9px}
+  .pcard ul li b{color:var(--white);font-weight:600;min-width:74px;display:inline-block}
+  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .quad{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+  .quad h4{font-family:"Archivo";font-weight:800;font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--lime);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .quad ul{list-style:none;display:grid;gap:8px;font-size:.92rem;color:var(--mute)}
+  .quad ul li{padding-left:16px;position:relative}
+  .quad ul li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--blue-soft)}
+
+  /* journey tabs */
+  .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}
+  .tab{
+    font-family:"Archivo";font-weight:800;letter-spacing:.04em;font-size:.86rem;
+    background:transparent;border:1px solid var(--line);color:var(--mute);
+    padding:12px 20px;border-radius:12px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:10px;
+  }
+  .tab .n{color:var(--lime);font-size:1rem}
+  .tab[aria-selected="true"]{background:var(--royal);border-color:var(--royal-bright);color:#fff}
+  .tab[aria-selected="true"] .n{color:var(--lime)}
+  .panel{display:none;animation:fade .3s ease}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .jgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .jcol h4{font-family:"Archivo";font-weight:800;font-size:.95rem;margin-bottom:6px}
+  .jcol .phase{font-size:.72rem;color:var(--lime);font-family:"Archivo";font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+  .jcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:12px;height:100%}
+  .jcard .row{margin-bottom:14px}
+  .jcard .row:last-child{margin-bottom:0}
+  .jcard .rk{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue-soft);font-weight:700;margin-bottom:3px}
+  .jcard .rv{font-size:.9rem;color:var(--mute)}
+  .emotion{display:flex;gap:4px;margin-top:4px}
+  .emotion i{height:6px;flex:1;border-radius:3px;background:rgba(255,255,255,.1)}
+  .emotion i.on{background:var(--crit)}
+  .emotion i.mid{background:var(--warn)}
+  .emotion i.good{background:var(--ok)}
+
+  /* POV / HMW */
+  .pov{background:linear-gradient(135deg,var(--navy-600),var(--navy-700));border:1px solid var(--line);border-left:4px solid var(--lime);border-radius:var(--r);padding:34px;margin-bottom:28px}
+  .pov .k{font-family:"Archivo";font-weight:800;text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;color:var(--lime);margin-bottom:14px}
+  .pov p{font-size:clamp(1.2rem,2.4vw,1.7rem);font-family:"Archivo";font-weight:600;line-height:1.3}
+  .pov p em{color:var(--blue-soft);font-style:normal}
+  .hmw{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .hmwc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;position:relative;overflow:hidden}
+  .hmwc .q{font-size:3rem;font-family:"Archivo";font-weight:900;color:rgba(215,230,75,.18);position:absolute;top:-6px;right:12px}
+  .hmwc p{font-size:1rem;position:relative;z-index:1}
+
+  /* body map (feature demo) */
+  .bodywrap{display:grid;grid-template-columns:320px 1fr;gap:34px;align-items:center}
+  .bodyfig{display:flex;justify-content:center}
+  .bodyfig svg{width:230px;height:auto;filter:drop-shadow(0 10px 30px rgba(0,0,0,.4))}
+  .zone{cursor:pointer;transition:.2s}
+  .zone:hover{filter:brightness(1.25)}
+  .zone.active{stroke:var(--lime);stroke-width:2.5}
+  .readout{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;min-height:230px}
+  .readout .status{display:inline-flex;align-items:center;gap:8px;font-family:"Archivo";font-weight:800;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border-radius:999px;margin-bottom:14px}
+  .dot{width:9px;height:9px;border-radius:50%}
+  .st-ok{background:rgba(76,203,143,.15);color:var(--ok)} .st-ok .dot{background:var(--ok)}
+  .st-warn{background:rgba(242,193,78,.15);color:var(--warn)} .st-warn .dot{background:var(--warn)}
+  .st-crit{background:rgba(239,106,90,.15);color:var(--crit)} .st-crit .dot{background:var(--crit)}
+  .readout h3{font-size:1.4rem;font-weight:800;margin-bottom:6px}
+  .readout .ind{color:var(--blue-soft);font-size:.9rem;margin-bottom:14px;font-weight:600}
+  .readout p{color:var(--mute);font-size:.95rem;margin-bottom:10px}
+  .readout .hint{font-size:.8rem;color:var(--lime)}
+  .legend{display:flex;gap:16px;margin-top:18px;flex-wrap:wrap;font-size:.78rem;color:var(--mute)}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+
+  /* coverage matrix */
+  .matrix{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r)}
+  table{border-collapse:collapse;width:100%;min-width:720px;font-size:.88rem}
+  th,td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line)}
+  thead th{font-family:"Archivo";font-weight:800;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue-soft);background:rgba(10,26,51,.6)}
+  tbody tr:last-child td{border-bottom:none}
+  td.screen{font-weight:600;color:var(--white)}
+  .pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:.72rem;font-weight:700;font-family:"Archivo"}
+  .p-full{background:rgba(76,203,143,.16);color:var(--ok)}
+  .p-part{background:rgba(242,193,78,.16);color:var(--warn)}
+  .p-gap{background:rgba(239,106,90,.16);color:var(--crit)}
+  .gapnote{margin-top:18px;background:linear-gradient(90deg,rgba(239,106,90,.1),transparent);border:1px solid rgba(239,106,90,.3);border-radius:14px;padding:18px 20px}
+  .gapnote b{color:var(--crit)}
+
+  /* insights */
+  .insights{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .icard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+  .icard .src{font-size:.72rem;color:var(--lime);font-family:"Archivo";font-weight:800;letter-spacing:.06em;margin-bottom:10px}
+  .icard h4{font-size:1.12rem;font-weight:800;margin-bottom:8px}
+  .icard p{color:var(--mute);font-size:.92rem;margin-bottom:12px}
+  .icard .hook{font-size:.84rem;background:rgba(30,82,200,.18);border-left:3px solid var(--blue-soft);padding:10px 13px;border-radius:0 10px 10px 0}
+  .icard .hook b{color:var(--blue-soft)}
+
+  /* plan */
+  .plan{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .pcol{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+  .pcol .ph{font-family:"Archivo";font-weight:900;color:var(--lime);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+  .pcol h4{font-size:1.15rem;font-weight:800;margin-bottom:14px}
+  .pcol ol{list-style:none;counter-reset:s;display:grid;gap:12px}
+  .pcol ol li{counter-increment:s;padding-left:34px;position:relative;font-size:.9rem;color:var(--mute)}
+  .pcol ol li::before{content:counter(s);position:absolute;left:0;top:-2px;width:24px;height:24px;border-radius:7px;background:rgba(30,82,200,.25);border:1px solid var(--line);color:var(--blue-soft);font-family:"Archivo";font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+
+  .workshop{margin-top:26px;background:linear-gradient(135deg,rgba(30,82,200,.25),var(--navy-700));border:1px solid var(--line);border-radius:var(--r);padding:28px}
+  .workshop h4{font-size:1.1rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+  .wsteps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .wstep{background:rgba(7,20,40,.5);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .wstep .t{font-family:"Archivo";font-weight:900;color:var(--lime);font-size:1.3rem}
+  .wstep .l{font-size:.84rem;color:var(--white);font-weight:600;margin:4px 0 2px}
+  .wstep .d{font-size:.76rem;color:var(--mute)}
+
+  /* sources */
+  .sources{columns:2;column-gap:28px}
+  .sources a{display:block;break-inside:avoid;color:var(--mute);font-size:.86rem;padding:10px 0;border-bottom:1px solid var(--line);text-decoration:none;transition:.2s}
+  .sources a:hover{color:var(--blue-soft)}
+  .sources a b{color:var(--white);font-weight:600;display:block}
+
+  footer{padding:50px 0;text-align:center;color:var(--mute);font-size:.82rem;border-top:1px solid var(--line)}
+  footer .logo-ring{width:38px;height:38px;margin:0 auto 14px}
+
+  @media(max-width:900px){
+    .hero-grid{grid-template-columns:1fr;gap:10px;padding:70px 0 50px;min-height:auto}
+    .planet-wrap{min-height:260px;order:-1}
+    .reframe{grid-template-columns:1fr}.arrow-mid{transform:rotate(90deg)}
+    .persona{grid-template-columns:1fr}.pgrid{grid-template-columns:1fr}
+    .jgrid{grid-template-columns:1fr}.hmw{grid-template-columns:1fr}
+    .bodywrap{grid-template-columns:1fr}.insights{grid-template-columns:1fr}
+    .plan{grid-template-columns:1fr}.wsteps{grid-template-columns:1fr 1fr}
+    .sources{columns:1}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="rings">
+    <span style="width:700px;height:700px;top:-120px;right:-160px"></span>
+    <span style="width:1000px;height:1000px;top:-260px;right:-300px"></span>
+    <span style="width:1320px;height:1320px;top:-420px;right:-440px"></span>
+  </div>
+  <div class="wrap inner">
+    <div class="hero-grid">
+      <div>
+        <div class="brandmark">
+          <span class="logo-ring">
+            <svg viewBox="0 0 48 48" fill="none">
+              <circle cx="22" cy="26" r="16" stroke="#f4f8ff" stroke-width="2.4"/>
+              <path d="M34 14 C 30 10, 24 9, 20 11" stroke="#d7e64b" stroke-width="2.4" stroke-linecap="round"/>
+              <circle cx="35" cy="13" r="2.4" fill="#ef6a5a"/>
+            </svg>
+          </span>
+          <span class="bt">
+            <small>NASA Space Apps · CDMX 2026</small>
+            <b>DESIGN THINKING KIT</b>
+          </span>
+        </div>
+
+        <div class="eyebrow">Reto · Health Monitoring for Astronauts</div>
+        <h1>ORBITAL<br><span class="stroke">Discovery</span></h1>
+        <div class="tag">Aterrizando el problema antes de construir</div>
+        <p class="lead">Un espacio para correr las primeras fases de Design Thinking — empatizar y definir — y validar la propuesta del equipo contra lo que realmente pide el reto.</p>
+
+        <div class="meta-row">
+          <span class="chip">🛰️ <b>Misión:</b> larga duración a Marte</span>
+          <span class="chip">🧠 <b>Enfoque:</b> físico + conductual</span>
+          <span class="chip">📍 <b>Local:</b> Mexico City</span>
+        </div>
+
+        <div class="role-badge">
+          <span class="k">Mi rol</span>
+          <span class="v">UX Designer · Frontend · Design Thinker</span>
+        </div>
+      </div>
+
+      <div class="planet-wrap">
+        <div class="orbit" style="width:120%;height:120%"></div>
+        <div class="orbit" style="width:145%;height:145%"></div>
+        <div class="planet"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= 01 RETO + REFRAME ================= -->
+<section>
+  <div class="rings"><span style="width:900px;height:900px;top:-200px;left:-300px"></span></div>
+  <div class="wrap inner">
+    <div class="shead">
+      <span class="numtag">01</span>
+      <div class="eyebrow" style="margin-top:8px">El reto, en una frase</div>
+      <h2>De monitorear indicadores a entender a la persona</h2>
+      <p>El brief oficial pide una <b>herramienta visual para que el astronauta evalúe su propia salud</b> y actúe — no un panel de telemetría pasivo. Ese matiz, con el delay de comunicación con la Tierra, define todo el diseño: <b>autonomía y autoevaluación</b>.</p>
+    </div>
+
+    <div class="reframe">
+      <div class="rcard from">
+        <div class="lbl">Cómo lo cuenta el motor</div>
+        <p>“El sistema aprende los patrones del astronauta, detecta desviaciones y genera una alerta.”</p>
+        <p style="color:var(--mute);font-size:.88rem;margin-top:12px">Correcto y potente — pero el protagonista es el modelo.</p>
+      </div>
+      <div class="arrow-mid">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M4 12h16M14 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="rcard to">
+        <div class="lbl">Cómo lo vive el astronauta</div>
+        <p>“¿Cómo estoy hoy, qué significa, y qué hago al respecto — sin esperar respuesta de Tierra?”</p>
+        <p style="color:var(--mute);font-size:.88rem;margin-top:12px">El protagonista es la persona. Aquí vive la capa de UX.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divline"></div>
+
+<!-- ================= 02 PERSONA + EMPATHY ================= -->
+<section>
+  <div class="wrap inner">
+    <div class="shead">
+      <span class="numtag">02</span>
+      <div class="eyebrow" style="margin-top:8px">Empatizar</div>
+      <h2>Persona &amp; mapa de empatía</h2>
+      <p>No diseñamos para “un astronauta” genérico. Diseñamos para alguien concreto, aislado, sin médico al otro lado de la línea.</p>
+    </div>
+
+    <div class="persona">
+      <div class="pcard">
+        <div class="avatar">
+          <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="14" fill="#0a1a33" stroke="#9cc1f2" stroke-width="1.5"/><circle cx="24" cy="24" r="9" fill="none" stroke="#4e8fe6" stroke-width="1.5"/><path d="M19 22a5 5 0 0110 0" stroke="#d7e64b" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Cmdr. Elena Ríos</h3>
+        <div class="sub">Ingeniera de vuelo · 38 años</div>
+        <ul>
+          <li><b>Misión</b> Tránsito a Marte, ~18 meses</li>
+          <li><b>Apoyo</b> Sin médico a bordo; delay de hasta 20 min</li>
+          <li><b>Carga</b> Alta: ella detecta sus propios cambios</li>
+          <li><b>Tech</b> Competente, no es clínica</li>
+          <li><b>Miedo</b> No notar algo serio a tiempo</li>
+        </ul>
+      </div>
+
+      <div class="pgrid">
+        <div class="quad">
+          <h4>🗣️ Dice / Piensa</h4>
+          <ul>
+            <li>“¿Esto es normal o debería preocuparme?”</li>
+            <li>“Dormí mal otra vez, pero tengo tarea crítica.”</li>
+            <li>“No quiero alarmar a Tierra por nada.”</li>
+          </ul>
+        </div>
+        <div class="quad">
+          <h4>👁️ Ve</h4>
+          <ul>
+            <li>Números crudos sin contexto ni referencia.</li>
+            <li>Alertas que no sabe si son graves.</li>
+            <li>La misma cápsula, día tras día.</li>
+          </ul>
+        </div>
+        <div class="quad">
+          <h4>💪 Hace</h4>
+          <ul>
+            <li>Registra mediciones entre tareas, con prisa.</li>
+            <li>Minimiza molestias para no “hacer drama”.</li>
+            <li>Busca la ventana para ver la Tierra.</li>
+          </ul>
+        </div>
+        <div class="quad">
+          <h4>😣 Dolores / Ganancias</h4>
+          <ul>
+            <li><b style="color:var(--crit)">Dolor:</b> incertidumbre, aislamiento, fatiga.</li>
+            <li><b style="color:var(--ok)">Gana:</b> confianza para decidir sola y a tiempo.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divline"></div>
+
+<!-- ================= 03 JOURNEY ================= -->
+<section>
+  <div class="rings"><span style="width:1000px;height:1000px;top:-250px;right:-350px"></span></div>
+  <div class="wrap inner">
+    <div class="shead">
+      <span class="numtag">03</span>
+      <div class="eyebrow" style="margin-top:8px">Empatizar → Definir</div>
+      <h2>Journey map: Before · During · After</h2>
+      <p>Montado sobre las tres etapas que ya trae ORBITAL. El objetivo es ver dónde cae la emoción del astronauta — ahí está la oportunidad de diseño.</p>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-p="p1"><span class="n">01</span> BEFORE · Baseline</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="p2"><span class="n">02</span> DURING · Monitoreo</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="p3"><span class="n">03</span> AFTER · Seguimiento</button>
+    </div>
+
+    <div class="panel active" id="p1">
+      <div class="jgrid">
+        <div class="jcol"><span class="phase">Acción</span><h4>Construye su línea base</h4>
+          <div class="jcard">
+            <div class="row"><div class="rk">Qué hace</div><div class="rv">Registra sueño, FC en reposo y ánimo durante los primeros días.</div></div>
+            <div class="row"><div class="rk">Piensa</div><div class="rv">“¿Para qué tanto dato al inicio?”</div></div>
+            <div class="row"><div class="rk">Emoción</div><div class="emotion"><i class="good"></i><i class="good"></i><i class="mid"></i><i></i><i></i></div></div>
+          </div>
+        </div>
+        <div class="jcol"><span class="phase">Punto de dolor</span><h4>Fricción de entrada</h4>
+          <div class="jcard">
+            <div class="row"><div class="rk">Problema</div><div class="rv">Registro manual tedioso compite con tareas de misión.</div></div>
+            <div class="row"><div class="rk">Riesgo</div><div class="rv">Si abandona ahora, no hay baseline y todo lo demás falla.</div></div>
+          </div>
+        </div>
+        <div class="jcol"><span class="phase">Oportunidad UX</span><h4>Onboarding con propósito</h4>
+          <div class="jcard">
+            <div class="row"><div class="rk">Idea</div><div class="rv">Explicar <em>por qué</em> importa el baseline + gamificar la racha inicial.</div></div>
+            <div class="row"><div class="rk">Objetivo oficial</div><div class="rv">“Instrucciones simples” + gamificación.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="p2">
+      <div class="jgrid">
+        <div class="jcol"><span class="phase">Acción</span><h4>Llega una desviación</h4>
+          <div class="jcard">
+            <div class="row"><div class="rk">Qué pasa</div><div class="rv">FC en reposo sube y el sueño cae varios días seguidos.</div></div>
+            <div class="row"><div class="rk">Piensa</div><div class="rv">“¿Es el estrés de la semana o algo real?”</div></div>
+            <div class="row"><div class="rk">Emoción</div><div class="emotion"><i class="mid"></i><i class="on"></i><i class="on"></i><i class="mid"></i><i></i></div></div>
+          </div>
+        </div>
+        <div class="jcol"><span class="phase">Punto de dolor</span><h4>Alerta sin contexto</h4>
+          <div class="jcard">
+            <div class="row"><div class="rk">Problema</div><div class="rv">Una alerta cruda genera ansiedad en vez de claridad.</div></div>
+            <div class="row"><div class="rk">Riesgo</div><div class="rv">Ignorarla por fatiga de alertas, o sobre-reaccionar.</div></div>
+          </div>
+        </div>
+        <div class="jcol"><span class="phase">Oportunidad UX</span><h4>Color &amp; cuerpo clicable</h4>
+          <div class="jcard">
+            <div class="row"><div class="rk">Idea</div><div class="rv">Estado por color + figura del cuerpo que ubica el indicador.</div></div>
+            <div class="row"><div class="rk">Objetivo oficial</div><div class="rv">Color coding + figura humana clicable.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="p3">
+      <div class="jgrid">
+        <div class="jcol"><span class="phase">Acción</span><h4>Entiende y actúa</h4>
+          <div class="jcard">
+            <div class="row"><div class="rk">Qué hace</div><div class="rv">Consulta al asistente, responde preguntas de síntomas, sigue un protocolo.</div></div>
+            <div class="row"><div class="rk">Piensa</div><div class="rv">“Ok, sé qué revisar y cuándo escalar a Tierra.”</div></div>
+            <div class="row"><div class="rk">Emoción</div><div class="emotion"><i class="mid"></i><i class="mid"></i><i class="good"></i><i class="good"></i><i class="good"></i></div></div>
+          </div>
+        </div>
+        <div class="jcol"><span class="phase">Punto de dolor</span><h4>Seguimiento que se pierde</h4>
+          <div class="jcard">
+            <div class="row"><div class="rk">Problema</div><div class="rv">Sin recordatorios, el evento queda a medias y no se cierra.</div></div>
+            <div class="row"><div class="rk">Riesgo</div><div class="rv">No ver la evolución = no aprender del episodio.</div></div>
+          </div>
+        </div>
+        <div class="jcol"><span class="phase">Oportunidad UX</span><h4>Recuperación guiada</h4>
+          <div class="jcard">
+            <div class="row"><div class="rk">Idea</div><div class="rv">Tareas de salud con progreso visible + cierre del evento.</div></div>
+            <div class="row"><div class="rk">Objetivo oficial</div><div class="rv">Gráficas dinámicas + gamificación de rutinas.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divline"></div>
+
+<!-- ================= 04 POV + HMW ================= -->
+<section>
+  <div class="wrap inner">
+    <div class="shead">
+      <span class="numtag">04</span>
+      <div class="eyebrow" style="margin-top:8px">Definir</div>
+      <h2>Punto de vista &amp; How Might We</h2>
+    </div>
+
+    <div class="pov">
+      <div class="k">Point of View</div>
+      <p>Una astronauta aislada necesita <em>interpretar sus propios cambios fisiológicos y anímicos con confianza</em>, porque no tiene a un médico al otro lado de la línea.</p>
+    </div>
+
+    <div class="hmw">
+      <div class="hmwc"><span class="q">?</span><p><b>¿Cómo podríamos</b> ayudar al astronauta a distinguir una desviación normal de una señal de alerta, por sí mismo?</p></div>
+      <div class="hmwc"><span class="q">?</span><p><b>¿Cómo podríamos</b> dar contexto a un número crudo para que reduzca la ansiedad en vez de aumentarla?</p></div>
+      <div class="hmwc"><span class="q">?</span><p><b>¿Cómo podríamos</b> tratar el ánimo, el estrés y el sueño como indicadores de primera clase, no como un campo suelto?</p></div>
+    </div>
+  </div>
+</section>
+<div class="divline"></div>
+
+<!-- ================= 05 BODY MAP FEATURE ================= -->
+<section>
+  <div class="rings"><span style="width:900px;height:900px;top:-200px;left:-280px"></span></div>
+  <div class="wrap inner">
+    <div class="shead">
+      <span class="numtag">05</span>
+      <div class="eyebrow" style="margin-top:8px">Prototipo conceptual · feature estrella</div>
+      <h2>Figura humana clicable</h2>
+      <p>El brief la pide textualmente y nadie en la propuesta la nombró. Toca una zona para ver su indicador, por qué importa en el espacio y su estado por color. <b>Pruébala</b> — así se verá en el pitch.</p>
+    </div>
+
+    <div class="bodywrap">
+      <div class="bodyfig">
+        <svg viewBox="0 0 160 360" aria-label="Figura del astronauta">
+          <!-- head -->
+          <circle class="zone" data-z="head" cx="80" cy="36" r="26" fill="#1e52c8" stroke="#4e8fe6" stroke-width="1.5"/>
+          <!-- torso/heart -->
+          <rect class="zone" data-z="heart" x="52" y="70" width="56" height="86" rx="18" fill="#2a66e6" stroke="#4e8fe6" stroke-width="1.5"/>
+          <!-- arms -->
+          <rect x="30" y="74" width="18" height="78" rx="9" fill="#13305f"/>
+          <rect x="112" y="74" width="18" height="78" rx="9" fill="#13305f"/>
+          <!-- immune (abdomen) -->
+          <rect class="zone" data-z="immune" x="56" y="160" width="48" height="48" rx="12" fill="#1b3f8f" stroke="#4e8fe6" stroke-width="1.5"/>
+          <!-- legs/bones -->
+          <rect class="zone" data-z="bones" x="54" y="212" width="22" height="118" rx="11" fill="#1e52c8" stroke="#4e8fe6" stroke-width="1.5"/>
+          <rect class="zone" data-z="bones" x="84" y="212" width="22" height="118" rx="11" fill="#1e52c8" stroke="#4e8fe6" stroke-width="1.5"/>
+        </svg>
+      </div>
+
+      <div class="readout" id="readout">
+        <span class="status st-warn"><span class="dot"></span> Requiere atención</span>
+        <h3>Cabeza · Sueño &amp; ánimo</h3>
+        <div class="ind">Duración del sueño · estado emocional · estrés</div>
+        <p>El aislamiento y los ciclos de luz alterados desregulan el sueño y el ánimo. La NASA clasifica la deficiencia de sueño como <b>riesgo Categoría 1</b> en misiones largas.</p>
+        <p class="hint">→ Toca otra zona del cuerpo para explorar.</p>
+        <div class="legend">
+          <span><span class="dot" style="background:var(--ok)"></span> Normal</span>
+          <span><span class="dot" style="background:var(--warn)"></span> Atención</span>
+          <span><span class="dot" style="background:var(--crit)"></span> Crítico</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divline"></div>
+
+<!-- ================= 06 COVERAGE MATRIX ================= -->
+<section>
+  <div class="wrap inner">
+    <div class="shead">
+      <span class="numtag">06</span>
+      <div class="eyebrow" style="margin-top:8px">Definir · alinear con el brief</div>
+      <h2>Pantallas × objetivos oficiales</h2>
+      <p>Las 5 secciones de ORBITAL cruzadas con lo que exige el reto. En rojo, los huecos que como diseñador debo cerrar.</p>
+    </div>
+
+    <div class="matrix">
+      <table>
+        <thead>
+          <tr><th>Pantalla</th><th>Autoevaluación</th><th>Color coding</th><th>Salud mental</th><th>Figura clicable</th><th>Gamificación</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="screen">Mission Overview</td><td><span class="pill p-part">Parcial</span></td><td><span class="pill p-full">Sí</span></td><td><span class="pill p-gap">Hueco</span></td><td><span class="pill p-gap">Hueco</span></td><td><span class="pill p-gap">—</span></td></tr>
+          <tr><td class="screen">Personal Baseline</td><td><span class="pill p-full">Sí</span></td><td><span class="pill p-part">Parcial</span></td><td><span class="pill p-part">Parcial</span></td><td><span class="pill p-gap">—</span></td><td><span class="pill p-gap">—</span></td></tr>
+          <tr><td class="screen">Anomaly Center</td><td><span class="pill p-part">Parcial</span></td><td><span class="pill p-full">Sí</span></td><td><span class="pill p-gap">Hueco</span></td><td><span class="pill p-part">Encaja</span></td><td><span class="pill p-gap">—</span></td></tr>
+          <tr><td class="screen">Recovery &amp; Tasks</td><td><span class="pill p-full">Sí</span></td><td><span class="pill p-part">Parcial</span></td><td><span class="pill p-part">Parcial</span></td><td><span class="pill p-gap">—</span></td><td><span class="pill p-full">Sí</span></td></tr>
+          <tr><td class="screen">AI Assistant</td><td><span class="pill p-full">Sí</span></td><td><span class="pill p-gap">—</span></td><td><span class="pill p-part">Parcial</span></td><td><span class="pill p-gap">—</span></td><td><span class="pill p-gap">—</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="gapnote">
+      <b>Dos huecos claros = mi territorio:</b> la <b>salud mental</b> como indicador de primera clase (con su tarjeta y color), y la <b>figura humana clicable</b> como columna visual que une todo. Ambos los pide el brief y ambos elevan el pitch.
+    </div>
+  </div>
+</section>
+<div class="divline"></div>
+
+<!-- ================= 07 INSIGHTS ================= -->
+<section>
+  <div class="rings"><span style="width:1100px;height:1100px;top:-300px;right:-400px"></span></div>
+  <div class="wrap inner">
+    <div class="shead">
+      <span class="numtag">07</span>
+      <div class="eyebrow" style="margin-top:8px">Documentación · evidencia</div>
+      <h2>Insights de salud del astronauta</h2>
+      <p>De fuentes oficiales de la NASA — con su “gancho” de diseño. Cítalas en el pitch: a los jueces les pesa el fundamento científico.</p>
+    </div>
+
+    <div class="insights">
+      <div class="icard">
+        <div class="src">NASA · Psychology of Space Exploration, Cap. 2</div>
+        <h4>El estrés psicológico es un factor de riesgo formal</h4>
+        <p>El aislamiento y el confinamiento son el riesgo conductual #1 en misiones largas. Las reacciones de ajuste con ansiedad o depresión están documentadas en Mir e ISS.</p>
+        <div class="hook"><b>Gancho:</b> ánimo, estrés y sueño merecen tarjeta propia con estado por color, no un campo suelto.</div>
+      </div>
+      <div class="icard">
+        <div class="src">NASA · Psychology of Space Exploration, Cap. 4</div>
+        <h4>Mirar la Tierra es un recurso de bienestar</h4>
+        <p>La observación de la Tierra desde la ventana funciona como experiencia <em>salutogénica</em> — regula emociones y restaura.</p>
+        <div class="hook"><b>Gancho:</b> una “ventana a la Tierra” en la app como herramienta de regulación emocional, con base en evidencia.</div>
+      </div>
+      <div class="icard">
+        <div class="src">MDPI · Circadian Disruption in Astronauts (2025)</div>
+        <h4>Sueño: riesgo Categoría 1 para la NASA</h4>
+        <p>Microgravedad, luz y carga de trabajo desalinean el ritmo circadiano; el déficit de sueño eleva el riesgo de error operacional.</p>
+        <div class="hook"><b>Gancho:</b> el sueño como uno de los dos indicadores del MVP está perfectamente justificado.</div>
+      </div>
+      <div class="icard">
+        <div class="src">U. Houston · Mental Health Checklist (Alfano)</div>
+        <h4>Existe un instrumento de autoreporte validado</h4>
+        <p>El MHCL detecta cambios de salud mental en entornos aislados y confinados (probado en la Antártida).</p>
+        <div class="hook"><b>Gancho:</b> base real para el check-in de ánimo — autoevaluación con respaldo, no inventada.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divline"></div>
+
+<!-- ================= 08 PLAN ================= -->
+<section>
+  <div class="wrap inner">
+    <div class="shead">
+      <span class="numtag">08</span>
+      <div class="eyebrow" style="margin-top:8px">Plan de trabajo</div>
+      <h2>Cómo ejecuto mi rol</h2>
+    </div>
+
+    <div class="plan">
+      <div class="pcol">
+        <div class="ph">Estos días · pre-evento</div>
+        <h4>Preparar el discovery</h4>
+        <ol>
+          <li>Documentarme con las fuentes de salud física y mental.</li>
+          <li>Afinar persona, empathy map y journey (este kit).</li>
+          <li>Draft de POV + 3 HMW para llevar al equipo.</li>
+          <li>Moodboard con esta identidad visual (navy + lima + anillos).</li>
+        </ol>
+      </div>
+      <div class="pcol">
+        <div class="ph">Día 1 · hackathon</div>
+        <h4>Aterrizar y bocetar</h4>
+        <ol>
+          <li>Facilitar el workshop corto al arrancar.</li>
+          <li>Wireframes lo-fi de las 5 secciones.</li>
+          <li>Validar el flujo con el equipo.</li>
+          <li>Definir design system (tokens, color de estado).</li>
+        </ol>
+      </div>
+      <div class="pcol">
+        <div class="ph">Día 2 · hackathon</div>
+        <h4>Hi-fi &amp; pitch</h4>
+        <ol>
+          <li>Hi-fi de Mission Overview, Anomaly Center, Assistant.</li>
+          <li>Prototipar la figura clicable para la demo.</li>
+          <li>Diagramar la narrativa de la demostración.</li>
+          <li>Cerrar el storytelling de 2–3 min con el equipo.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="workshop">
+      <h4>⚡ Workshop de arranque — 20 minutos</h4>
+      <div class="wsteps">
+        <div class="wstep"><div class="t">5′</div><div class="l">Persona</div><div class="d">Presentar a Elena; acordar para quién diseñamos.</div></div>
+        <div class="wstep"><div class="t">5′</div><div class="l">Journey</div><div class="d">Before/During/After sobre sticky notes.</div></div>
+        <div class="wstep"><div class="t">5′</div><div class="l">HMW</div><div class="d">Generar “¿Cómo podríamos…?” en equipo.</div></div>
+        <div class="wstep"><div class="t">5′</div><div class="l">Wedge</div><div class="d">Votar el foco del MVP y cerrar alcance.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divline"></div>
+
+<!-- ================= SOURCES ================= -->
+<section>
+  <div class="wrap inner">
+    <div class="shead">
+      <span class="numtag">09</span>
+      <div class="eyebrow" style="margin-top:8px">Fuentes</div>
+      <h2>Para documentarte</h2>
+    </div>
+    <div class="sources">
+      <a href="https://www.nasa.gov/humans-in-space/the-human-body-in-space/" target="_blank" rel="noopener"><b>The Human Body in Space (marco RIDGE)</b>NASA Human Research Program</a>
+      <a href="https://www.psychiatrictimes.com/view/psychiatric-issues-space" target="_blank" rel="noopener"><b>Psychiatric Issues in Space</b>N. Kanas · Psychiatric Times</a>
+      <a href="https://ntrs.nasa.gov/api/citations/20240000994/downloads/Behavioral%20Risk%20In%20Spaceflight_Picano.pdf" target="_blank" rel="noopener"><b>Behavioral Risk in Spaceflight (PDF)</b>NASA BHP · Picano</a>
+      <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12155433/" target="_blank" rel="noopener"><b>Circadian Disruption &amp; Sleep Disorders in Astronauts (2025)</b>Int. J. Mol. Sci.</a>
+      <a href="https://www.uh.edu/news-events/stories/2021/april-2021/04202021-candice-alfano-astronaut-antarctica-mental-health.php" target="_blank" rel="noopener"><b>Mental Health Checklist (autoreporte)</b>C. Alfano · U. of Houston</a>
+      <a href="https://ntrs.nasa.gov/api/citations/20230003796/downloads/NASA-TP-2023003796%20SSRI%20Manuscript.pdf" target="_blank" rel="noopener"><b>SSRIs in Spaceflight (revisión 100+ estudios)</b>NASA Technical Paper</a>
+      <a href="https://www.nasa.gov/missions/station/human-research-studying-astronaut-physiology" target="_blank" rel="noopener"><b>Studying Astronaut Physiology (SANS, Twins Study)</b>NASA HRP</a>
+      <a href="https://discovermagazine.com/the-sciences/can-humans-live-in-space-without-going-crazy" target="_blank" rel="noopener"><b>Mars-500: 520 días de aislamiento</b>Discover Magazine</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo-ring">
+    <svg viewBox="0 0 48 48" fill="none"><circle cx="22" cy="26" r="16" stroke="#9cc1f2" stroke-width="2.4"/><path d="M34 14 C 30 10, 24 9, 20 11" stroke="#d7e64b" stroke-width="2.4" stroke-linecap="round"/><circle cx="35" cy="13" r="2.4" fill="#ef6a5a"/></svg>
+  </div>
+  ORBITAL · Design Thinking Starter Kit — NASA Space Apps Challenge CDMX 2026<br/>
+  Preparado para el reto <em>Health Monitoring Software for Astronauts</em>
+</footer>
+
+<script>
+  // journey tabs
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click', function(){
+      document.querySelectorAll('.tab').forEach(function(x){x.setAttribute('aria-selected','false')});
+      t.setAttribute('aria-selected','true');
+      document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+      document.getElementById(t.dataset.p).classList.add('active');
+    });
+  });
+
+  // body map
+  var data = {
+    head:  {status:'warn', title:'Cabeza · Sueño & ánimo', ind:'Duración del sueño · estado emocional · estrés',
+            txt:'El aislamiento y los ciclos de luz alterados desregulan el sueño y el ánimo. La NASA clasifica la deficiencia de sueño como <b>riesgo Categoría 1</b> en misiones largas.'},
+    heart: {status:'ok', title:'Pecho · Cardiovascular', ind:'Frecuencia cardíaca en reposo · presión arterial',
+            txt:'La microgravedad desplaza fluidos y altera la función cardiovascular. La FC en reposo es un indicador temprano y barato de seguir — <b>núcleo del MVP</b>.'},
+    immune:{status:'ok', title:'Abdomen · Inmune & metabólico', ind:'Marcadores inmunes · glucosa · hidratación',
+            txt:'El entorno cerrado y el estrés alteran la respuesta inmune. Seguimiento por registro manual mientras no haya sensores dedicados.'},
+    bones: {status:'crit', title:'Piernas · Óseo & muscular', ind:'Densidad ósea · masa muscular · actividad',
+            txt:'Sin carga mecánica, el hueso pierde estímulo y se desmineraliza. Es el riesgo más claro en misiones largas: requiere contramedidas (ejercicio) y seguimiento.'}
+  };
+  var cls = {ok:'st-ok', warn:'st-warn', crit:'st-crit'};
+  var lbl = {ok:'Normal', warn:'Requiere atención', crit:'Crítico'};
+  var ro = document.getElementById('readout');
+  document.querySelectorAll('.zone').forEach(function(z){
+    z.addEventListener('click', function(){
+      document.querySelectorAll('.zone').forEach(function(x){x.classList.remove('active')});
+      z.classList.add('active');
+      var d = data[z.dataset.z]; if(!d) return;
+      ro.innerHTML = '<span class="status '+cls[d.status]+'"><span class="dot"></span> '+lbl[d.status]+'</span>'+
+        '<h3>'+d.title+'</h3><div class="ind">'+d.ind+'</div><p>'+d.txt+'</p>'+
+        '<p class="hint">→ Toca otra zona del cuerpo para explorar.</p>'+
+        '<div class="legend"><span><span class="dot" style="background:var(--ok)"></span> Normal</span>'+
+        '<span><span class="dot" style="background:var(--warn)"></span> Atención</span>'+
+        '<span><span class="dot" style="background:var(--crit)"></span> Crítico</span></div>';
+    });
+  });
+</script>
+</body>
+</html>
