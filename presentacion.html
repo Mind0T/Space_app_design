@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ORBITAL · Presentación para el equipo</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="description" content="Presentación de impacto ORBITAL — modo slides a pantalla completa. NASA Space Apps CDMX 2026." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=Overpass:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy-900:#071428;--navy-800:#0a1a33;--navy-700:#0d2244;--navy-600:#102a55;
+    --royal:#1e52c8;--royal-bright:#2a66e6;--blue-soft:#4e8fe6;--blue-pale:#9cc1f2;
+    --lime:#d7e64b;--white:#f4f8ff;--mute:#a9bbd6;--line:rgba(156,193,242,.16);
+    --card:rgba(18,38,74,.6);--ok:#4ccb8f;--warn:#f2c14e;--crit:#ef6a5a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:"Overpass",system-ui,sans-serif;background:var(--navy-900);color:var(--white);line-height:1.55;-webkit-font-smoothing:antialiased;overflow:hidden}
+  h1,h2,h3,h4,.display{font-family:"Archivo",sans-serif;letter-spacing:-.01em}
+
+  /* ---------- DECK ---------- */
+  .deck{position:fixed;inset:0;background:
+      radial-gradient(1200px 760px at 82% 12%, rgba(30,82,200,.32), transparent 60%),
+      radial-gradient(900px 640px at 6% 96%, rgba(20,50,130,.3), transparent 60%),
+      linear-gradient(180deg,var(--navy-800),var(--navy-900))}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    padding:clamp(26px,5vh,64px) clamp(22px,6vw,96px);
+    opacity:0;visibility:hidden;transform:scale(.985);
+    transition:opacity .5s ease,transform .6s cubic-bezier(.2,.7,.2,1),visibility .5s;
+    overflow-y:auto}
+  .slide.active{opacity:1;visibility:visible;transform:none;z-index:2}
+  .sin{width:100%;max-width:1080px;margin:auto}
+
+  /* rings deco */
+  .rings{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .rings span{position:absolute;border-radius:50%;border:1px solid rgba(120,160,230,.10)}
+
+  /* reveal anim */
+  .r{opacity:0;transform:translateY(26px);
+     transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
+  .slide.active .r{opacity:1;transform:none;transition-delay:var(--d,0s)}
+  .slide.active .pop{animation:pop .6s both;animation-delay:var(--d,0s)}
+  @keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+
+  /* shared type */
+  .eyebrow{font-family:"Archivo";font-weight:800;text-transform:uppercase;letter-spacing:.14em;font-size:clamp(.66rem,1.1vw,.78rem);color:var(--lime);display:inline-flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--lime);display:inline-block}
+  .numtag{font-family:"Archivo";font-weight:900;color:var(--lime);font-size:clamp(1.3rem,2.4vw,1.7rem);display:block;margin-bottom:6px}
+  h2.title{font-size:clamp(1.9rem,4.8vw,3.4rem);font-weight:900;line-height:1.02;margin:8px 0 14px}
+  .sub{color:var(--mute);font-size:clamp(1rem,1.7vw,1.2rem);max-width:70ch}
+  .hl{color:var(--lime)} em{color:var(--blue-soft);font-style:normal}
+
+  /* ---------- HERO ---------- */
+  .brandmark{display:flex;align-items:center;gap:14px;margin-bottom:34px}
+  .logo-ring{width:50px;height:50px;flex:0 0 auto}
+  .brandmark small{display:block;font-size:.6rem;letter-spacing:.3em;color:var(--mute);font-weight:700;font-family:"Archivo"}
+  .brandmark b{font-size:1rem;letter-spacing:.04em;font-family:"Archivo";font-weight:900;text-transform:uppercase}
+  .hero h1{font-weight:900;font-size:clamp(2.6rem,8vw,5.6rem);line-height:.95;margin:14px 0 22px;max-width:17ch}
+  .hero .lead{color:var(--blue-pale);font-size:clamp(1.05rem,2.1vw,1.4rem);max-width:56ch;margin-bottom:26px}
+  .hero .sign{color:var(--mute);font-size:.95rem;border-left:3px solid var(--lime);padding-left:14px}
+  .hero .sign b{color:var(--white)}
+
+  /* stat cards */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:10px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+  .stat .big{font-family:"Archivo";font-weight:900;color:var(--lime);font-size:clamp(1.5rem,3vw,2.1rem)}
+  .stat .lbl{color:var(--mute);font-size:.86rem;margin-top:6px}
+
+  /* two cards */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:8px}
+  .scard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px}
+  .scard .tagk{font-size:.72rem;color:var(--lime);font-family:"Archivo";font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+  .scard h3{font-size:clamp(1.15rem,2vw,1.4rem);font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+  .scard p{color:var(--mute);font-size:clamp(.92rem,1.4vw,1rem)}
+  .three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
+
+  /* statement */
+  .statement{background:linear-gradient(135deg,var(--navy-600),var(--navy-700));border:1px solid var(--line);border-left:5px solid var(--lime);border-radius:18px;padding:clamp(28px,4vw,46px)}
+  .statement p{font-family:"Archivo";font-weight:600;font-size:clamp(1.3rem,3.4vw,2.3rem);line-height:1.28}
+  .statement .by{margin-top:18px;color:var(--mute);font-size:.95rem}
+
+  /* brief quotes */
+  .brief{display:grid;gap:14px}
+  .bq{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px;display:flex;gap:18px;align-items:flex-start}
+  .bq .q{font-family:"Archivo";font-weight:900;color:var(--royal-bright);font-size:1.7rem;flex:0 0 auto;line-height:1}
+  .bq p{font-size:clamp(.95rem,1.5vw,1.08rem)}
+  .bq p b{color:var(--lime);font-weight:600}
+  .bq p span{display:block;color:var(--mute);font-size:.84rem;margin-top:4px}
+
+  /* gaps */
+  .gaps{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:8px}
+  .gcard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px;position:relative;overflow:hidden}
+  .gcard::before{content:"";position:absolute;top:0;left:0;width:100%;height:4px;background:var(--crit)}
+  .gcard .n{font-family:"Archivo";font-weight:900;font-size:2.4rem;color:rgba(239,106,90,.25);line-height:1}
+  .gcard h3{font-size:clamp(1.15rem,1.9vw,1.35rem);font-weight:800;margin:4px 0 12px}
+  .gcard p{color:var(--mute);font-size:clamp(.92rem,1.4vw,1rem);margin-bottom:14px}
+  .gcard .ev{font-size:.86rem;background:rgba(30,82,200,.18);border-left:3px solid var(--blue-soft);padding:12px 14px;border-radius:0 10px 10px 0}
+  .gcard .ev b{color:var(--blue-soft)}
+
+  /* body figure */
+  .bodywrap{display:grid;grid-template-columns:270px 1fr;gap:38px;align-items:center;margin-top:6px}
+  .bodyfig{display:flex;justify-content:center}
+  .bodyfig svg{width:210px;height:auto;filter:drop-shadow(0 10px 30px rgba(0,0,0,.4))}
+  .zone{cursor:pointer;transition:.2s}
+  .zone:hover{filter:brightness(1.25)}
+  .zone.active{stroke:var(--lime);stroke-width:2.5}
+  .readout{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px;min-height:240px}
+  .readout .status{display:inline-flex;align-items:center;gap:8px;font-family:"Archivo";font-weight:800;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;border-radius:999px;margin-bottom:14px}
+  .dot{width:9px;height:9px;border-radius:50%}
+  .st-ok{background:rgba(76,203,143,.15);color:var(--ok)} .st-ok .dot{background:var(--ok)}
+  .st-warn{background:rgba(242,193,78,.15);color:var(--warn)} .st-warn .dot{background:var(--warn)}
+  .st-crit{background:rgba(239,106,90,.15);color:var(--crit)} .st-crit .dot{background:var(--crit)}
+  .readout h3{font-size:clamp(1.2rem,2vw,1.5rem);font-weight:800;margin-bottom:6px}
+  .readout .ind{color:var(--blue-soft);font-size:.92rem;margin-bottom:14px;font-weight:600}
+  .readout p{color:var(--mute);font-size:.96rem;margin-bottom:10px}
+  .readout .hint{font-size:.82rem;color:var(--lime)}
+  .legend{display:flex;gap:16px;margin-top:18px;flex-wrap:wrap;font-size:.8rem;color:var(--mute)}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+
+  /* matrix */
+  .matrix{overflow:auto;border:1px solid var(--line);border-radius:16px;max-height:58vh}
+  table{border-collapse:collapse;width:100%;min-width:680px;font-size:clamp(.82rem,1.3vw,.95rem)}
+  th,td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line)}
+  thead th{font-family:"Archivo";font-weight:800;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue-soft);background:rgba(10,26,51,.9);position:sticky;top:0}
+  tbody tr:last-child td{border-bottom:none}
+  td.dir{font-weight:600;color:var(--white)}
+  .pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:.72rem;font-weight:700;font-family:"Archivo"}
+  .p-full{background:rgba(76,203,143,.16);color:var(--ok)}
+  .p-part{background:rgba(242,193,78,.16);color:var(--warn)}
+  .p-gap{background:rgba(239,106,90,.16);color:var(--crit)}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:6px 0 24px}
+  .stp{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center;position:relative}
+  .stp.here{border-color:rgba(215,230,75,.5);background:linear-gradient(180deg,rgba(215,230,75,.08),var(--card))}
+  .stp.skip{opacity:.5}
+  .stp .ph{font-family:"Archivo";font-weight:900;font-size:.92rem}
+  .stp .st{font-size:.68rem;color:var(--mute);margin-top:4px}
+  .stp .badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--lime);color:#071428;font-family:"Archivo";font-weight:800;font-size:.58rem;padding:3px 8px;border-radius:999px;white-space:nowrap}
+  .riskrow{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .risk{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .risk h4{font-size:1rem;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .risk.bad h4{color:var(--crit)} .risk.good h4{color:var(--ok)}
+  .risk p{color:var(--mute);font-size:.92rem}
+
+  /* ask */
+  .ask{background:linear-gradient(135deg,rgba(30,82,200,.3),var(--navy-700));border:1px solid var(--line);border-radius:18px;padding:clamp(26px,3.5vw,40px)}
+  .ask h3{font-size:clamp(1.2rem,2.2vw,1.6rem);font-weight:900;margin-bottom:18px}
+  .asklist{display:grid;gap:14px}
+  .asklist .a{display:flex;gap:16px;align-items:flex-start}
+  .asklist .a .k{width:30px;height:30px;border-radius:9px;background:rgba(215,230,75,.15);border:1px solid rgba(215,230,75,.4);color:var(--lime);font-family:"Archivo";font-weight:800;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .asklist .a p{font-size:clamp(.95rem,1.5vw,1.05rem)}
+  .asklist .a p b{color:var(--white)}
+
+  /* closing */
+  .closing-slide .big{font-family:"Archivo";font-weight:900;font-size:clamp(2rem,5.5vw,4rem);line-height:1.05;max-width:18ch}
+  .closing-slide .tag{margin-top:26px;color:var(--mute);font-size:1.05rem}
+
+  /* ---------- CHROME ---------- */
+  .prog{position:fixed;top:0;left:0;height:3px;background:var(--lime);width:0;z-index:30;transition:width .4s ease;box-shadow:0 0 12px rgba(215,230,75,.5)}
+  .hud{position:fixed;bottom:18px;right:20px;display:flex;align-items:center;gap:10px;z-index:30}
+  .hud button{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:rgba(10,26,51,.7);color:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;backdrop-filter:blur(6px)}
+  .hud button:hover{border-color:var(--lime);color:var(--lime)}
+  .hud button:disabled{opacity:.3;cursor:default;border-color:var(--line);color:var(--white)}
+  .counter{font-family:"Archivo";font-weight:800;font-size:.82rem;color:var(--mute);letter-spacing:.08em;padding:0 6px;min-width:62px;text-align:center}
+  .counter b{color:var(--lime)}
+  .hint-key{position:fixed;bottom:24px;left:22px;z-index:30;color:var(--mute);font-size:.76rem;font-family:"Archivo";font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:8px;opacity:.75}
+  .hint-key kbd{background:rgba(10,26,51,.8);border:1px solid var(--line);border-radius:6px;padding:2px 7px;font-family:"Archivo";font-size:.72rem}
+  .hint-key.gone{opacity:0;transition:opacity .6s;pointer-events:none}
+
+  @media(max-width:820px){
+    .stats{grid-template-columns:1fr 1fr}
+    .two,.gaps,.riskrow,.three{grid-template-columns:1fr}
+    .bodywrap{grid-template-columns:1fr}
+    .steps{grid-template-columns:1fr 1fr}
+    .hint-key{display:none}
+    .slide{padding:64px 22px 80px}
+  }
+</style>
+</head>
+<body>
+
+<div class="prog" id="prog"></div>
+<div class="deck" id="deck">
+
+  <!-- 1 · PORTADA -->
+  <section class="slide hero active">
+    <div class="rings">
+      <span style="width:620px;height:620px;top:-120px;right:-160px"></span>
+      <span style="width:920px;height:920px;top:-240px;right:-300px"></span>
+      <span style="width:1240px;height:1240px;top:-400px;right:-440px"></span>
+    </div>
+    <div class="sin">
+      <div class="brandmark r" style="--d:.05s">
+        <span class="logo-ring"><svg viewBox="0 0 48 48" fill="none"><circle cx="22" cy="26" r="16" stroke="#f4f8ff" stroke-width="2.4"/><path d="M34 14 C 30 10, 24 9, 20 11" stroke="#d7e64b" stroke-width="2.4" stroke-linecap="round"/><circle cx="35" cy="13" r="2.4" fill="#ef6a5a"/></svg></span>
+        <span><small>NASA Space Apps · CDMX 2026 · Equipo ORBITAL</small><b>Reunión previa al hackathon</b></span>
+      </div>
+      <div class="eyebrow r" style="--d:.15s">Propuesta para el equipo</div>
+      <h1 class="r" style="--d:.25s">ORBITAL ya es fuerte.<br>Hagámoslo <span class="hl">ganador</span>.</h1>
+      <p class="lead r" style="--d:.38s">Dos frentes que mueven la aguja con los jueces — y una forma de encontrarlos juntos antes de cerrar la arquitectura.</p>
+      <div class="sign r" style="--d:.5s">Expone: <b>Irving Soriano</b> · UX Designer · Frontend · Design Thinker</div>
+    </div>
+  </section>
+
+  <!-- 2 · MISIÓN -->
+  <section class="slide">
+    <div class="sin">
+      <div class="eyebrow r" style="--d:.05s">El escenario que diseñamos</div>
+      <h2 class="title r" style="--d:.12s">La misión de Katya: tránsito a Marte</h2>
+      <p class="sub r" style="--d:.2s">A esta distancia <b style="color:var(--white)">no hay Houston en tiempo real</b>. Katya es su propia médica de primer contacto.</p>
+      <div class="stats" style="margin-top:28px">
+        <div class="stat pop" style="--d:.3s"><div class="big">7–9 meses</div><div class="lbl">de viaje, solo de ida</div></div>
+        <div class="stat pop" style="--d:.4s"><div class="big">2.5–3 años</div><div class="lbl">misión completa: ida · estancia · regreso</div></div>
+        <div class="stat pop" style="--d:.5s"><div class="big">~20 min</div><div class="lbl">retraso de señal por vía, + apagones en conjunción solar</div></div>
+        <div class="stat pop" style="--d:.6s"><div class="big">1 punto de luz</div><div class="lbl">así se ve la Tierra desde Marte</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · FORTALEZAS -->
+  <section class="slide">
+    <div class="sin">
+      <span class="numtag r" style="--d:.05s">01</span>
+      <div class="eyebrow r" style="--d:.12s">Lo que ya tenemos</div>
+      <h2 class="title r" style="--d:.2s">Nuestro motor es de los que ganan</h2>
+      <p class="sub r" style="--d:.28s">La base técnica de ORBITAL es sólida y es nuestra ventaja. El objetivo no es cambiarla: es asegurarnos de que brille.</p>
+      <div class="two" style="margin-top:28px">
+        <div class="scard r" style="--d:.4s">
+          <div class="tagk">Fortaleza 1</div>
+          <h3>🧠 Forecasting personalizado</h3>
+          <p>Aprender la línea base de cada astronauta y detectar desviaciones persistentes es un enfoque serio y bien fundamentado. Ese es el corazón.</p>
+        </div>
+        <div class="scard r" style="--d:.52s">
+          <div class="tagk">Fortaleza 2</div>
+          <h3>☁️ Músculo en la nube (AWS)</h3>
+          <p>Capacidad técnica real para llevarlo a un demo funcional. Eso nos pone por delante de muchos equipos que se quedan en la idea.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · THE TURN -->
+  <section class="slide">
+    <div class="rings"><span style="width:900px;height:900px;top:-200px;left:-300px"></span></div>
+    <div class="sin">
+      <div class="statement r" style="--d:.1s">
+        <p>Pero este reto <span class="hl">no se gana solo con el motor.</span> Se gana demostrando que entendimos a la persona que lo va a usar: un astronauta <em>solo</em>, que evalúa su propia salud sin un médico del otro lado.</p>
+        <div class="by">Lo pide el propio brief de la NASA.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · BRIEF -->
+  <section class="slide">
+    <div class="sin">
+      <span class="numtag r" style="--d:.05s">02</span>
+      <div class="eyebrow r" style="--d:.12s">Lo que pide el reto, textual</div>
+      <h2 class="title r" style="--d:.2s">El brief pide una capa humana</h2>
+      <p class="sub r" style="--d:.28s">Casi todo lo que el reto marca como diferenciador no vive en el modelo — vive en la experiencia.</p>
+      <div class="brief" style="margin-top:24px">
+        <div class="bq r" style="--d:.4s"><span class="q">“</span><p>“Crear una herramienta <b>visual</b> que ayude al astronauta a evaluar <b>su propia</b> salud y guíe sobre tratamientos.”<span>→ Autoevaluación, no telemetría pasiva.</span></p></div>
+        <div class="bq r" style="--d:.5s"><span class="q">“</span><p>“Una figura humana donde cada parte del cuerpo es <b>clicable</b> y muestra su función y estado.”<span>→ Lo piden literal. Es una feature, no un adorno.</span></p></div>
+        <div class="bq r" style="--d:.6s"><span class="q">“</span><p>“<b>Color coding</b> para interpretar el estado de un indicador de un vistazo.”<span>→ Lectura inmediata bajo estrés.</span></p></div>
+        <div class="bq r" style="--d:.7s"><span class="q">“</span><p>“No asuman que el astronauta sabe evaluar su salud: den <b>instrucciones simples</b>.”<span>→ Educación dentro del producto.</span></p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · GAPS -->
+  <section class="slide">
+    <div class="rings"><span style="width:1000px;height:1000px;top:-250px;right:-350px"></span></div>
+    <div class="sin">
+      <span class="numtag r" style="--d:.05s">03</span>
+      <div class="eyebrow r" style="--d:.12s">Dónde están nuestros diferenciadores</div>
+      <h2 class="title r" style="--d:.2s">Dos puntos que nos separan del resto</h2>
+      <p class="sub r" style="--d:.28s">Dos frentes subdesarrollados hoy — y son justo los que los jueces premian.</p>
+      <div class="gaps" style="margin-top:26px">
+        <div class="gcard r" style="--d:.4s">
+          <div class="n">01</div>
+          <h3>La salud mental como indicador de primera clase</h3>
+          <p>Que el sueño, el estrés y el estado emocional tengan su propia tarjeta y su propio color de estado, igual que la frecuencia cardíaca.</p>
+          <div class="ev"><b>Evidencia NASA:</b> el aislamiento y el confinamiento son el riesgo conductual #1 en misiones largas, y la deficiencia de sueño es riesgo Categoría 1.</div>
+        </div>
+        <div class="gcard r" style="--d:.55s">
+          <div class="n">02</div>
+          <h3>La capa visual de autoevaluación</h3>
+          <p>El motor detecta; el astronauta necesita <em>entender y actuar</em>. La figura clicable, el color de estado y las instrucciones simples convierten un número crudo en una decisión con confianza.</p>
+          <div class="ev"><b>Por qué importa:</b> es exactamente lo que el brief pide y lo que hace memorable una demo de 3 minutos frente a jueces.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · FIGURA CLICABLE -->
+  <section class="slide">
+    <div class="sin">
+      <span class="numtag r" style="--d:.05s">04</span>
+      <div class="eyebrow r" style="--d:.12s">Se muestra, no se cuenta</div>
+      <h2 class="title r" style="--d:.2s">Así se vería la figura clicable</h2>
+      <p class="sub r" style="--d:.28s">Toca una zona del cuerpo: aparece su indicador, por qué importa en el espacio y su estado por color.</p>
+      <div class="bodywrap r" style="--d:.4s">
+        <div class="bodyfig">
+          <svg viewBox="0 0 160 360" aria-label="Figura del astronauta">
+            <circle class="zone" data-z="head" cx="80" cy="36" r="26" fill="#1e52c8" stroke="#4e8fe6" stroke-width="1.5"/>
+            <rect class="zone" data-z="heart" x="52" y="70" width="56" height="86" rx="18" fill="#2a66e6" stroke="#4e8fe6" stroke-width="1.5"/>
+            <rect x="30" y="74" width="18" height="78" rx="9" fill="#13305f"/>
+            <rect x="112" y="74" width="18" height="78" rx="9" fill="#13305f"/>
+            <rect class="zone" data-z="immune" x="56" y="160" width="48" height="48" rx="12" fill="#1b3f8f" stroke="#4e8fe6" stroke-width="1.5"/>
+            <rect class="zone" data-z="bones" x="54" y="212" width="22" height="118" rx="11" fill="#1e52c8" stroke="#4e8fe6" stroke-width="1.5"/>
+            <rect class="zone" data-z="bones" x="84" y="212" width="22" height="118" rx="11" fill="#1e52c8" stroke="#4e8fe6" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="readout" id="readout">
+          <span class="status st-warn"><span class="dot"></span> Requiere atención</span>
+          <h3>Cabeza · Sueño &amp; ánimo</h3>
+          <div class="ind">Duración del sueño · estado emocional · estrés</div>
+          <p>El aislamiento y los ciclos de luz alterados desregulan el sueño y el ánimo. La NASA clasifica la deficiencia de sueño como <b>riesgo Categoría 1</b> en misiones largas.</p>
+          <p class="hint">→ Toca otra zona del cuerpo.</p>
+          <div class="legend">
+            <span><span class="dot" style="background:var(--ok)"></span> Normal</span>
+            <span><span class="dot" style="background:var(--warn)"></span> Atención</span>
+            <span><span class="dot" style="background:var(--crit)"></span> Crítico</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · TRIAJE -->
+  <section class="slide">
+    <div class="rings"><span style="width:1000px;height:1000px;top:-250px;right:-350px"></span></div>
+    <div class="sin">
+      <span class="numtag r" style="--d:.05s">05</span>
+      <div class="eyebrow r" style="--d:.12s">La apuesta diferenciadora</div>
+      <h2 class="title r" style="--d:.2s">¿Es el cuerpo… o es la mente?</h2>
+      <div class="statement r" style="--d:.3s;margin:18px 0 22px">
+        <p>A un tripulante le empieza a doler el pecho. Nadie a bordo es médico y Houston está a 20 minutos. ¿Es un infarto… o el <span class="hl">estrés crónico</span> manifestándose en el cuerpo?</p>
+        <div class="by">— Escenario planteado por Rodrigo Leonardi, Agencia Espacial Brasileña.</div>
+      </div>
+      <div class="three">
+        <div class="scard r" style="--d:.45s">
+          <div class="tagk">Diferenciador</div>
+          <h3>🧭 Triaje psicofisiológico</h3>
+          <p>Antes de asumir lo peor, el sistema pregunta: ¿puede ser la mente hablando por el cuerpo? Cruza señales y orienta — sin diagnosticar, pero sin dejar sola a la persona.</p>
+        </div>
+        <div class="scard r" style="--d:.55s">
+          <div class="tagk">Psicología conductual</div>
+          <h3>🎮 Gamificación con propósito</h3>
+          <p>Nudges, rachas y micro-recompensas para que monitorearse sea la acción de menor resistencia. Mini-juegos cognitivos detectan declive sutil <b style="color:var(--white)">sin sentirse un examen</b>.</p>
+        </div>
+        <div class="scard r" style="--d:.65s">
+          <div class="tagk">Bienestar · evidencia NASA</div>
+          <h3>🌍 Ventana a la Tierra</h3>
+          <p>Ver la Tierra funciona como recurso de bienestar (efecto salutogénico). A la distancia de Marte es un punto de luz — la app lo vuelve una herramienta de regulación emocional.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · MATRIZ -->
+  <section class="slide">
+    <div class="sin">
+      <span class="numtag r" style="--d:.05s">06</span>
+      <div class="eyebrow r" style="--d:.12s">Checklist contra las directrices oficiales</div>
+      <h2 class="title r" style="--d:.2s">Dónde estamos parados hoy</h2>
+      <p class="sub r" style="--d:.28s">En rojo, lo que todavía no cubrimos — y es cerrable en un día.</p>
+      <div class="matrix r" style="--d:.4s;margin-top:20px">
+        <table>
+          <thead><tr><th>Directriz del challenge</th><th>¿La contempla ORBITAL hoy?</th><th>Quién la cubre</th></tr></thead>
+          <tbody>
+            <tr><td class="dir">Autoevaluación del astronauta</td><td><span class="pill p-part">Parcial</span></td><td>UX + motor</td></tr>
+            <tr><td class="dir">Figura humana clicable</td><td><span class="pill p-gap">No aún</span></td><td>UX / Frontend</td></tr>
+            <tr><td class="dir">Color coding de estado</td><td><span class="pill p-part">Implícito</span></td><td>UX</td></tr>
+            <tr><td class="dir">Salud mental / conductual</td><td><span class="pill p-gap">No aún</span></td><td>Diseño + datos</td></tr>
+            <tr><td class="dir">Gráficas dinámicas</td><td><span class="pill p-full">Sí</span></td><td>Frontend + datos</td></tr>
+            <tr><td class="dir">Gamificación de rutinas</td><td><span class="pill p-part">Mencionada</span></td><td>UX</td></tr>
+            <tr><td class="dir">Selector de entorno (nave/rover/base)</td><td><span class="pill p-part">Mencionado</span></td><td>UX + frontend</td></tr>
+            <tr><td class="dir">Instrucciones simples / educación</td><td><span class="pill p-gap">No aún</span></td><td>UX + contenido</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · NO SALTAR -->
+  <section class="slide">
+    <div class="rings"><span style="width:900px;height:900px;top:-200px;left:-280px"></span></div>
+    <div class="sin">
+      <span class="numtag r" style="--d:.05s">07</span>
+      <div class="eyebrow r" style="--d:.12s">Proceso</div>
+      <h2 class="title r" style="--d:.2s">No nos saltemos un paso</h2>
+      <p class="sub r" style="--d:.28s">Antes de prototipar y arquitectar hay tres pasos. Saltar directo al cuarto tiene un costo.</p>
+      <div class="steps r" style="--d:.4s;margin-top:22px">
+        <div class="stp here"><div class="badge">1 hora basta</div><div class="ph">Empatizar</div><div class="st">entender al usuario</div></div>
+        <div class="stp here"><div class="ph">Definir</div><div class="st">el problema real</div></div>
+        <div class="stp here"><div class="ph">Idear</div><div class="st">explorar opciones</div></div>
+        <div class="stp"><div class="ph">Prototipar</div><div class="st">construir</div></div>
+        <div class="stp skip"><div class="ph">Testear</div><div class="st">validar</div></div>
+      </div>
+      <div class="riskrow r" style="--d:.55s">
+        <div class="risk bad">
+          <h4>⚠️ Si saltamos directo a arquitectura</h4>
+          <p>Construimos muy bien… una solución a un problema que no terminamos de definir. Las features que premia el jurado se quedan fuera porque nunca las ideamos. Rehacer en el hackathon cuesta carísimo.</p>
+        </div>
+        <div class="risk good">
+          <h4>✅ Si dedicamos 1 hora al inicio</h4>
+          <p>Validamos que ORBITAL resuelve el problema correcto, encontramos juntos las 2–3 features que nos diferencian, y entramos a construir con una historia clara para la demo. No perdemos tiempo: lo ganamos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 · LA PROPUESTA -->
+  <section class="slide">
+    <div class="sin">
+      <span class="numtag r" style="--d:.05s">08</span>
+      <div class="eyebrow r" style="--d:.12s">La propuesta concreta</div>
+      <h2 class="title r" style="--d:.2s">En tres movimientos</h2>
+      <div class="ask r" style="--d:.35s;margin-top:18px">
+        <h3>No cambiamos ORBITAL. Lo completamos.</h3>
+        <div class="asklist">
+          <div class="a"><span class="k">1</span><p><b>Una hora de Design Thinking</b> antes de cerrar arquitectura: empatizar, definir, idear. Con la dinámica lista.</p></div>
+          <div class="a"><span class="k">2</span><p><b>Integrar la salud mental</b> como indicador de primera clase dentro del mismo motor — con triaje psicofisiológico y gamificación conductual. Mismo forecasting, un indicador más que importa.</p></div>
+          <div class="a"><span class="k">3</span><p><b>La capa visual de autoevaluación</b>: figura clicable, color de estado e instrucciones simples. Rol de UX, cubierto.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 · CIERRE -->
+  <section class="slide closing-slide">
+    <div class="rings">
+      <span style="width:700px;height:700px;top:50%;left:50%;transform:translate(-50%,-50%)"></span>
+      <span style="width:1050px;height:1050px;top:50%;left:50%;transform:translate(-50%,-50%)"></span>
+    </div>
+    <div class="sin">
+      <div class="eyebrow r" style="--d:.1s">Lo que construimos juntos</div>
+      <div class="big r" style="--d:.2s;margin-top:14px">Pongámosle a ORBITAL la <span class="hl">cara humana</span> que el reto está pidiendo.</div>
+      <div class="tag r" style="--d:.45s">El motor es excelente. Juntos, eso es un proyecto que se recuerda.</div>
+      <div class="tag r" style="--d:.6s;margin-top:28px;color:var(--blue-pale);font-family:'Archivo';font-weight:800;letter-spacing:.04em">🌮 Tacos de Asada · ORBITAL · NASA Space Apps CDMX 2026</div>
+    </div>
+  </section>
+
+</div>
+
+<div class="hud">
+  <button id="prev" aria-label="Anterior"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <span class="counter"><b id="cur">01</b> / <span id="total">12</span></span>
+  <button id="next" aria-label="Siguiente"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button id="fs" aria-label="Pantalla completa"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 9V5a1 1 0 011-1h4M20 9V5a1 1 0 00-1-1h-4M4 15v4a1 1 0 001 1h4M20 15v4a1 1 0 01-1 1h-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+</div>
+<div class="hint-key" id="keyhint"><kbd>←</kbd><kbd>→</kbd> navega · <kbd>F</kbd> pantalla completa</div>
+
+<script>
+  /* ---- body figure data ---- */
+  var data = {
+    head:  {status:'warn', title:'Cabeza · Sueño & ánimo', ind:'Duración del sueño · estado emocional · estrés',
+            txt:'El aislamiento y los ciclos de luz alterados desregulan el sueño y el ánimo. La NASA clasifica la deficiencia de sueño como <b>riesgo Categoría 1</b> en misiones largas.'},
+    heart: {status:'ok', title:'Pecho · Cardiovascular', ind:'Frecuencia cardíaca en reposo · presión arterial',
+            txt:'La microgravedad desplaza fluidos y altera la función cardiovascular. La FC en reposo es un indicador temprano y barato de seguir — <b>núcleo del MVP</b>.'},
+    immune:{status:'ok', title:'Abdomen · Inmune & metabólico', ind:'Marcadores inmunes · glucosa · hidratación',
+            txt:'El entorno cerrado y el estrés alteran la respuesta inmune. Seguimiento por registro manual mientras no haya sensores dedicados.'},
+    bones: {status:'crit', title:'Piernas · Óseo & muscular', ind:'Densidad ósea · masa muscular · actividad',
+            txt:'Sin carga mecánica, el hueso pierde estímulo y se desmineraliza. Es el riesgo más claro en misiones largas: requiere contramedidas y seguimiento.'}
+  };
+  var cls = {ok:'st-ok', warn:'st-warn', crit:'st-crit'};
+  var lbl = {ok:'Normal', warn:'Requiere atención', crit:'Crítico'};
+  var ro = document.getElementById('readout');
+  document.querySelectorAll('.zone').forEach(function(z){
+    z.addEventListener('click', function(){
+      document.querySelectorAll('.zone').forEach(function(x){x.classList.remove('active')});
+      z.classList.add('active');
+      var d = data[z.dataset.z]; if(!d) return;
+      ro.innerHTML = '<span class="status '+cls[d.status]+'"><span class="dot"></span> '+lbl[d.status]+'</span>'+
+        '<h3>'+d.title+'</h3><div class="ind">'+d.ind+'</div><p>'+d.txt+'</p>'+
+        '<p class="hint">→ Toca otra zona del cuerpo.</p>'+
+        '<div class="legend"><span><span class="dot" style="background:var(--ok)"></span> Normal</span>'+
+        '<span><span class="dot" style="background:var(--warn)"></span> Atención</span>'+
+        '<span><span class="dot" style="background:var(--crit)"></span> Crítico</span></div>';
+    });
+  });
+
+  /* ---- deck navigation ---- */
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var N = slides.length, i = 0;
+  var prog = document.getElementById('prog'), cur = document.getElementById('cur');
+  var prevB = document.getElementById('prev'), nextB = document.getElementById('next');
+  document.getElementById('total').textContent = String(N).padStart(2,'0');
+  function pad(n){return String(n+1).padStart(2,'0')}
+  function go(n){
+    n = Math.max(0, Math.min(N-1, n));
+    if(n===i && slides[i].classList.contains('active')) return;
+    slides[i].classList.remove('active');
+    i = n;
+    slides[i].classList.add('active');
+    slides[i].scrollTop = 0;
+    prog.style.width = ((i)/(N-1)*100)+'%';
+    cur.textContent = pad(i);
+    prevB.disabled = i===0; nextB.disabled = i===N-1;
+  }
+  function next(){go(i+1)} function prev(){go(i-1)}
+  nextB.addEventListener('click', next);
+  prevB.addEventListener('click', prev);
+  var kh = document.getElementById('keyhint');
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'||e.key==='PageDown'||(e.key===' '&&!e.shiftKey)){e.preventDefault();next();kh.classList.add('gone')}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'||(e.key===' '&&e.shiftKey)){e.preventDefault();prev();kh.classList.add('gone')}
+    else if(e.key==='Home'){go(0)} else if(e.key==='End'){go(N-1)}
+    else if(e.key==='f'||e.key==='F'){toggleFs()}
+  });
+  /* touch swipe */
+  var tx=0, ty=0;
+  document.getElementById('deck').addEventListener('touchstart',function(e){tx=e.changedTouches[0].clientX;ty=e.changedTouches[0].clientY},{passive:true});
+  document.getElementById('deck').addEventListener('touchend',function(e){
+    var dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)){ dx<0?next():prev(); kh.classList.add('gone'); }
+  },{passive:true});
+  /* fullscreen */
+  function toggleFs(){
+    if(!document.fullscreenElement){ (document.documentElement.requestFullscreen||function(){})(); }
+    else { (document.exitFullscreen||function(){})(); }
+  }
+  document.getElementById('fs').addEventListener('click', toggleFs);
+  go(0);
+</script>
+</body>
+</html>
