@@ -162,6 +162,25 @@
   .closing-slide .big{font-family:"Archivo";font-weight:900;font-size:clamp(2rem,5.5vw,4rem);line-height:1.05;max-width:18ch}
   .closing-slide .tag{margin-top:26px;color:var(--mute);font-size:1.05rem}
 
+  /* workshop + refs */
+  .chip{display:inline-flex;align-items:center;gap:8px;background:rgba(215,230,75,.14);border:1px solid rgba(215,230,75,.4);color:var(--lime);font-family:"Archivo";font-weight:800;font-size:clamp(.72rem,1.2vw,.82rem);letter-spacing:.06em;text-transform:uppercase;padding:6px 14px;border-radius:999px;margin-bottom:14px}
+  .cta{display:inline-flex;align-items:center;gap:10px;background:var(--lime);color:#071428;font-family:"Archivo",sans-serif;font-weight:800;font-size:clamp(.95rem,1.6vw,1.05rem);padding:15px 26px;border-radius:12px;text-decoration:none;box-shadow:0 8px 24px rgba(215,230,75,.25)}
+  .tip{margin-top:20px;background:rgba(215,230,75,.08);border-left:3px solid var(--lime);border-radius:0 12px 12px 0;padding:14px 18px;font-size:clamp(.88rem,1.4vw,1rem);color:var(--mute)}
+  .tip b{color:var(--lime)}
+  .povbox{margin-top:18px;background:linear-gradient(135deg,var(--navy-600),var(--navy-700));border:1px solid var(--line);border-left:4px solid var(--blue-soft);border-radius:14px;padding:20px 24px;font-family:"Archivo";font-weight:600;font-size:clamp(1.05rem,2vw,1.4rem);line-height:1.3}
+  .povbox span{color:var(--blue-soft)}
+  .phaserow{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+  .phasecard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .phasecard .ph-n{font-family:"Archivo";font-weight:900;color:var(--lime);font-size:1.05rem}
+  .phasecard .ph-t{font-weight:700;margin:4px 0 2px}
+  .phasecard .ph-d{color:var(--mute);font-size:.84rem}
+  .reflist{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;max-height:62vh;overflow:auto}
+  .reflist a{color:var(--mute);font-size:clamp(.8rem,1.3vw,.92rem);text-decoration:none;padding:12px 15px;background:var(--card);border:1px solid var(--line);border-radius:12px;transition:.2s;display:block}
+  .reflist a:hover{border-color:var(--blue-soft);color:var(--white)}
+  .reflist a b{color:var(--white);font-weight:600;display:block;margin-bottom:2px}
+  .reflist a.wide{grid-column:1/-1;background:linear-gradient(90deg,rgba(215,230,75,.12),transparent);border-color:rgba(215,230,75,.4)}
+  .reflist a.wide b{color:var(--lime)}
+
   /* ---------- CHROME ---------- */
   .prog{position:fixed;top:0;left:0;height:3px;background:var(--lime);width:0;z-index:30;transition:width .4s ease;box-shadow:0 0 12px rgba(215,230,75,.5)}
   .hud{position:fixed;bottom:18px;right:20px;display:flex;align-items:center;gap:10px;z-index:30}
@@ -176,7 +195,7 @@
 
   @media(max-width:820px){
     .stats{grid-template-columns:1fr 1fr}
-    .two,.gaps,.riskrow,.three{grid-template-columns:1fr}
+    .two,.gaps,.riskrow,.three,.phaserow,.reflist{grid-template-columns:1fr}
     .bodywrap{grid-template-columns:1fr}
     .steps{grid-template-columns:1fr 1fr}
     .hint-key{display:none}
@@ -204,7 +223,6 @@
       <div class="eyebrow r" style="--d:.15s">Propuesta para el equipo</div>
       <h1 class="r" style="--d:.25s">ORBITAL ya es fuerte.<br>Hagámoslo <span class="hl">ganador</span>.</h1>
       <p class="lead r" style="--d:.38s">Dos frentes que mueven la aguja con los jueces — y una forma de encontrarlos juntos antes de cerrar la arquitectura.</p>
-      <div class="sign r" style="--d:.5s">Expone: <b>Irving Soriano</b> · UX Designer · Frontend · Design Thinker</div>
     </div>
   </section>
 
@@ -433,7 +451,80 @@
     </div>
   </section>
 
-  <!-- 12 · CIERRE -->
+  <!-- 12 · MANOS A LA OBRA / FIGJAM -->
+  <section class="slide">
+    <div class="rings"><span style="width:900px;height:900px;top:-200px;right:-280px"></span></div>
+    <div class="sin">
+      <div class="chip r" style="--d:.05s">La sesión, en vivo</div>
+      <h2 class="title r" style="--d:.12s">Manos a la obra: abramos el tablero</h2>
+      <p class="sub r" style="--d:.2s">Una hora, tres fases. Salimos con las <b style="color:var(--white)">2–3 features que nos diferencian</b> y una historia clara para la demo. Diseñamos para <b style="color:var(--white)">Katya</b>, nuestra comandante en tránsito a Marte.</p>
+      <div class="r" style="--d:.3s;margin-top:24px">
+        <a class="cta" href="https://www.figma.com/board/Gvpuko3RX7H2IzdzN6ksQT/Sin-t%C3%ADtulo?node-id=1-483&t=jHRVNDjSHpTVCd1T-1" target="_blank" rel="noopener">🧠 Abrir el tablero de empatía en FigJam
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12h16M14 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="phaserow r" style="--d:.42s">
+        <div class="phasecard"><div class="ph-n">01 · ~20 min</div><div class="ph-t">Empatizar</div><div class="ph-d">Mapa de empatía de Katya</div></div>
+        <div class="phasecard"><div class="ph-n">02 · ~15 min</div><div class="ph-t">Definir</div><div class="ph-d">Del dolor al problema (POV)</div></div>
+        <div class="phasecard"><div class="ph-n">03 · ~20 min</div><div class="ph-t">Idear</div><div class="ph-d">How Might We + votación</div></div>
+      </div>
+      <div class="tip r" style="--d:.55s"><b>Regla de oro:</b> escribimos en silencio primero y votamos después. Nadie defiende su idea en voz alta — dejamos que los votos hablen.</div>
+    </div>
+  </section>
+
+  <!-- 13 · EMPATIZAR -->
+  <section class="slide">
+    <div class="sin">
+      <div class="chip r" style="--d:.05s">Fase 1 · ~20 min</div>
+      <h2 class="title r" style="--d:.12s">Empatizar — ¿quién es Katya y qué le duele?</h2>
+      <p class="sub r" style="--d:.2s">Arrancamos con el escenario: <em>a Katya le empieza a doler el pecho, nadie a bordo es médico y Houston está a 20 min.</em> Con esa tensión en la cabeza, llenamos el mapa.</p>
+      <div class="ask r" style="--d:.34s;margin-top:18px">
+        <div class="asklist">
+          <div class="a"><span class="k">1</span><p><b>Proyectamos a Katya</b> arriba del mapa — todos diseñamos para la misma cabeza.</p></div>
+          <div class="a"><span class="k">2</span><p><b>Escritura en silencio, 5 min:</b> cada quien pega stickies en <em>Dice · Piensa · Hace · Siente · Dolores · Ganancias</em>. Una idea por sticky.</p></div>
+          <div class="a"><span class="k">3</span><p><b>Agrupamos</b> las notas parecidas en clusters (3 min). Ahí aparecen los patrones.</p></div>
+          <div class="a"><span class="k">4</span><p><b>Marcamos los dolores más fuertes</b> — de cada dolor saldrá una necesidad en la siguiente fase.</p></div>
+        </div>
+      </div>
+      <div class="tip r" style="--d:.5s"><b>Al facilitar:</b> pregunto, no impongo. "¿Qué <em>siente</em> Katya cuando ve un número que no entiende?" — y dejo que el equipo llene.</div>
+    </div>
+  </section>
+
+  <!-- 14 · DEFINIR -->
+  <section class="slide">
+    <div class="rings"><span style="width:900px;height:900px;top:-220px;left:-300px"></span></div>
+    <div class="sin">
+      <div class="chip r" style="--d:.05s">Fase 2 · ~15 min</div>
+      <h2 class="title r" style="--d:.12s">Definir — del dolor al problema real</h2>
+      <p class="sub r" style="--d:.2s">Convertimos los dolores más votados en un enunciado claro que sea la brújula del hackathon.</p>
+      <div class="ask r" style="--d:.34s;margin-top:18px">
+        <div class="asklist">
+          <div class="a"><span class="k">1</span><p><b>Tomamos las necesidades más votadas</b> del mapa de empatía.</p></div>
+          <div class="a"><span class="k">2</span><p><b>Las escribimos como POV</b> con la plantilla: <em>[usuario] necesita [necesidad] porque [insight]</em>.</p></div>
+          <div class="a"><span class="k">3</span><p><b>Elegimos 1–2 POV</b> que guiarán todo lo que construyamos después.</p></div>
+        </div>
+      </div>
+      <div class="povbox r" style="--d:.5s"><span>POV ejemplo —</span> Katya necesita saber si un cambio es normal o una alerta, <span>porque</span> no tiene a un médico del otro lado de la línea.</div>
+    </div>
+  </section>
+
+  <!-- 15 · IDEAR -->
+  <section class="slide">
+    <div class="sin">
+      <div class="chip r" style="--d:.05s">Fase 3 · ~20 min</div>
+      <h2 class="title r" style="--d:.12s">Idear — ¿cómo podríamos resolverlo?</h2>
+      <p class="sub r" style="--d:.2s">Del problema a las soluciones. Buscamos cantidad primero, calidad después.</p>
+      <div class="ask r" style="--d:.34s;margin-top:18px">
+        <div class="asklist">
+          <div class="a"><span class="k">1</span><p><b>Reformulamos el POV como How Might We:</b> <em>"¿Cómo podríamos dar contexto a un número para que no genere ansiedad?"</em></p></div>
+          <div class="a"><span class="k">2</span><p><b>Lluvia rápida, 5 min en silencio:</b> cantidad sobre calidad, sin juzgar ninguna idea.</p></div>
+          <div class="a"><span class="k">3</span><p><b>Dot voting:</b> 3 votos cada quien a las ideas con más potencial.</p></div>
+        </div>
+      </div>
+      <div class="tip r" style="--d:.5s"><b>Salida de la hora:</b> las 2–3 features que construimos — y que nos separan del resto. Entramos al hackathon con el alcance cerrado.</div>
+    </div>
+  </section>
+
+  <!-- 16 · CIERRE -->
   <section class="slide closing-slide">
     <div class="rings">
       <span style="width:700px;height:700px;top:50%;left:50%;transform:translate(-50%,-50%)"></span>
@@ -444,6 +535,27 @@
       <div class="big r" style="--d:.2s;margin-top:14px">Pongámosle a ORBITAL la <span class="hl">cara humana</span> que el reto está pidiendo.</div>
       <div class="tag r" style="--d:.45s">El motor es excelente. Juntos, eso es un proyecto que se recuerda.</div>
       <div class="tag r" style="--d:.6s;margin-top:28px;color:var(--blue-pale);font-family:'Archivo';font-weight:800;letter-spacing:.04em">🌮 Tacos de Asada · ORBITAL · NASA Space Apps CDMX 2026</div>
+    </div>
+  </section>
+
+  <!-- 17 · REFERENCIAS -->
+  <section class="slide">
+    <div class="sin">
+      <span class="numtag r" style="--d:.05s">+</span>
+      <div class="eyebrow r" style="--d:.12s">En qué nos basamos</div>
+      <h2 class="title r" style="--d:.2s">Referencias</h2>
+      <div class="reflist r" style="--d:.32s">
+        <a class="wide" href="https://drive.google.com/drive/folders/1UrVE1Gp53D9SItG5zXhtFitwmo81hk66?usp=sharing" target="_blank" rel="noopener"><b>📁 Carpeta de recursos del equipo (Google Drive)</b>Documentos, briefs y material de referencia que vamos compilando como equipo.</a>
+        <a class="wide" href="reto.html"><b>📄 Análisis del Reto: Software de Salud Espacial</b>Objetivos oficiales, lineamientos, contexto, salud mental, escenario del video y gamificación.</a>
+        <a href="https://www.nasa.gov/humans-in-space/the-human-body-in-space/" target="_blank" rel="noopener"><b>The Human Body in Space (marco RIDGE)</b>NASA Human Research Program</a>
+        <a href="https://www.psychiatrictimes.com/view/psychiatric-issues-space" target="_blank" rel="noopener"><b>Psychiatric Issues in Space</b>N. Kanas · Psychiatric Times</a>
+        <a href="https://ntrs.nasa.gov/api/citations/20240000994/downloads/Behavioral%20Risk%20In%20Spaceflight_Picano.pdf" target="_blank" rel="noopener"><b>Behavioral Risk in Spaceflight (PDF)</b>NASA BHP · Picano</a>
+        <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12155433/" target="_blank" rel="noopener"><b>Circadian Disruption &amp; Sleep Disorders (2025)</b>Int. J. Mol. Sci.</a>
+        <a href="https://www.uh.edu/news-events/stories/2021/april-2021/04202021-candice-alfano-astronaut-antarctica-mental-health.php" target="_blank" rel="noopener"><b>Mental Health Checklist (autoreporte)</b>C. Alfano · U. of Houston</a>
+        <a href="https://ntrs.nasa.gov/api/citations/20230003796/downloads/NASA-TP-2023003796%20SSRI%20Manuscript.pdf" target="_blank" rel="noopener"><b>SSRIs in Spaceflight</b>NASA Technical Paper</a>
+        <a href="https://www.nasa.gov/missions/station/human-research-studying-astronaut-physiology" target="_blank" rel="noopener"><b>Studying Astronaut Physiology</b>NASA HRP · SANS, Twins Study</a>
+        <a href="https://ntrs.nasa.gov/api/citations/20220013418/downloads/ASCEND-Communication%20Delays%2C%20Disruptions%2C%20and%20Blackouts%20for%20Crewed%20Mars%20Missions.pdf" target="_blank" rel="noopener"><b>Communication Delays &amp; Blackouts (Mars)</b>NASA ASCEND</a>
+      </div>
     </div>
   </section>
 
