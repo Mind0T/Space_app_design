@@ -5,7 +5,7 @@
   // Pega aquí la URL /exec del Apps Script para dejar a TODO el equipo conectado
   // sin que cada quien la pegue a mano. Si queda vacía, se usa la que cada
   // persona ponga en el botón ⚙️ Conectar.
-  var HARDCODED_ENDPOINT = "";
+  var HARDCODED_ENDPOINT = "https://script.google.com/macros/s/AKfycbwCi15lxUNGfKHaAz3-XoxXD0kXoRYkqMySGEEj1-EzXrUEpmg7ehAo4RnXcveE7C0ZIw/exec";
   var DEFAULT_ROOM = "tacos-de-asada";
 
   var LS = { ep: 'orbital_endpoint', name: 'orbital_name', room: 'orbital_room' };
