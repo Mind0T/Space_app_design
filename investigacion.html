@@ -8,7 +8,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="description" content="Presentación de investigación — por qué una misión a Marte, el marco RIDGE de la NASA y qué monitorear en cuerpo y mente. NASA Space Apps CDMX 2026." />
+<meta name="description" content="Presentación de investigación — por qué una misión a Marte, el marco RIDGE de la NASA, resumen de fuentes oficiales (NASA HRP, Agencia Espacial Canadiense), las pruebas cognitivas Cognition y WinSCAT, y qué monitorear en cuerpo y mente. NASA Space Apps CDMX 2026." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=Overpass:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -136,6 +136,20 @@
   .reflist a b{color:var(--white);font-weight:600;display:block;margin-bottom:2px}
   .reflist a.wide{grid-column:1/-1;background:linear-gradient(90deg,rgba(215,230,75,.12),transparent);border-color:rgba(215,230,75,.4)}
   .reflist a.wide b{color:var(--lime)}
+
+  /* fuentes oficiales + pruebas cognitivas */
+  .srcline{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:2px 0 14px;font-size:.84rem}
+  .srcline .org{font-family:"Archivo";font-weight:800;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;background:rgba(78,143,230,.16);color:var(--blue-soft);padding:4px 10px;border-radius:999px}
+  .srcline a{color:var(--blue-pale);text-decoration:none;border-bottom:1px dotted rgba(156,193,242,.5)}
+  .srcline a:hover{color:var(--white)}
+  .srcline .dt{color:var(--mute)}
+  .matrix.fit{max-height:none}
+  .matrix.fit th,.matrix.fit td{padding:9px 14px}
+  .matrix.fit td.dir small{margin-top:1px}
+  td a{color:var(--blue-pale);text-decoration:none;border-bottom:1px dotted rgba(156,193,242,.5)}
+  td a:hover{color:var(--white)}
+  td.dir small{display:block;font-weight:400;color:var(--mute);font-size:.78rem}
+  .reflist .refh{grid-column:1/-1;font-family:"Archivo";font-weight:800;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--lime);margin-top:6px}
 
   /* CHROME */
   .prog{position:fixed;top:0;left:0;height:3px;background:var(--lime);width:0;z-index:30;transition:width .4s ease;box-shadow:0 0 12px rgba(215,230,75,.5)}
@@ -469,6 +483,201 @@
     </div>
   </section>
 
+  <!-- FUENTE 1 · NASA HRP · PELIGROS -->
+  <section class="slide">
+    <div class="sin">
+      <div class="eyebrow r" style="--d:.05s">Fuente oficial · 1 de 5</div>
+      <h2 class="title r" style="--d:.12s">Los 5 peligros, según la NASA</h2>
+      <div class="srcline r" style="--d:.18s"><span class="org">NASA · Human Research Program</span><a href="https://www.nasa.gov/hrp/hazards/" target="_blank" rel="noopener">nasa.gov/hrp/hazards</a><span class="dt">Actualizada el 12 jun 2026</span></div>
+      <p class="sub r" style="--d:.22s">La página que da origen al marco RIDGE: reconocer los peligros permite a la NASA buscar cómo superarlos en misiones a la estación, la Luna y Marte.</p>
+      <div class="haz">
+        <div class="col r" style="--d:.34s">
+          <h4>Qué dice</h4>
+          <ul>
+            <li>Agrupa los retos del vuelo humano en <b>cinco peligros</b>: radiación, aislamiento y confinamiento, distancia a la Tierra, campos de gravedad y entornos hostiles o cerrados.</li>
+            <li>Los peligros <b>pueden interactuar</b> y empeorar los efectos de los demás sobre el cuerpo.</li>
+            <li>Se estudian en <b>análogos en tierra, laboratorios y la ISS</b>; cada peligro tiene su subpágina y su video.</li>
+          </ul>
+        </div>
+        <div class="col b r" style="--d:.46s">
+          <h4>Para ORBITAL</h4>
+          <ul>
+            <li>Es la base del <b>marco RIDGE</b> de esta presentación.</li>
+            <li>Como los peligros se combinan, tiene sentido medir <b>cuerpo y mente juntos</b>, no por separado.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUENTE 2 · NASA HRP · RIESGOS -->
+  <section class="slide">
+    <div class="sin">
+      <div class="eyebrow r" style="--d:.05s">Fuente oficial · 2 de 5</div>
+      <h2 class="title r" style="--d:.12s">Los riesgos de salud y desempeño</h2>
+      <div class="srcline r" style="--d:.18s"><span class="org">NASA · Human Research Program</span><a href="https://www.nasa.gov/hrp/risks/" target="_blank" rel="noopener">nasa.gov/hrp/risks</a><span class="dt">Actualizada el 21 jul 2026</span></div>
+      <p class="sub r" style="--d:.22s">Baja un nivel: de los cinco peligros a los riesgos concretos para la tripulación, que cambian según el destino (órbita baja, Luna o Marte).</p>
+      <div class="haz">
+        <div class="col r" style="--d:.34s">
+          <h4>Qué dice</h4>
+          <ul>
+            <li>Ordena los riesgos en <b>tres categorías</b>: fisiología humana (11), desempeño conductual y factores humanos (5) y radiación (1: cánceres inducidos).</li>
+            <li>No los jerarquiza, salvo uno: el <b>síndrome neuro-ocular asociado al vuelo (SANS)</b> es hoy el principal riesgo de salud.</li>
+            <li>En la categoría conductual aparecen <b>cambios de conducta y trastornos psiquiátricos</b>, trabajo en equipo inadecuado, <b>sueño inadecuado y horarios irregulares</b> y soporte insuficiente a la operación de sistemas (cognición y toma de decisiones).</li>
+          </ul>
+        </div>
+        <div class="col b r" style="--d:.46s">
+          <h4>Para ORBITAL</h4>
+          <ul>
+            <li>Nuestro eje mental-conductual cae justo en esa categoría: <b>sueño, cognición y conducta</b>.</li>
+            <li>Da un vocabulario oficial para nombrar lo que la app vigila.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUENTE 3 · NASA HRP · INVESTIGACIÓN EN CURSO -->
+  <section class="slide">
+    <div class="rings"><span style="width:1000px;height:1000px;top:-250px;right:-350px"></span></div>
+    <div class="sin">
+      <div class="eyebrow r" style="--d:.05s">Fuente oficial · 3 de 5</div>
+      <h2 class="title r" style="--d:.12s">Qué investiga la NASA ahora</h2>
+      <div class="srcline r" style="--d:.18s"><span class="org">NASA · Human Research Program</span><a href="https://www.nasa.gov/hrp/ongoing-hrp-research/" target="_blank" rel="noopener">nasa.gov/hrp/ongoing-hrp-research</a><span class="dt">Actualizada el 18 ago 2026</span></div>
+      <p class="sub r" style="--d:.22s">Catálogo de estudios en curso y pasados, en cuatro áreas: factores humanos y desempeño conductual, contramedidas de salud, radiación y operaciones de investigación.</p>
+      <div class="haz">
+        <div class="col r" style="--d:.34s">
+          <h4>Qué dice</h4>
+          <ul>
+            <li><b>Artemis II:</b> ARCHeR (bienestar, actividad y sueño de la tripulación), biomarcadores inmunes y un banco de datos de salud compartido.</li>
+            <li><b>Órbita baja (ISS):</b> CIPHER, B-Complex, Thigh Cuff, Zero T2, presión del líquido cefalorraquídeo, <b>Standard Measures</b> (mediciones fisiológicas y psicológicas consistentes), entre otros.</li>
+            <li>No nombra estudios cognitivos concretos; solo enlaza al área de factores humanos y a la <b>Human Research Roadmap</b>.</li>
+          </ul>
+        </div>
+        <div class="col b r" style="--d:.46s">
+          <h4>Para ORBITAL</h4>
+          <ul>
+            <li>ARCHeR y Standard Measures son el precedente de <b>seguimiento continuo</b> de bienestar, actividad y sueño.</li>
+            <li>El banco de datos compartido respalda guardar todo en una <b>base común</b>.</li>
+            <li>Para cognición hay que ir a las pruebas de la siguiente sección.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUENTE 4 · ASC-CSA · RADIACIÓN -->
+  <section class="slide">
+    <div class="sin">
+      <div class="eyebrow r" style="--d:.05s">Fuente oficial · 4 de 5</div>
+      <h2 class="title r" style="--d:.12s">Vigilar la radiación, en miniatura</h2>
+      <div class="srcline r" style="--d:.18s"><span class="org">Agencia Espacial Canadiense</span><a href="https://www.asc-csa.gc.ca/eng/news/articles/2026/2026-02-26-monitoring-radiation-astronaut-health.asp" target="_blank" rel="noopener">asc-csa.gc.ca · Monitoring radiation</a><span class="dt">26 feb 2026</span></div>
+      <p class="sub r" style="--d:.22s">La agencia canadiense contrató a Bubble Technology Industries para seguir desarrollando un espectrómetro de neutrones compacto y autónomo, el <b style="color:var(--white)">CANS</b>.</p>
+      <div class="stats">
+        <div class="stat pop" style="--d:.3s"><div class="big">$5.5 M</div><div class="lbl">valor del contrato para desarrollar el CANS</div></div>
+        <div class="stat pop" style="--d:.38s"><div class="big">~30%</div><div class="lbl">de la radiación en la ISS son neutrones</div></div>
+        <div class="stat pop" style="--d:.46s"><div class="big">25+ años</div><div class="lbl">de la ISS como banco de pruebas tecnológico</div></div>
+        <div class="stat pop" style="--d:.54s"><div class="big">5</div><div class="lbl">instrumentos o experimentos previos citados: detectores de burbujas, MOSFET, EVARM, Radi-N y Radi-N2</div></div>
+      </div>
+      <div class="haz" style="margin-top:22px">
+        <div class="col r" style="--d:.62s">
+          <h4>Qué dice</h4>
+          <ul>
+            <li>Los neutrones pueden causar daño biológico serio; los datos ayudarían a <b>reducir riesgos en misiones a la Luna y Marte</b>.</li>
+            <li>Los detectores de burbujas, antecesores del CANS, los usó el astronauta David Saint-Jacques en la ISS.</li>
+            <li>También tendría usos en la Tierra: terapia contra el cáncer, protección de tripulaciones aéreas y seguridad pública.</li>
+          </ul>
+        </div>
+        <div class="col b r" style="--d:.7s">
+          <h4>Para ORBITAL</h4>
+          <ul>
+            <li>Ejemplo real de cómo se monitorea la <b>R</b> de RIDGE.</li>
+            <li>Con la opción B (eje mental-conductual), la radiación queda como <b>contexto de la misión</b>, no como dato propio.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUENTE 5 · ASC-CSA · POR QUÉ CIENCIA EN EL ESPACIO -->
+  <section class="slide">
+    <div class="rings"><span style="width:900px;height:900px;top:-200px;left:-300px"></span></div>
+    <div class="sin">
+      <div class="eyebrow r" style="--d:.05s">Fuente oficial · 5 de 5</div>
+      <h2 class="title r" style="--d:.12s">¿Por qué hacer ciencia en el espacio?</h2>
+      <div class="srcline r" style="--d:.18s"><span class="org">Agencia Espacial Canadiense</span><a href="https://www.asc-csa.gc.ca/eng/iss/science/why-do-we-conduct-science-experiments-in-space.asp" target="_blank" rel="noopener">asc-csa.gc.ca · Why science in space</a><span class="dt">Modificada el 28 oct 2025</span></div>
+      <p class="sub r" style="--d:.22s">Tres razones que da la agencia para usar la ISS como laboratorio.</p>
+      <div class="three">
+        <div class="scard r" style="--d:.3s"><div class="tagk">1 · Acceso</div><h3>Un entorno único</h3><p>La ISS ofrece condiciones imposibles de reproducir en tierra. En promedio hay <b style="color:var(--white)">~200 experimentos internacionales</b> a bordo al mismo tiempo.</p></div>
+        <div class="scard r" style="--d:.4s"><div class="tagk">2 · Futuro</div><h3>Preparar Luna y Marte</h3><p>Identificar y reducir riesgos de misiones largas: ingravidez prolongada, más radiación, aislamiento, retrasos de comunicación y menos apoyo de la Tierra en suministros y atención médica.</p></div>
+        <div class="scard r" style="--d:.5s"><div class="tagk">3 · Aquí</div><h3>Mejorar la vida en la Tierra</h3><p>Los efectos en astronautas recuerdan al envejecimiento acelerado y al sedentarismo. Se estudian huesos, corazón, vasos sanguíneos y cerebro, con posibles beneficios para el equilibrio, la osteoporosis, enfermedades cardiovasculares y diabetes tipo 2.</p></div>
+      </div>
+      <div class="tip r" style="--d:.62s"><b>Dato clave:</b> seis meses en el espacio pueden dar datos que en la Tierra tardarían años en reunirse. <b>Para ORBITAL:</b> respalda medir de forma continua durante la misión, y mostrar que lo que aprendemos también sirve en tierra.</div>
+    </div>
+  </section>
+
+  <!-- PRUEBAS 1 · COGNITION -->
+  <section class="slide">
+    <div class="sin">
+      <div class="eyebrow r" style="--d:.05s">Pruebas cognitivas · 1 de 3</div>
+      <h2 class="title r" style="--d:.12s">Cognition: 7 pruebas de referencia</h2>
+      <p class="sub r" style="--d:.2s">Batería de 10 pruebas breves que Penn desarrolló para la NASA y que se usa en la ISS. Estos son los parámetros para diseñar cada minijuego.</p>
+      <div class="matrix fit r" style="--d:.3s">
+        <table>
+          <thead><tr><th>Prueba</th><th>Qué ve y hace la persona</th><th>Dónde verla</th></tr></thead>
+          <tbody>
+            <tr><td class="dir">Motor Praxis<small>MPT</small></td><td>20 cuadros azules, uno a la vez, cada uno más pequeño y en lugar aleatorio; se hace clic con el trackpad.</td><td><a href="https://www.med.upenn.edu/uep/cognition.html" target="_blank" rel="noopener">GIF en Penn</a></td></tr>
+            <tr><td class="dir">Visual Object Learning<small>VOLT</small></td><td>Memorizar 10 objetos de alambre (5 s cada uno); luego juzgar 20, la mitad nuevos, con 4 respuestas: sí o no, definitivo o probable.</td><td><a href="https://www.med.upenn.edu/uep/cognition.html" target="_blank" rel="noopener">GIF en Penn</a></td></tr>
+            <tr><td class="dir">Fractal 2-Back<small>F2B</small></td><td>62 fractales de 1.75 s, 15 de ellos coincidencias; barra espaciadora si es igual al de dos antes. Práctica con feedback; la prueba real, sin él.</td><td><a href="https://www.med.upenn.edu/uep/cognition.html" target="_blank" rel="noopener">GIF en Penn</a> · <a href="https://github.com/vekteo/Nback_jsPsych" target="_blank" rel="noopener">código n-back (MIT)</a></td></tr>
+            <tr><td class="dir">Line Orientation<small>LOT</small></td><td>12 pares: rotar con flechas la línea azul hasta dejarla paralela a la negra (pasos de 2° según la NASA).</td><td><a href="https://www.med.upenn.edu/uep/cognition.html" target="_blank" rel="noopener">GIF en Penn</a></td></tr>
+            <tr><td class="dir">Balloon Analog Risk<small>BART</small></td><td>30 globos: cada bombeo suma $1 y puede reventar; “collect” guarda lo ganado. El reporte de la NASA menciona un punto de ruptura de unos 4 bombeos.</td><td><a href="https://www.med.upenn.edu/uep/cognition.html" target="_blank" rel="noopener">GIF en Penn</a> · <a href="https://github.com/m-Py/BART" target="_blank" rel="noopener">código BART (dominio público)</a></td></tr>
+            <tr><td class="dir">Psychomotor Vigilance<small>PVT</small></td><td>3 min. Tras un rectángulo azul arranca un contador en milisegundos; se presiona la barra espaciadora lo más rápido posible y el tiempo se muestra 1 s. Intervalo entre estímulos de 1 a 4 s.</td><td><a href="https://www.med.upenn.edu/uep/assets/user-content/documents/Basner2011-ValidityandsensitivityofabriefPVT.pdf" target="_blank" rel="noopener">PDF Basner 2011</a> · <a href="https://www.psytoolkit.org/experiment-library/pvtb.html" target="_blank" rel="noopener">demo PsyToolkit</a></td></tr>
+            <tr><td class="dir">Emotion Recognition<small>ERT</small></td><td>Caras una por una; 5 etiquetas: feliz, triste, enojo, miedo y sin emoción. La versión NASA y Penn usa 20 caras.</td><td><a href="https://www.med.upenn.edu/bbl/2dfaces.html" target="_blank" rel="noopener">Muestras ER40 (Penn)</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note r" style="--d:.45s;margin-bottom:34px">Capturas reales: Figura 1 de <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4691281" target="_blank" rel="noopener" style="color:var(--blue-pale)">Basner et al. 2015</a>. Instrucciones exactas al sujeto: Apéndice C del <a href="https://ntrs.nasa.gov/api/citations/20205008023/downloads/NASA_TM20205008023.pdf" target="_blank" rel="noopener" style="color:var(--blue-pale)">reporte NASA/TM-20205008023</a> (pp. 56–58).</p>
+    </div>
+  </section>
+
+  <!-- PRUEBAS 2 · WINSCAT -->
+  <section class="slide">
+    <div class="rings"><span style="width:1000px;height:1000px;top:-250px;right:-350px"></span></div>
+    <div class="sin">
+      <div class="eyebrow r" style="--d:.05s">Pruebas cognitivas · 2 de 3</div>
+      <h2 class="title r" style="--d:.12s">WinSCAT: las otras tres pruebas</h2>
+      <p class="sub r" style="--d:.2s">Subconjunto de cinco pruebas del sistema ANAM que usó la NASA antes de Cognition. La batería completa dura entre 11 y 15 minutos.</p>
+      <div class="three">
+        <div class="scard r" style="--d:.3s"><div class="tagk">WinSCAT</div><h3>Code Substitution</h3><p>Se emparejan símbolos con números consultando una cuadrícula de referencia en la parte superior de la pantalla.</p></div>
+        <div class="scard r" style="--d:.4s"><div class="tagk">WinSCAT</div><h3>Mathematics</h3><p>Sumas y restas de tres dígitos sueltos, por ejemplo 3 − 5 + 4 = ?</p></div>
+        <div class="scard r" style="--d:.5s"><div class="tagk">WinSCAT</div><h3>Match to Sample</h3><p>Se identifica la cuadrícula igual a la mostrada, después de una demora de 5 s.</p></div>
+      </div>
+      <div class="tip r" style="--d:.62s"><b>Sin capturas públicas.</b> Estas descripciones salen de la <a href="https://ntrs.nasa.gov/api/citations/20080009715/downloads/20080009715.pdf" target="_blank" rel="noopener" style="color:var(--blue-pale)">Tabla I (p. 10) de un reporte de la NASA</a>; no encontré cantidad de ítems ni tiempos. Lo más cercano a ver la pantalla son las figuras B-5, B-7, B-8 y B-9 (pp. 17–19) del <a href="https://apps.dtic.mil/sti/pdfs/ADA549141.pdf" target="_blank" rel="noopener" style="color:var(--blue-pale)">informe ARL-TN-0440 sobre ANAM</a> (es ANAM, no WinSCAT, y solo leí los pies de figura). Pruebas parecidas con demo: <a href="https://www.millisecond.com/library/digitsymbolsubstitutiontask" target="_blank" rel="noopener" style="color:var(--blue-pale)">DSST</a> y <a href="https://www.millisecond.com/library/dmts" target="_blank" rel="noopener" style="color:var(--blue-pale)">Delayed Matching to Sample</a> de Millisecond (requieren licencia de Inquisit).</div>
+    </div>
+  </section>
+
+  <!-- PRUEBAS 3 · PARÁMETROS QUE NO COINCIDEN -->
+  <section class="slide">
+    <div class="sin">
+      <div class="eyebrow r" style="--d:.05s">Pruebas cognitivas · 3 de 3</div>
+      <h2 class="title r" style="--d:.12s">Antes de fijar parámetros: las fuentes no coinciden</h2>
+      <p class="sub r" style="--d:.2s">Al comparar los documentos aparecen valores distintos para la misma prueba. Hay que elegir uno y dejarlo escrito.</p>
+      <div class="matrix fit r" style="--d:.3s">
+        <table>
+          <thead><tr><th>Parámetro</th><th>Valores encontrados</th><th>Fuentes</th></tr></thead>
+          <tbody>
+            <tr><td class="dir">PVT · lapso</td><td>355 ms · 500 ms</td><td>Basner 2011 y Moore 2017 · PsyToolkit</td></tr>
+            <tr><td class="dir">PVT · falso inicio</td><td>menos de 100 ms · 130 ms</td><td>Basner 2011 · Moore 2017</td></tr>
+            <tr><td class="dir">PVT · intervalo entre estímulos</td><td>1–4 s · 0–3 s · 2–10 s</td><td>Basner 2011 y NASA · PsyToolkit · repo snipeso/pvt</td></tr>
+            <tr><td class="dir">ERT · número de caras</td><td>20 · 40</td><td>Reporte NASA y página de Penn · Moore 2017</td></tr>
+            <tr><td class="dir">LOT · rotación por clic</td><td>2° · 9° o 3°</td><td>Reporte NASA · Moore 2017</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip r" style="--d:.45s"><b>Propuesta:</b> un valor por parámetro, la fuente citada en el código y todo configurable. <b>Para ver la interfaz original:</b> Penn entrega el software gratis, vía NASA, a investigación con fondos federales y aprobación ética (IRB); contacto: cognition@pennmedicine.upenn.edu. La versión para iPad es comercial (Pulsar Informatics).</div>
+    </div>
+  </section>
+
   <!-- 15 · PREGUNTA DE ALCANCE -->
   <section class="slide">
     <div class="sin">
@@ -522,6 +731,40 @@
         <a href="https://www.nasa.gov/missions/station/human-research-studying-astronaut-physiology" target="_blank" rel="noopener"><b>Studying Astronaut Physiology</b>NASA HRP · SANS, Twins Study</a>
         <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12155433/" target="_blank" rel="noopener"><b>Circadian Disruption &amp; Sleep Disorders (2025)</b>Int. J. Mol. Sci.</a>
         <a href="https://ntrs.nasa.gov/api/citations/20220013418/downloads/ASCEND-Communication%20Delays%2C%20Disruptions%2C%20and%20Blackouts%20for%20Crewed%20Mars%20Missions.pdf" target="_blank" rel="noopener"><b>Communication Delays &amp; Blackouts (Mars)</b>NASA ASCEND</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 19 · REFERENCIAS · FUENTES OFICIALES Y PRUEBAS COGNITIVAS -->
+  <section class="slide">
+    <div class="sin">
+      <span class="numtag r" style="--d:.05s">+</span>
+      <div class="eyebrow r" style="--d:.12s">En qué nos basamos · parte 2</div>
+      <h2 class="title r" style="--d:.2s">Fuentes oficiales y pruebas cognitivas</h2>
+      <div class="reflist r" style="--d:.32s">
+        <div class="refh">Fuentes oficiales</div>
+        <a href="https://www.nasa.gov/hrp/hazards/" target="_blank" rel="noopener"><b>NASA HRP · Los 5 peligros</b>Actualizada el 12 jun 2026</a>
+        <a href="https://www.nasa.gov/hrp/risks/" target="_blank" rel="noopener"><b>NASA HRP · Riesgos del vuelo espacial</b>Actualizada el 21 jul 2026</a>
+        <a href="https://www.nasa.gov/hrp/ongoing-hrp-research/" target="_blank" rel="noopener"><b>NASA HRP · Investigación en curso</b>Actualizada el 18 ago 2026</a>
+        <a href="https://www.asc-csa.gc.ca/eng/news/articles/2026/2026-02-26-monitoring-radiation-astronaut-health.asp" target="_blank" rel="noopener"><b>ASC-CSA · Monitoreo de radiación</b>Agencia Espacial Canadiense · 26 feb 2026</a>
+        <a class="wide" href="https://www.asc-csa.gc.ca/eng/iss/science/why-do-we-conduct-science-experiments-in-space.asp" target="_blank" rel="noopener"><b>ASC-CSA · ¿Por qué hacer ciencia en el espacio?</b>Agencia Espacial Canadiense · modificada el 28 oct 2025</a>
+        <div class="refh">Batería Cognition y WinSCAT</div>
+        <a href="https://www.med.upenn.edu/uep/cognition.html" target="_blank" rel="noopener"><b>Penn · Cognition Test Battery</b>Un GIF por prueba y duración de la batería</a>
+        <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4691281" target="_blank" rel="noopener"><b>Basner et al. 2015 (PMC)</b>Desarrollo y validación; Figura 1 con capturas de las 10 pruebas</a>
+        <a href="https://ntrs.nasa.gov/api/citations/20205008023/downloads/NASA_TM20205008023.pdf" target="_blank" rel="noopener"><b>NASA/TM-20205008023 (PDF)</b>Beard · parámetros e instrucciones al sujeto</a>
+        <a href="https://www.mooremetrics.com/wp-content/uploads/2021/01/neurocats_moore.pdf" target="_blank" rel="noopener"><b>Moore et al. 2017 (PDF)</b>Validación; Apéndice A describe las pruebas</a>
+        <a href="https://www.med.upenn.edu/uep/assets/user-content/documents/Basner2011-ValidityandsensitivityofabriefPVT.pdf" target="_blank" rel="noopener"><b>Basner et al. 2011 · PVT-B (PDF)</b>3 min, ISI de 1 a 4 s, lapso de 355 ms</a>
+        <a href="https://ntrs.nasa.gov/api/citations/20080009715/downloads/20080009715.pdf" target="_blank" rel="noopener"><b>NTRS 20080009715 (PDF)</b>Seaton et al. · descripción de WinSCAT en la Tabla I</a>
+        <a class="wide" href="https://apps.dtic.mil/sti/pdfs/ADA549141.pdf" target="_blank" rel="noopener"><b>ARL-TN-0440 · ANAM (PDF)</b>Figuras B-5, B-7, B-8 y B-9 de Code Substitution, Match to Sample y Mathematical Processing</a>
+        <div class="refh">Código y demos</div>
+        <a href="https://github.com/m-Py/BART" target="_blank" rel="noopener"><b>m-Py/BART</b>BART en JavaScript · dominio público</a>
+        <a href="https://github.com/vekteo/Nback_jsPsych" target="_blank" rel="noopener"><b>vekteo/Nback_jsPsych</b>n-back en jsPsych · licencia MIT</a>
+        <a href="https://github.com/snipeso/pvt" target="_blank" rel="noopener"><b>snipeso/pvt</b>PVT en Python con PsychoPy · sin licencia visible</a>
+        <a href="https://www.psytoolkit.org/experiment-library/pvtb.html" target="_blank" rel="noopener"><b>PsyToolkit · PVT-B</b>Demo y código del PVT de 3 min</a>
+        <a href="https://www.med.upenn.edu/bbl/2dfaces.html" target="_blank" rel="noopener"><b>Penn BBL · caras ER40</b>Muestras; el set completo es solo para investigación</a>
+        <a href="https://link.springer.com/content/pdf/10.3758/BRM.40.1.109.pdf" target="_blank" rel="noopener"><b>Calvo y Lundqvist 2008 (PDF)</b>KDEF: tiempos de exposición y layout de caras</a>
+        <a href="https://www.millisecond.com/library/digitsymbolsubstitutiontask" target="_blank" rel="noopener"><b>Millisecond · DSST</b>Demo parecida a Code Substitution · requiere licencia</a>
+        <a href="https://www.millisecond.com/library/dmts" target="_blank" rel="noopener"><b>Millisecond · Delayed Matching to Sample</b>Demo parecida a Match to Sample · requiere licencia</a>
       </div>
     </div>
   </section>
