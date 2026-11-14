@@ -142,6 +142,11 @@
   .verdict.good{background:rgba(76,203,143,.15);color:var(--ok)}
   .verdict.warn{background:rgba(242,193,78,.15);color:var(--warn)}
   .verdict.none{background:rgba(156,193,242,.1);color:var(--mute)}
+  .hecho.empty{color:var(--mute);font-weight:400;font-style:italic;font-size:clamp(.95rem,1.6vw,1.1rem)}
+  .arfoot{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:16px}
+  .arfoot .verdict{margin-top:0}
+  .editlink{cursor:pointer;font-family:"Archivo";font-weight:800;font-size:.82rem;color:var(--white);background:rgba(10,26,51,.6);border:1px solid var(--line);border-radius:11px;padding:10px 16px;transition:.15s}
+  .editlink:hover{border-color:var(--lime);color:var(--lime)}
 
   /* matriz */
   .matrix{overflow:auto;border:1px solid var(--line);border-radius:16px;max-height:max(280px,calc(100vh - 290px));margin-top:16px}
@@ -174,6 +179,8 @@
   .combocol .src{color:var(--mute);font-size:.78rem;margin-bottom:12px}
   .combocol.dato h5{color:var(--lime)} .combocol.canal h5{color:var(--blue-soft)} .combocol.mom h5{color:var(--warn)}
   .combocol .col-in{margin-bottom:8px}
+  .combocol input[type=text]{padding:10px 12px}
+  .pickgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
   .chosenq{background:linear-gradient(135deg,rgba(30,82,200,.28),var(--navy-700));border:1px solid rgba(215,230,75,.35);border-radius:14px;padding:14px 18px;margin-bottom:18px}
   .chosenq .lbl{font-family:"Archivo";font-weight:800;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--lime);margin-bottom:4px}
   .chosenq .txt{font-size:clamp(.98rem,1.7vw,1.15rem);font-weight:600;color:var(--white)}
@@ -232,6 +239,20 @@
     .hint-key{display:none}
     .slide{padding:68px 20px 92px}
     .tchip.hideM{display:none}
+    .tchip.hideM.on{display:inline-flex}
+    .pickgrid{grid-template-columns:1fr}
+    /* matriz como tarjetas en celular */
+    .matrix{max-height:none;overflow:visible;border:none}
+    .matrix table{min-width:0}
+    .matrix thead{display:none}
+    .matrix tbody,.matrix td{display:block}
+    .matrix tr{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+    .matrix td{border:none;padding:0}
+    .matrix td.mhmw{grid-column:1/-1}
+    .matrix td[data-l]::before{content:attr(data-l);display:block;font-family:"Archivo";font-weight:800;font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;color:var(--blue-soft);margin-bottom:6px}
+    .matrix td select{width:100%}
+    .matrix td.total{text-align:left;align-self:center}
+    .matrix td.pickcell{align-self:center;justify-self:end}
     .tin{padding:8px 12px}
     .tin .tl{display:none}
     .tin .tb{padding:8px 11px}
@@ -496,8 +517,10 @@
       <div class="chosenq r" style="--d:.05s"><div class="lbl">Pregunta elegida (del paso 4)</div><div class="txt empty chosenHMW">Marca “Elegir” en una pregunta del paso 4 y aparecerá aquí.</div></div>
       <div class="rh r" style="--d:.1s"><span class="rnum">Elegir</span><h3>La idea finalista</h3><span class="rtime">5 min</span></div>
       <p class="rd r" style="--d:.16s">Cada persona vota por tres ideas. Entre las más votadas, quédense con la que <b>puedan demostrar en un prototipo de un día</b>.</p>
-      <div class="r" style="--d:.22s;margin-bottom:14px"><div class="lb">Idea con la que seguimos</div><textarea data-k="final_idea" placeholder="La combinación / idea elegida para prototipar…"></textarea></div>
-      <div class="r" style="--d:.28s"><div class="lb">¿Por qué se puede prototipar en un día?</div><textarea data-k="final_why" placeholder="Qué es lo mínimo que mostraríamos en la demo…"></textarea></div>
+      <div class="pickgrid r" style="--d:.22s">
+        <div><div class="lb">Idea con la que seguimos</div><textarea data-k="final_idea" placeholder="La combinación / idea elegida para prototipar…"></textarea></div>
+        <div><div class="lb">¿Por qué se puede prototipar en un día?</div><textarea data-k="final_why" placeholder="Qué es lo mínimo que mostraríamos en la demo…"></textarea></div>
+      </div>
     </div>
   </section>
 
@@ -586,7 +609,7 @@
   <button id="next" aria-label="Siguiente"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <button id="fs" aria-label="Pantalla completa"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 9V5a1 1 0 011-1h4M20 9V5a1 1 0 00-1-1h-4M4 15v4a1 1 0 001 1h4M20 15v4a1 1 0 01-1 1h-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 </div>
-<div class="hint-key" id="keyhint"><kbd>←</kbd><kbd>→</kbd> navega · <kbd>F</kbd> pantalla completa</div>
+<div class="hint-key" id="keyhint"><kbd>←</kbd><kbd>→</kbd> navega · <kbd>Esc</kbd> sale del campo · <kbd>F</kbd> pantalla completa</div>
 
 <script src="sync.js"></script>
 <script>
@@ -689,7 +712,8 @@ gen('autorev', CANVAS.map(function(f){
     '<div class="fhead r" style="--d:.1s;margin-top:12px"><span class="fn">'+f.n+'</span><h2 class="title sm">'+f.name+'</h2></div>'+
     '<div class="hecho r" style="--d:.16s" data-hmwecho="'+f.k+'">—</div>'+
     '<div class="checks r" style="--d:.22s">'+checks+'</div>'+
-    '<span class="verdict none" id="verd_'+f.k+'">Sin revisar</span>'+
+    '<div class="arfoot"><span class="verdict none" id="verd_'+f.k+'">Sin revisar</span>'+
+    '<button type="button" class="editlink" data-goto="h-'+f.k+'">✎ Editar esta pregunta (paso 2)</button></div>'+
     '<div class="exrow"><button type="button" class="exbtn" data-ex="ex3">Ver ejemplo de calibración</button></div>'+
   '</div></section>';
 }).join(''));
@@ -701,10 +725,10 @@ CANVAS.forEach(function(f){
   mx.insertAdjacentHTML('beforeend',
    '<tr>'+
     '<td class="mhmw"><span class="rcname">'+f.name+'</span><span data-mhmw="'+f.k+'">—</span></td>'+
-    '<td><select data-k="m1_'+f.k+'" data-m="'+f.k+'">'+opts()+'</select></td>'+
-    '<td><select data-k="m2_'+f.k+'" data-m="'+f.k+'">'+opts()+'</select></td>'+
-    '<td class="total" id="tot_'+f.k+'">0</td>'+
-    '<td><button type="button" class="pickbtn" data-pick="'+f.k+'">Elegir</button></td>'+
+    '<td data-l="¿Conecta con un dato de la NASA? (1–3)"><select data-k="m1_'+f.k+'" data-m="'+f.k+'">'+opts()+'</select></td>'+
+    '<td data-l="¿Se puede prototipar en un día? (1–3)"><select data-k="m2_'+f.k+'" data-m="'+f.k+'">'+opts()+'</select></td>'+
+    '<td class="total" data-l="Total" id="tot_'+f.k+'">0</td>'+
+    '<td class="pickcell"><button type="button" class="pickbtn" data-pick="'+f.k+'">Elegir</button></td>'+
    '</tr>');
 });
 
@@ -758,7 +782,8 @@ function syncHMW(){
   CANVAS.forEach(function(f){
     var v=(document.querySelector('[data-k="hmw_'+f.k+'"]')||{}).value||'';
     var txt=v.trim()||'—';
-    var echo=document.querySelector('[data-hmwecho="'+f.k+'"]'); if(echo) echo.textContent=txt;
+    var echo=document.querySelector('[data-hmwecho="'+f.k+'"]');
+    if(echo){ echo.textContent=v.trim()||'Todavía no escriben esta pregunta. Usen “✎ Editar esta pregunta” para ir al paso 2.'; echo.classList.toggle('empty',!v.trim()); }
     var mh=document.querySelector('[data-mhmw="'+f.k+'"]'); if(mh) mh.textContent=txt;
   });
   syncChosen();
@@ -866,7 +891,9 @@ document.getElementById('csvBtn2').onclick=exportCSV;
 document.getElementById('copyBtn').onclick=function(){copyTSV(this)};
 document.getElementById('copyBtn2').onclick=function(){copyTSV(this)};
 document.getElementById('resetBtn').onclick=function(){
-  if(confirm('¿Borrar todo lo escrito en este navegador? No se puede deshacer.')){
+  var msg='¿Borrar todo lo escrito en este navegador? No se puede deshacer.';
+  if(window.Sync&&Sync.isConnected()) msg+='\n\nOjo: están conectados al Google Sheet del equipo. Lo que ya está en la hoja se volverá a cargar; para empezar de cero también hay que borrar esas filas en el Sheet.';
+  if(confirm(msg)){
     try{localStorage.removeItem(KEY)}catch(e){}; location.reload();
   }
 };
@@ -927,7 +954,7 @@ function typing(t){
 document.addEventListener('keydown', function(e){
   if(exModal.classList.contains('open')){ if(e.key==='Escape') closeEx(); return; }
   if(e.ctrlKey||e.metaKey||e.altKey) return;
-  if(typing(e.target)) return;
+  if(typing(e.target)){ if(e.key==='Escape'){ e.target.blur(); kh.classList.remove('gone'); } return; }
   var onBtn=e.target&&(e.target.tagName==='BUTTON'||e.target.tagName==='A');
   if(e.key==='ArrowRight'||e.key==='PageDown'||(e.key===' '&&!e.shiftKey&&!onBtn)){e.preventDefault();next();kh.classList.add('gone')}
   else if(e.key==='ArrowLeft'||e.key==='PageUp'||(e.key===' '&&e.shiftKey&&!onBtn)){e.preventDefault();prev();kh.classList.add('gone')}
@@ -945,6 +972,7 @@ document.getElementById('deck').addEventListener('touchend',function(e){
   var dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
   if(Math.abs(dx)>60 && Math.abs(dx)>Math.abs(dy)){ dx<0?next():prev(); kh.classList.add('gone'); }
 },{passive:true});
+window.addEventListener('hashchange', function(){ var t=indexOfId((location.hash||'').slice(1)); if(t>=0&&t!==idx) go(t,true); });
 function toggleFs(){
   if(!document.fullscreenElement){ (document.documentElement.requestFullscreen||function(){}).call(document.documentElement); }
   else { (document.exitFullscreen||function(){}).call(document); }
@@ -964,15 +992,17 @@ document.getElementById('fs').addEventListener('click', function(){ toggleFs(); 
 (function(){
   if(!window.Sync) return;
   var barEl=document.getElementById('syncbar'); if(barEl) Sync.mountBar(barEl);
-  var TOOL='aterrizar', pushTimers={}, firstPull=true;
+  var TOOL='aterrizar', pushTimers={}, firstPull=true, lastLocal={};
+  function touch(k){ lastLocal[k]=Date.now(); }
   function val(t){ return t.type==='checkbox' ? (t.checked?'true':'false') : t.value; }
   function pushNow(key,value){ if(Sync.isConnected()) Sync.post({op:'set',tool:TOOL,key:key,value:value}).catch(function(){}); }
   function pushDeb(key,value){ if(!Sync.isConnected()) return; clearTimeout(pushTimers[key]); pushTimers[key]=setTimeout(function(){pushNow(key,value)},600); }
-  document.addEventListener('input', function(e){ var t=e.target; if(t.matches&&t.matches('[data-k]')) pushDeb(t.getAttribute('data-k'), val(t)); });
-  document.addEventListener('change', function(e){ var t=e.target; if(t.matches&&t.matches('[data-k]')) pushNow(t.getAttribute('data-k'), val(t)); });
-  document.addEventListener('click', function(e){ var b=e.target.closest&&e.target.closest('[data-pick]'); if(b) setTimeout(function(){ pushNow('elegida', window._elegida||''); },0); });
+  document.addEventListener('input', function(e){ var t=e.target; if(t.matches&&t.matches('[data-k]')){ var k=t.getAttribute('data-k'); touch(k); pushDeb(k, val(t)); } });
+  document.addEventListener('change', function(e){ var t=e.target; if(t.matches&&t.matches('[data-k]')){ var k=t.getAttribute('data-k'); touch(k); pushNow(k, val(t)); } });
+  document.addEventListener('click', function(e){ var b=e.target.closest&&e.target.closest('[data-pick]'); if(b){ touch('elegida'); setTimeout(function(){ pushNow('elegida', window._elegida||''); },0); } });
 
   function applyServerValue(key,value){
+    if(lastLocal[key] && Date.now()-lastLocal[key]<10000) return; /* edición propia reciente: aún viaja al Sheet */
     if(key==='elegida'){ if((window._elegida||'')!==value) setPick(value, !!value); return; }
     var els=document.querySelectorAll('[data-k="'+key+'"]'); if(!els.length) return;
     var e0=els[0];
@@ -994,7 +1024,8 @@ document.getElementById('fs').addEventListener('click', function(){ toggleFs(); 
     Sync.read(TOOL).then(function(j){
       if(!j||!j.ok||!j.rows) return;
       var has=j.rows.length>0;
-      j.rows.forEach(function(r){ if(r.key!=null&&r.key!=='') applyServerValue(String(r.key), r.value==null?'':String(r.value)); save(); });
+      j.rows.forEach(function(r){ if(r.key!=null&&r.key!=='') applyServerValue(String(r.key), r.value==null?'':String(r.value)); });
+      if(has){ try{ localStorage.setItem(KEY, JSON.stringify(collect())); }catch(e){} } /* guardado silencioso: sin parpadeo cada 8 s */
       if(firstPull){ firstPull=false; if(!has) seedLocal(); }
     }).catch(function(){});
   }
