@@ -192,11 +192,29 @@ function maybeBuildViews_(room) {
   } catch (_) {}
 }
 
+/* Separador de claves "por persona": aterrizar.html guarda el texto como
+   clave~~personaslug. Aquí volvemos a juntar todas las respuestas de un mismo
+   recuadro para que las pestañas legibles muestren a TODO el equipo junto. */
+var PP_SEP = '~~';
 function kv_(rows, tool) {
-  var m = {};
+  var m = {}, pp = {};
   rows.forEach(function (r) {
     if (String(r[2]) !== tool || !r[6]) return;
-    m[String(r[6])] = { v: r[7] == null ? '' : String(r[7]), a: String(r[5] || ''), t: r[0] };
+    var key = String(r[6]);
+    var e = { v: r[7] == null ? '' : String(r[7]), a: String(r[5] || ''), t: r[0] };
+    m[key] = e;
+    var si = key.indexOf(PP_SEP);
+    if (si >= 0 && e.v !== '') {
+      var base = key.slice(0, si);
+      (pp[base] = pp[base] || []).push({ who: e.a || key.slice(si + PP_SEP.length), v: e.v, t: e.t });
+    }
+  });
+  /* para cada clave base, junta las respuestas de todas las personas */
+  Object.keys(pp).forEach(function (base) {
+    var arr = pp[base].sort(function (a, b) { return (a.t || 0) - (b.t || 0); });
+    var joined = arr.map(function (x) { return (x.who || '—') + ': ' + x.v; }).join('\n');
+    var last = arr[arr.length - 1];
+    m[base] = { v: joined, a: last.who, t: last.t, pp: arr };
   });
   return m;
 }

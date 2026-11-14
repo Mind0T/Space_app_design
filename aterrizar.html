@@ -990,35 +990,59 @@ document.getElementById('fs').addEventListener('click', function(){ toggleFs(); 
   go(start>=0?start:0, true);
 })();
 
-/* ---------- live sync con Google Sheets ---------- */
+/* ---------- live sync con Google Sheets · RESPUESTAS SEPARADAS POR PERSONA ----------
+   Los cuadros de texto (textarea / input de texto) se guardan con el nombre de quien
+   los escribe: cada quien ve y edita SOLO lo suyo, nadie se pisa, y el texto de otra
+   persona ya no aparece en tu cuadro mientras llenas.
+   Las decisiones de equipo (Dato/Supuesto, puntajes de la matriz, la pregunta elegida)
+   siguen siendo compartidas a propósito: eso sí es un acuerdo del equipo. */
 (function(){
   if(!window.Sync) return;
   var barEl=document.getElementById('syncbar'); if(barEl) Sync.mountBar(barEl);
-  var TOOL='aterrizar', pushTimers={}, firstPull=true, lastLocal={};
+  var TOOL='aterrizar', SEP='~~', pushTimers={}, firstPull=true, lastLocal={};
+  function slug(n){ return (String(n||'').toLowerCase().replace(/[^a-z0-9]+/g,'')).slice(0,24) || 'anon'; }
+  function me(){ return slug(Sync.getName()); }
+  function isText(t){ return !!t && (t.tagName==='TEXTAREA' || (t.tagName==='INPUT' && t.type==='text')); }
+  function storeKey(baseKey, el){ return isText(el) ? baseKey+SEP+me() : baseKey; } /* texto → por persona; lo demás → compartido */
   function touch(k){ lastLocal[k]=Date.now(); }
   function val(t){ return t.type==='checkbox' ? (t.checked?'true':'false') : t.value; }
   function pushNow(key,value){ if(Sync.isConnected()) Sync.post({op:'set',tool:TOOL,key:key,value:value}).catch(function(){}); }
   function pushDeb(key,value){ if(!Sync.isConnected()) return; clearTimeout(pushTimers[key]); pushTimers[key]=setTimeout(function(){pushNow(key,value)},600); }
-  document.addEventListener('input', function(e){ var t=e.target; if(t.matches&&t.matches('[data-k]')){ var k=t.getAttribute('data-k'); touch(k); pushDeb(k, val(t)); } });
-  document.addEventListener('change', function(e){ var t=e.target; if(t.matches&&t.matches('[data-k]')){ var k=t.getAttribute('data-k'); touch(k); pushNow(k, val(t)); } });
+  document.addEventListener('input', function(e){ var t=e.target; if(t.matches&&t.matches('[data-k]')){ var sk=storeKey(t.getAttribute('data-k'),t); touch(sk); pushDeb(sk, val(t)); } });
+  document.addEventListener('change', function(e){ var t=e.target; if(t.matches&&t.matches('[data-k]')){ var sk=storeKey(t.getAttribute('data-k'),t); touch(sk); pushNow(sk, val(t)); } });
   document.addEventListener('click', function(e){ var b=e.target.closest&&e.target.closest('[data-pick]'); if(b){ touch('elegida'); setTimeout(function(){ pushNow('elegida', window._elegida||''); },0); } });
 
   function applyServerValue(key,value){
     if(lastLocal[key] && Date.now()-lastLocal[key]<10000) return; /* edición propia reciente: aún viaja al Sheet */
-    if(key==='elegida'){ if((window._elegida||'')!==value) setPick(value, !!value); return; }
-    var els=document.querySelectorAll('[data-k="'+key+'"]'); if(!els.length) return;
+    var base=key, si=key.indexOf(SEP);
+    if(si>=0){ if(key.slice(si+SEP.length)!==me()) return; base=key.slice(0,si); } /* respuesta de otra persona: no la pongas en mi cuadro */
+    if(base==='elegida'){ if((window._elegida||'')!==value) setPick(value, !!value); return; }
+    var els=document.querySelectorAll('[data-k="'+base+'"]'); if(!els.length) return;
     var e0=els[0];
     if(e0.type==='radio'){ [].forEach.call(els,function(r){ r.checked=(r.value===value); }); return; }
     if(e0.type==='checkbox'){ var b=(value==='true'); if(e0.checked!==b){ e0.checked=b; if(e0.getAttribute('data-ar')) syncVerdict(e0.getAttribute('data-ar')); } return; }
     if(e0===document.activeElement) return;
     if(e0.value===value) return;
     e0.value=value;
-    if(key.indexOf('hmw_')===0) syncHMW();
+    if(base.indexOf('hmw_')===0) syncHMW();
     if(e0.getAttribute('data-m')) syncTotals();
+  }
+  function eachField(cb){
+    var seen={};
+    [].forEach.call(document.querySelectorAll('[data-k]'), function(el){ var k=el.getAttribute('data-k'); if(seen[k]) return; seen[k]=1; cb(k, el); });
+  }
+  /* reenvía MI texto bajo mi nombre (p. ej. tras cambiar de nombre) */
+  function reseedMine(){
+    if(!Sync.isConnected()) return;
+    var items=[];
+    eachField(function(k,el){ if(!isText(el)) return; var v=el.value; if(v==='') return; items.push({key:storeKey(k,el), value:v}); });
+    if(items.length) Sync.post({op:'bulkset',tool:TOOL,items:items}).catch(function(){});
   }
   function seedLocal(){
     var m=collect(), items=[];
-    for(var k in m){ if(!m.hasOwnProperty(k)) continue; var v=m[k]; if(v===false||v===''||v==null) continue; items.push({key:k, value:(v===true?'true':String(v))}); }
+    for(var k in m){ if(!m.hasOwnProperty(k)) continue; var v=m[k]; if(v===false||v===''||v==null) continue;
+      var el=document.querySelector('[data-k="'+k+'"]');
+      items.push({key:storeKey(k, el), value:(v===true?'true':String(v))}); }
     if(items.length) Sync.post({op:'bulkset',tool:TOOL,items:items}).catch(function(){});
   }
   function pull(){
@@ -1031,7 +1055,8 @@ document.getElementById('fs').addEventListener('click', function(){ toggleFs(); 
       if(firstPull){ firstPull=false; if(!has) seedLocal(); }
     }).catch(function(){});
   }
-  Sync.onContext(function(){ firstPull=true; pull(); });
+  var reseedT;
+  Sync.onContext(function(){ firstPull=true; clearTimeout(reseedT); reseedT=setTimeout(function(){ reseedMine(); pull(); }, 400); });
   setInterval(pull, 8000);
 })();
 </script>
