@@ -273,7 +273,8 @@ function buildViews_(room) {
     .map(function (r) { return [zoneName[r[4]] || r[4], String(r[7]), Number(r[8]) || 0, String(r[5] || ''), fmtDate_(r[0])]; });
   writeTab_(TAB.empatia, '#9cc1f2', [
     { title: 'Mapa de empatía · Katya E. · ' + updated },
-    { title: 'Punto de vista (POV)', rows: [[v_(em, 'pov') || '(sin POV todavía)']] },
+    { title: 'Escenario que se empatizó', rows: [[v_(em, 'escenario') || '(sin escenario todavía)']] },
+    { title: 'Punto de vista (POV) · la necesidad', rows: [[v_(em, 'pov') || '(sin POV todavía)']] },
     { title: 'Notas por zona (las más votadas primero)', header: ['Zona', 'Nota', 'Votos', 'Autor', 'Fecha'], rows: noteRows.length ? noteRows : [['', '(sin notas)', '', '', '']] }
   ], [110, 460, 70, 130, 130]);
 
@@ -350,6 +351,7 @@ function buildViews_(room) {
     ['1 · Problema', 'Evidencia', nD + ' recuadros con dato y ' + nS + ' supuestos', 'Aterrizar · Dato/Supuesto'],
     ['1 · Problema', 'Supuestos por verificar', sup.join(' · '), 'Aterrizar · Dato/Supuesto'],
     ['2 · Usuario', 'Cliente / usuario', v_(at, 'c_clientes'), 'Aterrizar · Canvas'],
+    ['2 · Usuario', 'Escenario empatizado', v_(em, 'escenario'), 'Empatía'],
     ['2 · Usuario', 'POV del mapa de empatía', v_(em, 'pov'), 'Empatía'],
     ['2 · Usuario', 'Dolores más votados', topZone('dolores'), 'Empatía'],
     ['2 · Usuario', 'Ganancias más votadas', topZone('ganancias'), 'Empatía'],
@@ -401,6 +403,7 @@ function buildViews_(room) {
       ['ts', 'Fecha y hora de la última escritura'], ['room', 'Equipo (por defecto tacos-de-asada)'], ['tool', 'Herramienta: aterrizar, empatia, riesgo_cedulas o riesgo'],
       ['id · zone · votes', 'Solo para notas de empatía y registros de riesgo (eventos y autorreportes)'], ['author', 'Quién escribió (el nombre de la barra de conexión)'],
       ['key · value', 'Un campo y su valor. Una fila por campo: cada cambio actualiza la misma fila'],
+      ['pov · escenario', 'Empatía: la necesidad (POV) y el escenario que se empatizó'],
       ['c_* · ds_*', 'Aterrizar: recuadro del canvas y si es Dato (D) o Supuesto (S)'], ['hmw_* · ar1/2/3_*', 'Aterrizar: pregunta “¿Cómo podríamos…?” y sus 3 casillas de autorrevisión'],
       ['m1_* · m2_* · elegida', 'Aterrizar: matriz de elección (dato NASA, prototipo en 1 día) y la pregunta elegida'],
       ['r1_* · co_* · r3* · final_*', 'Aterrizar: rondas 1, 2 y 3 de ideación y la idea finalista'],

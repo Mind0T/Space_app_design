@@ -427,6 +427,7 @@ var DEMO = {
     co_dato_1:'Frecuencia cardíaca en reposo',co_dato_2:'Horas de sueño',co_dato_3:'CO₂ del módulo',co_canal_1:'Panel de triaje en la tablet',co_canal_2:'Aviso háptico en la pulsera',co_canal_3:'Resumen diferido a Tierra',co_mom_1:'Al despertar',co_mom_2:'Al aparecer un síntoma',co_mom_3:'Antes del turno nocturno',
     r3base_1:'Semáforo de síntomas',r3add_1:'Sí, y además sugiere el siguiente paso del protocolo',
     final_idea:'Panel de triaje que compara FC, sueño y CO₂ contra la línea base de Katya y sugiere el siguiente paso del protocolo.',final_why:'Con 7 soles de datos simulados basta una pantalla de triaje y un autorreporte de 1 minuto.'},
+  escenario:'A Katya le empieza a doler el pecho durante el turno nocturno. Nadie a bordo es médico y Houston está a ~20 min; el estrés crónico también causa dolor de pecho, así que no sabe si es grave.',
   pov:'Katya necesita saber, sola y a tiempo, si un síntoma es grave, porque la ayuda de Tierra tarda ~20 minutos y un número crudo no le dice nada.',
   notes:[{zone:'dice',value:'“¿Esto es normal o debería preocuparme?”',votes:4},{zone:'piensa',value:'“No quiero alarmar a Tierra por nada.”',votes:5},{zone:'hace',value:'Minimiza molestias para no hacer drama.',votes:3},{zone:'siente',value:'Incertidumbre y aislamiento.',votes:4},{zone:'dolores',value:'Un número crudo sin contexto le genera ansiedad.',votes:6},{zone:'dolores',value:'Demasiadas alarmas: ya no sabe cuál importa.',votes:3},{zone:'ganancias',value:'Confianza para decidir sola y a tiempo.',votes:5}],
   ce:{equipo:'Tacos de Asada',c1_tarea:'Turno nocturno de soporte vital en el módulo de descanso',
@@ -461,14 +462,14 @@ function truthy(v){ return v===true||v==='true'||v==='TRUE'; }
 
 /* =================== CARGA DE DATOS =================== */
 var MODE='team', D=null, SRC='', BEVER=null;
-function emptyData(){ return {at:{},ce:{},pov:'',notes:[],events:[],reports:[]}; }
+function emptyData(){ return {at:{},ce:{},pov:'',escenario:'',notes:[],events:[],reports:[]}; }
 function fromLocal(){
   var d=emptyData();
   var a=lsGet('aterrizar_orbital_v1',{}); Object.keys(a).forEach(function(k){ d.at[k]=typeof a[k]==='boolean'?String(a[k]):a[k]; });
   d.ce=lsGet('riesgo_cedulas_v1',{})||{};
   var rs=lsGet('riesgo_orbital_v1',{events:{},reports:{}});
   d.events=Object.keys(rs.events||{}).map(function(k){return rs.events[k]}); d.reports=Object.keys(rs.reports||{}).map(function(k){return rs.reports[k]});
-  d.notes=(lsGet('empatia_notes_v1',[])||[]).filter(function(n){return n.author!=='Ejemplo'}); d.pov=lsGet('empatia_pov_v1','')||'';
+  d.notes=(lsGet('empatia_notes_v1',[])||[]).filter(function(n){return n.author!=='Ejemplo'}); d.pov=lsGet('empatia_pov_v1','')||''; d.escenario=lsGet('empatia_escenario_v1','')||'';
   return d;
 }
 function fromServer(){
@@ -478,7 +479,7 @@ function fromServer(){
     var d=emptyData();
     (res[0].rows||[]).forEach(function(r){ if(r.key) d.at[String(r.key)]=r.value==null?'':String(r.value); });
     (res[1].rows||[]).forEach(function(r){ if(r.key) d.ce[String(r.key)]=r.value==null?'':String(r.value); });
-    (res[2].rows||[]).forEach(function(r){ if(r.id&&r.zone) d.notes.push({zone:String(r.zone),value:String(r.value||''),votes:Number(r.votes)||0,author:String(r.author||'')}); else if(r.key==='pov') d.pov=String(r.value||''); });
+    (res[2].rows||[]).forEach(function(r){ if(r.id&&r.zone) d.notes.push({zone:String(r.zone),value:String(r.value||''),votes:Number(r.votes)||0,author:String(r.author||'')}); else if(r.key==='pov') d.pov=String(r.value||''); else if(r.key==='escenario') d.escenario=String(r.value||''); });
     (res[3].rows||[]).forEach(function(r){ var o; try{o=JSON.parse(r.value)}catch(e){return} if(r.zone==='evento') d.events.push(o); if(r.zone==='autorreporte') d.reports.push(o); });
     return d;
   });
@@ -543,7 +544,8 @@ function renderAterrizar(){
   $('#supList').innerHTML=sup.length?'<div class="kk" style="--c:var(--warn)">Supuestos por verificar</div>'+sup.map(function(s){return '<div style="font-size:.86rem;color:var(--blue-pale);margin-top:4px">• '+esc(s.n)+'</div>';}).join(''):'<p class="empty">Sin supuestos marcados.</p>';
   $('#canvasGrid').innerHTML=DS.canvas.map(function(c,i){ var col=c.ds==='D'?'#4ccb8f':c.ds==='S'?'#f2c14e':'rgba(156,193,242,.25)';
     return '<div class="cbox'+(i===6?' wide':'')+'" style="--c:'+col+'"><h5>'+esc(c.n)+(c.ds?'<span class="tag '+(c.ds==='D'?'t-ok':'t-warn')+'">'+(c.ds==='D'?'Dato':'Supuesto')+'</span>':'')+'</h5><p>'+(c.v?esc(c.v):'<span class="pend">pendiente</span>')+'</p></div>'; }).join('');
-  $('#povStmt').innerHTML=D.pov?esc(D.pov)+'<small>Punto de vista (POV) del mapa de empatía</small>':pend('POV del mapa de empatía');
+  var escTxt=D.escenario?'<div style="font-size:.84rem;color:var(--mute);font-family:Overpass;font-weight:400;margin-bottom:10px">🎬 <b style="color:var(--blue-pale)">Escenario:</b> '+esc(D.escenario)+'</div>':'';
+  $('#povStmt').innerHTML=escTxt+(D.pov?esc(D.pov)+'<small>Punto de vista (POV) del mapa de empatía</small>':pend('POV del mapa de empatía'));
   $('#zones').innerHTML=ZONES.map(function(z){ var ns=DS.notes.filter(function(n){return n.zone===z[0]}).slice(0,3);
     return '<div class="zone" style="--c:'+z[2]+'"><h5>'+z[1]+'</h5>'+(ns.length?ns.map(function(n){return '<div class="note"><span class="v">👍 '+(n.votes||0)+'</span><span>'+esc(n.value)+'</span></div>';}).join(''):'<p class="empty">Sin notas.</p>')+'</div>'; }).join('');
   var cal=DS.hmw.filter(function(h){return h.ver==='Bien calibrada'}).length, wrote=DS.hmw.filter(function(h){return h.q}).length;
@@ -629,6 +631,7 @@ function reqMarkdown(){
   md.push('- **Evidencia:** '+nD+' de 7 recuadros con dato; supuestos por verificar: '+(sup.length?sup.join(', '):'ninguno marcado')+'.');
   md.push('## 2. Usuario');
   md.push('- **Usuario principal:** '+P(val(at,'c_clientes'),'Aterrizar · Clientes'));
+  md.push('- **Escenario empatizado:** '+P(D.escenario,'Mapa de empatía · escenario'));
   md.push('- **Punto de vista (POV):** '+P(D.pov,'Mapa de empatía · POV'));
   md.push('- **Dolores más votados:** '+(topZ('dolores').join(' · ')||'_(pendiente: Mapa de empatía)_'));
   md.push('- **Ganancias más votadas:** '+(topZ('ganancias').join(' · ')||'_(pendiente: Mapa de empatía)_'));
