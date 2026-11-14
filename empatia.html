@@ -293,6 +293,7 @@
   <button id="prev" aria-label="Anterior"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <span class="counter"><b id="cur">01</b> / <span id="total">00</span></span>
   <button id="next" aria-label="Siguiente"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button id="sendBtn" type="button" style="width:auto;padding:0 16px;height:44px;font-family:Archivo,sans-serif;font-weight:800;font-size:.78rem;letter-spacing:.02em;color:#071428;background:var(--lime);border:none;border-radius:12px;cursor:pointer">Enviar mis respuestas</button>
   <button id="fs" aria-label="Pantalla completa"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 9V5a1 1 0 011-1h4M20 9V5a1 1 0 00-1-1h-4M4 15v4a1 1 0 001 1h4M20 15v4a1 1 0 01-1 1h-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 </div>
 <div class="hint-key" id="keyhint"><kbd>←</kbd><kbd>→</kbd> navega · <kbd>Esc</kbd> sale del campo · <kbd>F</kbd> pantalla completa</div>
@@ -329,6 +330,10 @@ var ZONES=[
 var ZORDER={}; ZONES.forEach(function(z,i){ ZORDER[z.k]=i; });
 var ZMETA={}; ZONES.forEach(function(z){ ZMETA[z.k]=z; });
 var TOOL='empatia';
+/* escenario y POV: cada quien el suyo (clave~~persona). Las notas ya son por persona. */
+var PP_SEP='~~';
+function _slug(n){ return (String(n||'').toLowerCase().replace(/[^a-z0-9]+/g,'')).slice(0,24) || 'anon'; }
+function _me(){ return _slug(window.Sync&&Sync.getName?Sync.getName():''); }
 var LS_NOTES='empatia_notes_v1', LS_MINE='empatia_mine_v1', LS_POV='empatia_pov_v1', LS_ESC='empatia_escenario_v1';
 var ESC_DEFAULT='A Katya le empieza a doler el pecho durante el turno nocturno. Nadie a bordo es médico y Houston está a 20 min; el estrés crónico también causa dolor de pecho, así que no sabe si es grave.';
 
@@ -409,10 +414,11 @@ function refresh(){
     Sync.read(TOOL).then(function(j){
       if(!j||!j.ok||!j.rows) return;
       CUR.notes=j.rows.filter(function(r){return r.id&&r.zone}).map(function(r){return {id:String(r.id),zone:String(r.zone),author:String(r.author||''),value:String(r.value||''),votes:Number(r.votes)||0}});
-      var pov=j.rows.filter(function(r){return r.key==='pov'})[0]; if(pov) CUR.pov=String(pov.value||'');
-      var es=j.rows.filter(function(r){return r.key==='escenario'})[0];
+      var myPov='pov'+PP_SEP+_me(), myEsc='escenario'+PP_SEP+_me();
+      var pov=j.rows.filter(function(r){return r.key===myPov})[0]; if(pov) CUR.pov=String(pov.value||''); /* solo el mío */
+      var es=j.rows.filter(function(r){return r.key===myEsc})[0];
       if(es){ CUR.esc=String(es.value||''); firstEsc=false; }
-      else if(firstEsc){ firstEsc=false; CUR.esc=ESC_DEFAULT; Sync.post({op:'set',tool:TOOL,key:'escenario',value:ESC_DEFAULT}).catch(function(){}); }
+      else if(firstEsc){ firstEsc=false; if(!CUR.esc) CUR.esc=ESC_DEFAULT; } /* arranca con el default localmente */
       renderNotes(); syncText();
     }).catch(function(){ loadLocal(); });
   } else { loadLocal(); }
@@ -445,8 +451,25 @@ document.addEventListener('keydown',function(e){
 
 /* ---- POV y escenario (debounce) ---- */
 var povT,escT;
-$('#pov').addEventListener('input',function(){ CUR.pov=this.value; lset(LS_POV,this.value); if(connected()){ clearTimeout(povT); var val=this.value; povT=setTimeout(function(){ Sync.post({op:'set',tool:TOOL,key:'pov',value:val}).catch(function(){}); },600); } });
-$('#escenario').addEventListener('input',function(){ CUR.esc=this.value; lset(LS_ESC,this.value); if(connected()){ clearTimeout(escT); var val=this.value; escT=setTimeout(function(){ Sync.post({op:'set',tool:TOOL,key:'escenario',value:val}).catch(function(){}); },600); } });
+$('#pov').addEventListener('input',function(){ CUR.pov=this.value; lset(LS_POV,this.value); if(connected()){ clearTimeout(povT); var val=this.value; povT=setTimeout(function(){ Sync.post({op:'set',tool:TOOL,key:'pov'+PP_SEP+_me(),value:val}).catch(function(){}); },600); } });
+$('#escenario').addEventListener('input',function(){ CUR.esc=this.value; lset(LS_ESC,this.value); if(connected()){ clearTimeout(escT); var val=this.value; escT=setTimeout(function(){ Sync.post({op:'set',tool:TOOL,key:'escenario'+PP_SEP+_me(),value:val}).catch(function(){}); },600); } });
+
+/* ---- botón Enviar: sube mi escenario + POV y refresca el Sheet al instante ---- */
+(function(){
+  var sendBtn=document.getElementById('sendBtn'), sendT;
+  if(!sendBtn) return;
+  function lab(txt,bg){ sendBtn.textContent=txt; if(bg) sendBtn.style.background=bg; }
+  sendBtn.addEventListener('click', function(){
+    this.blur();
+    if(!connected() || !(window.Sync&&Sync.getName())){ lab('Pon tu nombre arriba ⚙️','#f2c14e'); clearTimeout(sendT); sendT=setTimeout(function(){lab('Enviar mis respuestas','var(--lime)')},2200); return; }
+    var items=[{key:'escenario'+PP_SEP+_me(),value:CUR.esc||''},{key:'pov'+PP_SEP+_me(),value:CUR.pov||''},{key:'_enviado'+PP_SEP+_me(),value:new Date().toLocaleString('es-MX')}];
+    lab('Enviando…','#9cc1f2');
+    Sync.post({op:'bulkset',tool:TOOL,items:items})
+      .then(function(){ return Sync.post({op:'views'}); })
+      .then(function(){ lab('Enviado ✓','#4ccb8f'); clearTimeout(sendT); sendT=setTimeout(function(){lab('Enviar mis respuestas','var(--lime)')},2200); })
+      .catch(function(){ lab('Error, reintenta','#ef6a5a'); clearTimeout(sendT); sendT=setTimeout(function(){lab('Enviar mis respuestas','var(--lime)')},2200); });
+  });
+})();
 
 /* ---- navegación ---- */
 var slides=$$('.slide'), N=slides.length, idx=0, prog=$('#prog'), cur=$('#cur'), prevB=$('#prev'), nextB=$('#next'), tchips=$$('.tchip');

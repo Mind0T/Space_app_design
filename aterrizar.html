@@ -609,6 +609,7 @@
   <button id="prev" aria-label="Anterior"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <span class="counter"><b id="cur">01</b> / <span id="total">00</span></span>
   <button id="next" aria-label="Siguiente"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button id="sendBtn" type="button" style="width:auto;padding:0 16px;height:44px;font-family:Archivo,sans-serif;font-weight:800;font-size:.78rem;letter-spacing:.02em;color:#071428;background:var(--lime);border:none;border-radius:12px;cursor:pointer">Enviar mis respuestas</button>
   <button id="fs" aria-label="Pantalla completa"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 9V5a1 1 0 011-1h4M20 9V5a1 1 0 00-1-1h-4M4 15v4a1 1 0 001 1h4M20 15v4a1 1 0 01-1 1h-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 </div>
 <div class="hint-key" id="keyhint"><kbd>←</kbd><kbd>→</kbd> navega · <kbd>Esc</kbd> sale del campo · <kbd>F</kbd> pantalla completa</div>
@@ -990,47 +991,71 @@ document.getElementById('fs').addEventListener('click', function(){ toggleFs(); 
   go(start>=0?start:0, true);
 })();
 
-/* ---------- live sync con Google Sheets ---------- */
+/* ---------- live sync con Google Sheets · CADA PERSONA SU PROPIA RESPUESTA ----------
+   Todos los campos se guardan con el nombre de quien escribe (clave~~persona).
+   Cada quien ve y edita SOLO lo suyo: nadie pisa a nadie, aunque llenen al mismo
+   tiempo. El botón "Enviar mis respuestas" sube todo y refresca el Sheet al instante. */
 (function(){
   if(!window.Sync) return;
   var barEl=document.getElementById('syncbar'); if(barEl) Sync.mountBar(barEl);
-  var TOOL='aterrizar', pushTimers={}, firstPull=true, lastLocal={};
+  var TOOL='aterrizar', SEP='~~', pushTimers={}, firstPull=true, lastLocal={};
+  function slug(n){ return (String(n||'').toLowerCase().replace(/[^a-z0-9]+/g,'')).slice(0,24) || 'anon'; }
+  function me(){ return slug(Sync.getName()); }
+  function sk(baseKey){ return baseKey+SEP+me(); }            /* todo es por persona */
   function touch(k){ lastLocal[k]=Date.now(); }
   function val(t){ return t.type==='checkbox' ? (t.checked?'true':'false') : t.value; }
   function pushNow(key,value){ if(Sync.isConnected()) Sync.post({op:'set',tool:TOOL,key:key,value:value}).catch(function(){}); }
   function pushDeb(key,value){ if(!Sync.isConnected()) return; clearTimeout(pushTimers[key]); pushTimers[key]=setTimeout(function(){pushNow(key,value)},600); }
-  document.addEventListener('input', function(e){ var t=e.target; if(t.matches&&t.matches('[data-k]')){ var k=t.getAttribute('data-k'); touch(k); pushDeb(k, val(t)); } });
-  document.addEventListener('change', function(e){ var t=e.target; if(t.matches&&t.matches('[data-k]')){ var k=t.getAttribute('data-k'); touch(k); pushNow(k, val(t)); } });
-  document.addEventListener('click', function(e){ var b=e.target.closest&&e.target.closest('[data-pick]'); if(b){ touch('elegida'); setTimeout(function(){ pushNow('elegida', window._elegida||''); },0); } });
+  document.addEventListener('input', function(e){ var t=e.target; if(t.matches&&t.matches('[data-k]')){ var k=sk(t.getAttribute('data-k')); touch(k); pushDeb(k, val(t)); } });
+  document.addEventListener('change', function(e){ var t=e.target; if(t.matches&&t.matches('[data-k]')){ var k=sk(t.getAttribute('data-k')); touch(k); pushNow(k, val(t)); } });
+  document.addEventListener('click', function(e){ var b=e.target.closest&&e.target.closest('[data-pick]'); if(b){ var k=sk('elegida'); touch(k); setTimeout(function(){ pushNow(k, window._elegida||''); },0); } });
 
   function applyServerValue(key,value){
-    if(lastLocal[key] && Date.now()-lastLocal[key]<10000) return; /* edición propia reciente: aún viaja al Sheet */
-    if(key==='elegida'){ if((window._elegida||'')!==value) setPick(value, !!value); return; }
-    var els=document.querySelectorAll('[data-k="'+key+'"]'); if(!els.length) return;
+    if(lastLocal[key] && Date.now()-lastLocal[key]<10000) return; /* mi edición reciente: ya va al Sheet */
+    var base=key, si=key.indexOf(SEP);
+    if(si>=0){ if(key.slice(si+SEP.length)!==me()) return; base=key.slice(0,si); } /* de otra persona: no la pongo en mi pantalla */
+    if(base==='elegida'){ if((window._elegida||'')!==value) setPick(value, !!value); return; }
+    var els=document.querySelectorAll('[data-k="'+base+'"]'); if(!els.length) return;
     var e0=els[0];
     if(e0.type==='radio'){ [].forEach.call(els,function(r){ r.checked=(r.value===value); }); return; }
     if(e0.type==='checkbox'){ var b=(value==='true'); if(e0.checked!==b){ e0.checked=b; if(e0.getAttribute('data-ar')) syncVerdict(e0.getAttribute('data-ar')); } return; }
     if(e0===document.activeElement) return;
     if(e0.value===value) return;
     e0.value=value;
-    if(key.indexOf('hmw_')===0) syncHMW();
+    if(base.indexOf('hmw_')===0) syncHMW();
     if(e0.getAttribute('data-m')) syncTotals();
   }
-  function seedLocal(){
+  function myItems(){
     var m=collect(), items=[];
-    for(var k in m){ if(!m.hasOwnProperty(k)) continue; var v=m[k]; if(v===false||v===''||v==null) continue; items.push({key:k, value:(v===true?'true':String(v))}); }
-    if(items.length) Sync.post({op:'bulkset',tool:TOOL,items:items}).catch(function(){});
+    for(var k in m){ if(!m.hasOwnProperty(k)) continue; var v=m[k]; if(v===false||v===''||v==null) continue; items.push({key:sk(k), value:(v===true?'true':String(v))}); }
+    return items;
   }
+  function seedLocal(){ var items=myItems(); if(items.length) Sync.post({op:'bulkset',tool:TOOL,items:items}).catch(function(){}); }
   function pull(){
     if(!Sync.isConnected()) return;
     Sync.read(TOOL).then(function(j){
       if(!j||!j.ok||!j.rows) return;
       var has=j.rows.length>0;
       j.rows.forEach(function(r){ if(r.key!=null&&r.key!=='') applyServerValue(String(r.key), r.value==null?'':String(r.value)); });
-      if(has){ try{ localStorage.setItem(KEY, JSON.stringify(collect())); }catch(e){} } /* guardado silencioso: sin parpadeo cada 8 s */
+      if(has){ try{ localStorage.setItem(KEY, JSON.stringify(collect())); }catch(e){} }
       if(firstPull){ firstPull=false; if(!has) seedLocal(); }
     }).catch(function(){});
   }
+
+  /* ---- botón Enviar: sube TODO lo mío y refresca el Sheet de inmediato ---- */
+  var sendBtn=document.getElementById('sendBtn'), sendT;
+  function sendLabel(txt,bg){ if(!sendBtn) return; sendBtn.textContent=txt; if(bg) sendBtn.style.background=bg; }
+  function enviar(){
+    if(!Sync.isConnected() || !Sync.getName()){ sendLabel('Pon tu nombre arriba ⚙️','#f2c14e'); clearTimeout(sendT); sendT=setTimeout(function(){sendLabel('Enviar mis respuestas','var(--lime)')},2200); return; }
+    var items=myItems(); items.push({key:sk('_enviado'), value:new Date().toLocaleString('es-MX')});
+    sendLabel('Enviando…','#9cc1f2');
+    Sync.post({op:'bulkset',tool:TOOL,items:items})
+      .then(function(){ return Sync.post({op:'views'}); })  /* reconstruye las pestañas legibles YA */
+      .then(function(){ sendLabel('Enviado ✓','#4ccb8f'); clearTimeout(sendT); sendT=setTimeout(function(){sendLabel('Enviar mis respuestas','var(--lime)')},2200); })
+      .catch(function(){ sendLabel('Error, reintenta','#ef6a5a'); clearTimeout(sendT); sendT=setTimeout(function(){sendLabel('Enviar mis respuestas','var(--lime)')},2200); });
+  }
+  if(sendBtn) sendBtn.addEventListener('click', function(){ enviar(); this.blur(); });
+
   Sync.onContext(function(){ firstPull=true; pull(); });
   setInterval(pull, 8000);
 })();

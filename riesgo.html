@@ -1108,6 +1108,7 @@
   <button id="prev" aria-label="Anterior"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <span class="counter"><b id="cur">01</b> / <span id="total">00</span></span>
   <button id="next" aria-label="Siguiente"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button id="sendBtn" type="button" style="width:auto;padding:0 16px;height:44px;font-family:Archivo,sans-serif;font-weight:800;font-size:.78rem;letter-spacing:.02em;color:#071428;background:var(--lime);border:none;border-radius:12px;cursor:pointer">Enviar mi cédula</button>
   <button id="fs" aria-label="Pantalla completa"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 9V5a1 1 0 011-1h4M20 9V5a1 1 0 00-1-1h-4M4 15v4a1 1 0 001 1h4M20 15v4a1 1 0 01-1 1h-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 </div>
 <div class="hint-key" id="keyhint"><kbd>←</kbd><kbd>→</kbd> navega · <kbd>Esc</kbd> sale del campo · <kbd>F</kbd> pantalla completa</div>
@@ -1422,8 +1423,14 @@ var KVK='riesgo_cedulas_v1', KVTOOL='riesgo_cedulas';
 function kvCollect(){ var m={}; $$('[data-k]').forEach(function(e){ m[e.getAttribute('data-k')]=e.value; }); return m; }
 function kvRestore(m){ if(!m) return; $$('[data-k]').forEach(function(e){ var k=e.getAttribute('data-k'); if(k in m) e.value=m[k]||''; }); }
 var kvSaveT; function kvSave(){ clearTimeout(kvSaveT); kvSaveT=setTimeout(function(){ lsSet(KVK,kvCollect()); showSaved(); },400); }
+/* cada quien su propia cédula: las claves se guardan como clave~~persona */
+var KVSEP='~~';
+function _rslug(n){ return (String(n||'').toLowerCase().replace(/[^a-z0-9]+/g,'')).slice(0,24) || 'anon'; }
+function _rme(){ return _rslug(window.Sync&&Sync.getName?Sync.getName():''); }
+function kvKey(base){ return base+KVSEP+_rme(); }
 var kvPushT={}, kvLast={};
-function kvPush(key,val,now){
+function kvPush(baseKey,val,now){
+  var key=kvKey(baseKey);
   kvLast[key]=Date.now();
   if(!(window.Sync&&Sync.isConnected())) return;
   clearTimeout(kvPushT[key]);
@@ -1439,16 +1446,37 @@ function kvPull(){
   Sync.read(KVTOOL).then(function(j){
     if(!j||!j.ok||!j.rows) return;
     var changed=false;
+    var suf=KVSEP+_rme();
     j.rows.forEach(function(r){
-      var k=String(r.key||''); if(!k) return;
-      if(kvLast[k]&&Date.now()-kvLast[k]<10000) return;
-      var el=$('[data-k="'+k+'"]'); if(!el||el===document.activeElement) return;
+      var key=String(r.key||''); if(!key) return;
+      var si=key.indexOf(KVSEP), base=key;
+      if(si>=0){ if(key.slice(si+KVSEP.length)!==_rme()) return; base=key.slice(0,si); } /* de otra persona: no la pongo en mi cédula */
+      if(kvLast[key]&&Date.now()-kvLast[key]<10000) return;
+      var el=$('[data-k="'+base+'"]'); if(!el||el===document.activeElement) return;
       var v=r.value==null?'':String(r.value); if(el.value!==v){ el.value=v; changed=true; }
     });
     if(changed){ lsSet(KVK,kvCollect()); syncCedulas(); }
-    if(kvFirst){ kvFirst=false; if(!j.rows.length){ var m=kvCollect(), items=[]; for(var k in m){ if(m[k]) items.push({key:k,value:m[k]}); } if(items.length) Sync.post({op:'bulkset',tool:KVTOOL,items:items}).catch(function(){}); } }
+    if(kvFirst){ kvFirst=false; var tengo=j.rows.some(function(r){ var k=String(r.key||''); return k.slice(k.length-suf.length)===suf; }); if(!tengo){ var m=kvCollect(), items=[]; for(var k in m){ if(m[k]) items.push({key:kvKey(k),value:m[k]}); } if(items.length) Sync.post({op:'bulkset',tool:KVTOOL,items:items}).catch(function(){}); } }
   }).catch(function(){});
 }
+
+/* ---- botón Enviar: sube MI cédula completa y refresca el Sheet al instante ---- */
+(function(){
+  var sendBtn=document.getElementById('sendBtn'), sendT;
+  if(!sendBtn) return;
+  function lab(txt,bg){ sendBtn.textContent=txt; if(bg) sendBtn.style.background=bg; }
+  sendBtn.addEventListener('click', function(){
+    this.blur();
+    if(!(window.Sync&&Sync.isConnected()&&Sync.getName())){ lab('Pon tu nombre arriba ⚙️','#f2c14e'); clearTimeout(sendT); sendT=setTimeout(function(){lab('Enviar mi cédula','var(--lime)')},2200); return; }
+    var m=kvCollect(), items=[]; for(var k in m){ if(m[k]) items.push({key:kvKey(k),value:m[k]}); }
+    items.push({key:kvKey('_enviado'),value:new Date().toLocaleString('es-MX')});
+    lab('Enviando…','#9cc1f2');
+    Sync.post({op:'bulkset',tool:KVTOOL,items:items})
+      .then(function(){ return Sync.post({op:'views'}); })
+      .then(function(){ lab('Enviado ✓','#4ccb8f'); clearTimeout(sendT); sendT=setTimeout(function(){lab('Enviar mi cédula','var(--lime)')},2200); })
+      .catch(function(){ lab('Error, reintenta','#ef6a5a'); clearTimeout(sendT); sendT=setTimeout(function(){lab('Enviar mi cédula','var(--lime)')},2200); });
+  });
+})();
 
 /* ---- Ejemplos: ver y copiar a campos vacíos ---- */
 var CED_KEYS={c1:/^c1_/, c2:/^c2_/, c4:/^c4_/};
