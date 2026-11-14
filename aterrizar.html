@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ORBITAL · Aterrizar el reto (taller)</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="description" content="Taller paso a paso para aterrizar el reto de la NASA en un problema potente y una idea para prototipar. Formularios rellenables + exportación a Sheets. NASA Space Apps CDMX 2026." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=Overpass:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy-900:#071428;--navy-800:#0a1a33;--navy-700:#0d2244;--navy-600:#102a55;
+    --royal:#1e52c8;--royal-bright:#2a66e6;--blue-soft:#4e8fe6;--blue-pale:#9cc1f2;
+    --lime:#d7e64b;--white:#f4f8ff;--mute:#a9bbd6;--line:rgba(156,193,242,.16);
+    --card:rgba(18,38,74,.55);--ok:#4ccb8f;--warn:#f2c14e;--crit:#ef6a5a;
+    --maxw:1000px;--r:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"Overpass",system-ui,sans-serif;background:var(--navy-900);color:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  h1,h2,h3,h4{font-family:"Archivo",sans-serif;letter-spacing:-.01em}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  a{color:var(--blue-soft)}
+  .eyebrow{font-family:"Archivo";font-weight:800;text-transform:uppercase;letter-spacing:.14em;font-size:.72rem;color:var(--lime);display:inline-flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--lime);display:inline-block}
+  .rings{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .rings span{position:absolute;border-radius:50%;border:1px solid rgba(120,160,230,.10)}
+
+  /* HERO */
+  header.hero{position:relative;padding:60px 0 40px;background:
+      radial-gradient(1100px 680px at 82% 10%, rgba(30,82,200,.4), transparent 60%),
+      linear-gradient(180deg,var(--navy-800),var(--navy-900))}
+  .brandmark{display:flex;align-items:center;gap:13px;margin-bottom:26px}
+  .logo-ring{width:44px;height:44px;flex:0 0 auto}
+  .brandmark small{display:block;font-size:.58rem;letter-spacing:.3em;color:var(--mute);font-weight:700;font-family:"Archivo"}
+  .brandmark b{font-size:.95rem;letter-spacing:.04em;font-family:"Archivo";font-weight:900;text-transform:uppercase}
+  header.hero h1{font-weight:900;font-size:clamp(2.2rem,5.6vw,3.6rem);line-height:1;margin:14px 0 14px}
+  header.hero .lead{color:var(--blue-pale);font-size:clamp(1.02rem,2vw,1.25rem);max-width:60ch}
+
+  /* 90-min plan strip */
+  .plan{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:30px}
+  .plan a{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 15px;text-decoration:none;color:var(--white);transition:.2s}
+  .plan a:hover{border-color:var(--lime);transform:translateY(-2px)}
+  .plan .pn{font-family:"Archivo";font-weight:900;color:var(--lime);font-size:.9rem}
+  .plan .pt{font-weight:800;font-family:"Archivo";font-size:.98rem;margin:6px 0 4px}
+  .plan .pm{color:var(--mute);font-size:.8rem}
+
+  /* how-to + traps */
+  .howbar{background:linear-gradient(135deg,rgba(30,82,200,.22),var(--navy-700));border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;margin-top:26px}
+  .howbar h3{font-size:1.05rem;margin-bottom:10px;display:flex;align-items:center;gap:9px}
+  .howbar p{color:var(--mute);font-size:.95rem;margin-bottom:8px}
+  .howbar b{color:var(--white)}
+  .traps{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+  .trap{background:rgba(239,106,90,.09);border:1px solid rgba(239,106,90,.3);border-radius:12px;padding:14px 16px}
+  .trap .tt{font-family:"Archivo";font-weight:800;color:var(--crit);font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+  .trap p{color:var(--mute);font-size:.9rem;margin:0}
+
+  /* sticky nav */
+  .snav{position:sticky;top:0;z-index:40;background:rgba(7,20,40,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .snav .inner{max-width:var(--maxw);margin:0 auto;padding:10px 22px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .snav .chip{font-family:"Archivo";font-weight:800;font-size:.76rem;color:var(--mute);text-decoration:none;padding:7px 12px;border-radius:999px;border:1px solid var(--line);white-space:nowrap;transition:.2s}
+  .snav .chip:hover{color:var(--white);border-color:var(--blue-soft)}
+  .snav .chip.on{color:#071428;background:var(--lime);border-color:var(--lime)}
+  .snav .sp{flex:1}
+  .snav button{font-family:"Archivo";font-weight:800;font-size:.76rem;cursor:pointer;border-radius:10px;padding:8px 13px;border:1px solid var(--line);background:rgba(10,26,51,.6);color:var(--white);transition:.2s;display:inline-flex;align-items:center;gap:7px}
+  .snav button:hover{border-color:var(--lime);color:var(--lime)}
+  .snav button.prime{background:var(--lime);color:#071428;border-color:var(--lime)}
+  .saved{font-size:.72rem;color:var(--ok);font-family:"Archivo";font-weight:700;opacity:0;transition:.3s}
+  .saved.show{opacity:1}
+
+  /* steps */
+  section.step{position:relative;padding:50px 0;border-top:1px solid var(--line)}
+  .stephead{display:flex;align-items:flex-start;gap:16px;margin-bottom:8px}
+  .stepnum{font-family:"Archivo";font-weight:900;font-size:1.9rem;color:var(--lime);line-height:1;flex:0 0 auto}
+  .timebadge{display:inline-block;font-family:"Archivo";font-weight:800;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--lime);background:rgba(215,230,75,.13);border:1px solid rgba(215,230,75,.4);padding:4px 11px;border-radius:999px;margin-bottom:8px}
+  section.step h2{font-size:clamp(1.5rem,3.4vw,2.2rem);font-weight:900;line-height:1.05;margin-bottom:6px}
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0 8px}
+  .mcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 17px}
+  .mcard .lbl{font-family:"Archivo";font-weight:800;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--blue-soft);margin-bottom:5px}
+  .mcard p{color:var(--mute);font-size:.93rem;margin:0}
+  .mcard.key{border-color:rgba(215,230,75,.35)} .mcard.key .lbl{color:var(--lime)}
+  .mcard.err{border-color:rgba(239,106,90,.3)} .mcard.err .lbl{color:var(--crit)}
+  .instr{color:var(--mute);font-size:.98rem;margin:14px 0}
+  .instr b{color:var(--white)}
+
+  /* fillable fields */
+  .field{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:14px;position:relative}
+  .field .fhead{display:flex;align-items:center;gap:12px;margin-bottom:4px;flex-wrap:wrap}
+  .field .fn{width:28px;height:28px;border-radius:8px;background:rgba(215,230,75,.14);border:1px solid rgba(215,230,75,.4);color:var(--lime);font-family:"Archivo";font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex:0 0 auto}
+  .field h4{font-size:1.08rem;font-weight:800}
+  .field .fq{color:var(--blue-pale);font-size:.92rem;font-weight:600}
+  .field ul.prompts{list-style:none;margin:12px 0;display:grid;gap:7px}
+  .field ul.prompts li{color:var(--mute);font-size:.88rem;padding-left:18px;position:relative;line-height:1.45}
+  .field ul.prompts li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--blue-soft)}
+  .field li em{color:var(--blue-soft)}
+  textarea,input[type=text]{width:100%;background:rgba(7,20,40,.5);border:1px solid var(--line);border-radius:10px;color:var(--white);font-family:"Overpass",sans-serif;font-size:.96rem;padding:11px 13px;resize:vertical;transition:.15s}
+  textarea:focus,input[type=text]:focus{outline:none;border-color:var(--lime);background:rgba(7,20,40,.8)}
+  textarea{min-height:66px}
+  .ds{display:inline-flex;gap:6px;margin-top:10px}
+  .ds label{cursor:pointer}
+  .ds input{position:absolute;opacity:0;width:0;height:0}
+  .ds span{display:inline-block;font-family:"Archivo";font-weight:800;font-size:.72rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);color:var(--mute);transition:.15s}
+  .ds input:checked + span.d{background:rgba(76,203,143,.18);border-color:var(--ok);color:var(--ok)}
+  .ds input:checked + span.s{background:rgba(242,193,78,.18);border-color:var(--warn);color:var(--warn)}
+  .dshelp{font-size:.76rem;color:var(--mute);margin-left:10px}
+
+  /* HMW rows */
+  .hmwrow{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 17px;margin-bottom:10px}
+  .hmwrow .rc{font-family:"Archivo";font-weight:800;font-size:.95rem}
+  .hmwrow .rc .st{display:block;color:var(--mute);font-size:.82rem;font-weight:400;margin-top:5px;font-family:"Overpass"}
+  .hmwrow .st em{color:var(--blue-soft)}
+  .formula{background:linear-gradient(135deg,var(--navy-600),var(--navy-700));border:1px solid var(--line);border-left:4px solid var(--lime);border-radius:12px;padding:16px 20px;margin:14px 0;font-family:"Archivo";font-weight:600;font-size:1rem;line-height:1.4}
+  .formula em{color:var(--lime);font-style:normal}
+
+  /* autorevisión */
+  .arrow{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 17px;margin-bottom:10px}
+  .arrow .q{font-weight:800;font-family:"Archivo";font-size:.95rem;margin-bottom:4px}
+  .arrow .qt{color:var(--mute);font-size:.85rem;margin-bottom:12px;min-height:1.2em}
+  .checks{display:grid;gap:9px}
+  .chk{display:flex;align-items:flex-start;gap:10px;cursor:pointer;color:var(--mute);font-size:.88rem}
+  .chk input{appearance:none;width:19px;height:19px;border:1px solid var(--line);border-radius:5px;flex:0 0 auto;margin-top:2px;cursor:pointer;transition:.15s;position:relative;background:rgba(7,20,40,.5)}
+  .chk input:checked{background:var(--lime);border-color:var(--lime)}
+  .chk input:checked::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#071428;font-size:.8rem;font-weight:900}
+  .chk b{color:var(--white)}
+  .verdict{margin-top:12px;font-family:"Archivo";font-weight:800;font-size:.8rem;padding:6px 12px;border-radius:999px;display:inline-block}
+  .verdict.good{background:rgba(76,203,143,.15);color:var(--ok)}
+  .verdict.warn{background:rgba(242,193,78,.15);color:var(--warn)}
+  .verdict.none{background:rgba(156,193,242,.1);color:var(--mute)}
+
+  /* matriz */
+  .matrix{overflow-x:auto;border:1px solid var(--line);border-radius:14px;margin-top:14px}
+  table{border-collapse:collapse;width:100%;min-width:720px;font-size:.9rem}
+  th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{font-family:"Archivo";font-weight:800;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--blue-soft);background:rgba(10,26,51,.7)}
+  tbody tr:last-child td{border-bottom:none}
+  .mhmw{color:var(--white);font-size:.86rem}
+  .mhmw .rcname{font-family:"Archivo";font-weight:800;color:var(--lime);font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:3px}
+  select{background:rgba(7,20,40,.6);border:1px solid var(--line);border-radius:8px;color:var(--white);font-family:"Overpass";font-size:.9rem;padding:7px 9px;cursor:pointer}
+  select:focus{outline:none;border-color:var(--lime)}
+  .total{font-family:"Archivo";font-weight:900;font-size:1.2rem;color:var(--lime);text-align:center}
+  .pickbtn{cursor:pointer;font-family:"Archivo";font-weight:800;font-size:.72rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--mute);transition:.15s;white-space:nowrap}
+  .pickbtn.on{background:var(--lime);color:#071428;border-color:var(--lime)}
+
+  /* ideation */
+  .round{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:16px}
+  .round .rh{display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+  .round .rnum{font-family:"Archivo";font-weight:900;color:var(--lime);font-size:1.1rem}
+  .round h3{font-size:1.15rem;font-weight:800}
+  .round .rtime{font-family:"Archivo";font-weight:800;font-size:.66rem;color:var(--lime);background:rgba(215,230,75,.12);border:1px solid rgba(215,230,75,.35);padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
+  .round p.rd{color:var(--mute);font-size:.92rem;margin-bottom:14px}
+  .idealist{display:grid;gap:8px}
+  .idearow{display:flex;align-items:center;gap:10px}
+  .idearow .num{font-family:"Archivo";font-weight:800;color:var(--mute);font-size:.8rem;width:20px;flex:0 0 auto;text-align:right}
+  .combobox{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:6px}
+  .combocol h5{font-family:"Archivo";font-weight:800;font-size:.8rem;margin-bottom:4px}
+  .combocol .src{color:var(--mute);font-size:.72rem;margin-bottom:9px}
+  .combocol.dato h5{color:var(--lime)} .combocol.canal h5{color:var(--blue-soft)} .combocol.mom h5{color:var(--warn)}
+  .combocol .col-in{margin-bottom:7px}
+  .chosenq{background:linear-gradient(135deg,rgba(30,82,200,.28),var(--navy-700));border:1px solid rgba(215,230,75,.35);border-radius:12px;padding:15px 18px;margin-bottom:16px}
+  .chosenq .lbl{font-family:"Archivo";font-weight:800;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--lime);margin-bottom:5px}
+  .chosenq .txt{font-size:1.05rem;font-weight:600;color:var(--white)}
+  .chosenq .txt.empty{color:var(--mute);font-weight:400;font-style:italic;font-size:.92rem}
+  .r3row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+  .r3row .lb{font-size:.76rem;color:var(--mute);margin-bottom:5px;font-family:"Archivo";font-weight:700}
+
+  /* example expander */
+  details.ex{margin-top:16px;background:rgba(10,26,51,.5);border:1px dashed var(--line);border-radius:12px;overflow:hidden}
+  details.ex > summary{cursor:pointer;padding:13px 18px;font-family:"Archivo";font-weight:800;font-size:.85rem;color:var(--blue-soft);list-style:none;display:flex;align-items:center;gap:9px}
+  details.ex > summary::-webkit-details-marker{display:none}
+  details.ex > summary::before{content:"▸";transition:.2s}
+  details.ex[open] > summary::before{transform:rotate(90deg)}
+  details.ex .exbody{padding:0 18px 18px;color:var(--mute);font-size:.88rem}
+  details.ex .exbody table{min-width:0;width:100%;font-size:.82rem}
+  details.ex .exbody td{padding:8px 10px}
+  .extag{font-family:"Archivo";font-weight:800;font-size:.68rem;padding:2px 7px;border-radius:5px}
+  .extag.d{background:rgba(76,203,143,.16);color:var(--ok)} .extag.s{background:rgba(242,193,78,.16);color:var(--warn)}
+  .exrc{color:var(--lime);font-family:"Archivo";font-weight:700;font-size:.78rem}
+
+  footer{padding:46px 0;text-align:center;color:var(--mute);font-size:.82rem;border-top:1px solid var(--line)}
+  footer .logo-ring{width:34px;height:34px;margin:0 auto 12px;display:block}
+
+  @media(max-width:820px){
+    .plan{grid-template-columns:1fr 1fr}
+    .traps,.meta,.combobox,.r3row{grid-template-columns:1fr}
+    .hmwrow{grid-template-columns:1fr}
+    .snav .chip.hideM{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="rings">
+    <span style="width:600px;height:600px;top:-140px;right:-160px"></span>
+    <span style="width:900px;height:900px;top:-260px;right:-300px"></span>
+  </div>
+  <div class="wrap" style="position:relative;z-index:1">
+    <div class="brandmark">
+      <span class="logo-ring"><svg viewBox="0 0 48 48" fill="none"><circle cx="22" cy="26" r="16" stroke="#f4f8ff" stroke-width="2.4"/><path d="M34 14 C 30 10, 24 9, 20 11" stroke="#d7e64b" stroke-width="2.4" stroke-linecap="round"/><circle cx="35" cy="13" r="2.4" fill="#ef6a5a"/></svg></span>
+      <span><small>NASA Space Apps · CDMX 2026 · Equipo ORBITAL</small><b>Taller · Aterrizar el reto</b></span>
+    </div>
+    <div class="eyebrow">Plan de vuelo · ~90 min</div>
+    <h1>Aterrizar el reto en un problema potente</h1>
+    <p class="lead">Una secuencia de cinco herramientas para convertir el reto de la NASA en un problema claro —centrado en una persona y conectado con un dato— y en una idea elegida para prototipar. Llénenla en equipo, paso a paso; se guarda sola y se exporta a Sheets.</p>
+
+    <div class="plan">
+      <a href="#p1"><div class="pn">1 · 30 min</div><div class="pt">Entender</div><div class="pm">Canvas del problema</div></a>
+      <a href="#p2"><div class="pn">2 · 15 min</div><div class="pt">Abrir</div><div class="pm">Siete "¿Cómo podríamos…?"</div></a>
+      <a href="#p3"><div class="pn">3 · 5 min</div><div class="pt">Afinar</div><div class="pm">Autorrevisión</div></a>
+      <a href="#p4"><div class="pn">4 · 10 min</div><div class="pt">Converger</div><div class="pm">Matriz de elección</div></a>
+      <a href="#p5"><div class="pn">5 · 25 min</div><div class="pt">Idear</div><div class="pm">Dato · Canal · Momento</div></a>
+    </div>
+
+    <div class="howbar">
+      <h3>⚙️ Cómo usar esta página</h3>
+      <p><b>Síganla en orden.</b> Cada paso explica qué hacer y trae sus campos para llenar en vivo durante la reunión.</p>
+      <p><b>Se guarda sola</b> en este navegador mientras escriben. Al terminar, usen <b>“Exportar”</b> o <b>“Copiar para Sheets”</b> (barra de arriba) para llevarse todo a una hoja de cálculo y usarlo como insumo al prototipar.</p>
+      <div class="traps">
+        <div class="trap"><div class="tt">Trampa 1 · no copiar el reto</div><p>El enunciado de la NASA es el punto de partida, no la respuesta. En el recuadro de Problema va una causa, no el reto repetido.</p></div>
+        <div class="trap"><div class="tt">Trampa 2 · no empezar por los datos</div><p>“Tenemos este dataset, ¿qué hacemos?” lleva a una solución buscando problema. Primero la persona, luego el dato.</p></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- STICKY NAV -->
+<nav class="snav">
+  <div class="inner">
+    <a class="chip" href="#p1">1 · Entender</a>
+    <a class="chip" href="#p2">2 · Abrir</a>
+    <a class="chip hideM" href="#p3">3 · Afinar</a>
+    <a class="chip hideM" href="#p4">4 · Converger</a>
+    <a class="chip" href="#p5">5 · Idear</a>
+    <span class="sp"></span>
+    <span class="saved" id="savedMsg">Guardado ✓</span>
+    <button id="copyBtn" title="Copiar todo en formato tabla para pegar en Google Sheets">⧉ Copiar para Sheets</button>
+    <button id="csvBtn" class="prime" title="Descargar CSV para abrir en Sheets/Excel">↓ Exportar</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- STEP 1 -->
+  <section class="step" id="p1">
+    <div class="stephead">
+      <span class="stepnum">1</span>
+      <div>
+        <span class="timebadge">30 min · Entender el problema</span>
+        <h2>Canvas del problema</h2>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="mcard"><div class="lbl">Qué es</div><p>Un lienzo de siete recuadros que describe el problema desde varias caras: cuándo ocurre, a quién, qué lo causa, cuánto duele y qué se hace hoy.</p></div>
+      <div class="mcard"><div class="lbl">Objetivo</div><p>Una definición del problema basada en evidencia, no en intuición. Una frase que los jueces entiendan en segundos.</p></div>
+      <div class="mcard key"><div class="lbl">La clave</div><p>El recuadro de <b>Problema va al final</b>: es lo que menos se sabe al inicio y debe salir de los demás. Marquen cada nota como Dato o Supuesto — es la única forma de distinguir un canvas con evidencia de uno lleno de suposiciones.</p></div>
+      <div class="mcard err"><div class="lbl">Error común</div><p>Copiar el enunciado del reto en el recuadro de Problema, o escribir una solución disfrazada (“no existe una app que…”).</p></div>
+    </div>
+    <p class="instr">Llenen los recuadros <b>en este orden</b> (Problema al final). En cada uno, marquen <b>D</b> si lo vieron o midieron (tiene fuente) o <b>S</b> si lo creen (supuesto). Los supuestos importantes son lo primero que conviene verificar.</p>
+    <div id="canvas"></div>
+    <div class="mcard key" style="margin-top:6px"><div class="lbl">Prueba final del canvas</div><p>Si los jueces leen solo el recuadro de Problema, ¿entienden quién sufre, por qué y qué dato de la NASA lo cambia? Si no, el canvas todavía describe el reto y no el problema.</p></div>
+    <details class="ex"><summary>Ver ejemplo trabajado (riego · humedad del suelo / SMAP)</summary>
+      <div class="exbody">
+        <p style="margin-bottom:10px">Caso ficticio, como referencia del nivel de detalle:</p>
+        <table><tbody>
+          <tr><td class="exrc">Contexto</td><td>Inicio de la temporada de lluvias. El productor decide sembrar tras las primeras lluvias, sin saber si el suelo retuvo humedad suficiente.</td><td><span class="extag d">D</span></td></tr>
+          <tr><td class="exrc">Clientes</td><td>Pequeños productores de temporal (sin riego) que siembran maíz en parcelas propias. Decide y paga la misma persona.</td><td><span class="extag d">D</span></td></tr>
+          <tr><td class="exrc">Alternativas</td><td>Experiencia propia, consejo de vecinos, calendario tradicional, pronóstico del clima en TV o celular.</td><td><span class="extag d">D</span></td></tr>
+          <tr><td class="exrc">Desventajas</td><td>El pronóstico habla de lluvia, no de humedad en el suelo. Las herramientas satelitales existen, pero son técnicas, en inglés y a escala regional.</td><td><span class="extag d">D</span></td></tr>
+          <tr><td class="exrc">Impacto emocional</td><td>Sensación de apuesta: si siembra muy pronto y el suelo se seca, pierde semilla y trabajo. Frustración de que “el clima ya no es como antes”.</td><td><span class="extag s">S</span></td></tr>
+          <tr><td class="exrc">Impacto cuantificable</td><td>Costo de resembrar por hectárea (semilla + jornales) × hectáreas que se resiembran por temporada. Falta el dato: buscarlo en fuentes agrícolas oficiales.</td><td><span class="extag s">S</span></td></tr>
+          <tr><td class="exrc">Problema</td><td>Los productores de temporal no pueden decidir con confianza cuándo sembrar porque solo ven la lluvia y no la humedad del suelo, aunque la NASA ya la mide desde satélite.</td><td><span class="extag d">D</span>/<span class="extag s">S</span></td></tr>
+        </tbody></table>
+      </div>
+    </details>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="step" id="p2">
+    <div class="stephead">
+      <span class="stepnum">2</span>
+      <div>
+        <span class="timebadge">15 min · Abrir oportunidades</span>
+        <h2>Siete “¿Cómo podríamos…?”</h2>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="mcard"><div class="lbl">Qué es</div><p>Convertir cada parte del problema en una pregunta abierta que invita a idear.</p></div>
+      <div class="mcard"><div class="lbl">Objetivo</div><p>Abrir varias puertas de entrada al mismo problema antes de elegir una. Opciones realmente distintas, no la misma pregunta con otras palabras.</p></div>
+      <div class="mcard key"><div class="lbl">La clave</div><p>Una buena pregunta “¿Cómo podríamos…?” nace de una <b>tensión</b>: la distancia entre cómo están las cosas hoy y cómo podrían estar. Cada fila trae un arranque que fuerza esa tensión.</p></div>
+      <div class="mcard err"><div class="lbl">Error común</div><p>Meter la solución dentro de la pregunta (“¿cómo podríamos hacer una app que…?”).</p></div>
+    </div>
+    <div class="formula">Fórmula base: ¿Cómo podríamos <em>[verbo]</em> para que <em>[cliente]</em> pueda <em>[lograr algo]</em> en/cuando <em>[contexto]</em>, a pesar de <em>[limitación]</em>?</div>
+    <p class="instr">Escriban <b>una pregunta por cada recuadro</b> del canvas. Usen el arranque de cada fila para no quedarse en una descripción.</p>
+    <div id="hmw"></div>
+    <details class="ex"><summary>Ver ejemplo trabajado (las 7 preguntas del caso de riego)</summary>
+      <div class="exbody">
+        <table><tbody>
+          <tr><td class="exrc">Contexto</td><td>¿Cómo podríamos anticipar el momento de riesgo para que el productor decida días antes y no el mismo día?</td></tr>
+          <tr><td class="exrc">Clientes</td><td>¿Cómo podríamos combinar lo que el productor ya sabe de su tierra con lo que el satélite mide?</td></tr>
+          <tr><td class="exrc">Alternativas</td><td>¿Cómo podríamos aprovechar los canales por los que hoy se informan, como vecinos o WhatsApp, para que el dato llegue por ahí?</td></tr>
+          <tr><td class="exrc">Desventajas</td><td>¿Cómo podríamos ofrecer la información que ya existe, pero a escala de parcela y en español?</td></tr>
+          <tr><td class="exrc">Impacto emocional</td><td>¿Cómo podríamos hacer que sembrar se sienta como una decisión informada y no como una apuesta?</td></tr>
+          <tr><td class="exrc">Impacto cuantificable</td><td>¿Cómo podríamos reducir las hectáreas que se resiembran por haber sembrado con el suelo demasiado seco?</td></tr>
+          <tr><td class="exrc">Problema</td><td>¿Cómo podríamos hacer que los datos de humedad del suelo lleguen al productor en un formato que entienda sin conocimientos técnicos?</td></tr>
+        </tbody></table>
+      </div>
+    </details>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step" id="p3">
+    <div class="stephead">
+      <span class="stepnum">3</span>
+      <div>
+        <span class="timebadge">5 min · Afinar</span>
+        <h2>Autorrevisión</h2>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="mcard"><div class="lbl">Qué es</div><p>Tres preguntas de control para revisar cada “¿Cómo podríamos…?” sin ayuda externa.</p></div>
+      <div class="mcard"><div class="lbl">Objetivo</div><p>Detectar por sí mismos si una pregunta está mal calibrada: demasiado amplia, demasiado estrecha, o sin tensión.</p></div>
+      <div class="mcard key"><div class="lbl">La clave</div><p>Una pregunta bien calibrada está en un punto medio: si es muy amplia, no orienta; si es muy estrecha, ya trae la solución y no deja idear.</p></div>
+      <div class="mcard err"><div class="lbl">Señal</div><p>Si las siete preguntas se parecen demasiado entre sí, casi siempre el recuadro de Problema describe un síntoma y no una causa: regresen a él.</p></div>
+    </div>
+    <p class="instr">Pasen cada pregunta por las tres casillas. La tercera es la que confirma que está bien: <b>si en un minuto se les ocurren tres ideas distintas, está calibrada.</b></p>
+    <div id="autorev"></div>
+    <details class="ex"><summary>Ver ejemplo de calibración</summary>
+      <div class="exbody">
+        <p>“¿Cómo podríamos mejorar la agricultura?” → <b>demasiado amplia</b> (sirve para cualquier reto): agreguen cliente y contexto.</p>
+        <p style="margin-top:8px">“¿Cómo podríamos hacer una app con mapa de calor?” → <b>demasiado estrecha</b> (ya dice qué construir): quiten la solución y quédense con el “para qué”.</p>
+        <p style="margin-top:8px">“¿Cómo podríamos hacer que la humedad del suelo llegue al productor sin tecnicismos?” → <b>bien calibrada</b> (salen tres ideas en un minuto).</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="step" id="p4">
+    <div class="stephead">
+      <span class="stepnum">4</span>
+      <div>
+        <span class="timebadge">10 min · Converger y decidir</span>
+        <h2>Matriz de elección</h2>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="mcard"><div class="lbl">Qué es</div><p>Una tabla para calificar las preguntas que pasaron la autorrevisión con dos criterios y elegir una.</p></div>
+      <div class="mcard"><div class="lbl">Objetivo</div><p>Decidir rápido y con argumentos, no por quién habla más fuerte, y asegurar que lo elegido se pueda construir a tiempo.</p></div>
+      <div class="mcard key"><div class="lbl">La clave</div><p>Los dos criterios son las dos restricciones reales del evento. <b>Conectar con un dato de la NASA</b> hace que el proyecto pertenezca al reto; <b>poder prototiparlo en un día</b> hace que llegue a la presentación.</p></div>
+      <div class="mcard"><div class="lbl">Los que no ganan</div><p>No se tiran: sirven como argumentos en el pitch para mostrar que entendieron el problema desde varios ángulos.</p></div>
+    </div>
+    <p class="instr">Califiquen cada pregunta del 1 al 3 en los dos criterios. El <b>total</b> se suma solo. Marquen <b>“Elegir”</b> en la de mayor suma: con esa van a idear y prototipar.</p>
+    <div class="matrix">
+      <table>
+        <thead><tr>
+          <th style="width:46%">Pregunta “¿Cómo podríamos…?”</th>
+          <th>¿Conecta con un dato de la NASA? (1–3)</th>
+          <th>¿Se puede prototipar en un día? (1–3)</th>
+          <th style="text-align:center">Total</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="matrix"></tbody>
+      </table>
+    </div>
+    <details class="ex"><summary>Ver ejemplo</summary>
+      <div class="exbody"><p>En el caso de riego, la pregunta de <b>Problema</b> (“que los datos de humedad lleguen al productor sin tecnicismos”) y la de <b>Alternativas</b> obtienen el total más alto: conectan directo con un dato satelital y se pueden demostrar con un prototipo sencillo de mensajes.</p></div>
+    </details>
+  </section>
+
+  <!-- STEP 5 -->
+  <section class="step" id="p5">
+    <div class="stephead">
+      <span class="stepnum">5</span>
+      <div>
+        <span class="timebadge">25 min · Idear</span>
+        <h2>Dato · Canal · Momento</h2>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="mcard"><div class="lbl">Qué es</div><p>Una ideación en tres rondas que combina escritura individual en silencio con una caja de combinaciones. Adapta dos técnicas: <em>brainwriting</em> y caja morfológica.</p></div>
+      <div class="mcard"><div class="lbl">Objetivo</div><p>Generar muchas ideas para la pregunta elegida, todas ancladas en un dato de la NASA y en el momento real del problema.</p></div>
+      <div class="mcard key"><div class="lbl">La clave</div><p>Casi toda solución de un hackathon de datos responde a tres preguntas: <b>qué dato</b>, <b>cómo le llega</b> a la persona y <b>en qué momento</b>. Combinar opciones de esas columnas produce ideas que nadie habría propuesto solo. Las columnas salen del canvas.</p></div>
+      <div class="mcard err"><div class="lbl">Error común</div><p>Discutir o descartar ideas mientras se generan. En las tres rondas todo se anota; se juzga solo al final.</p></div>
+    </div>
+
+    <div class="chosenq">
+      <div class="lbl">Pregunta elegida (del paso 4)</div>
+      <div class="txt empty" id="chosenHMW">Marca “Elegir” en una pregunta del paso 4 y aparecerá aquí.</div>
+    </div>
+
+    <!-- Ronda 1 -->
+    <div class="round">
+      <div class="rh"><span class="rnum">Ronda 1</span><h3>En silencio</h3><span class="rtime">5 min</span></div>
+      <p class="rd">Cada persona escribe <b>sola, al menos cinco ideas</b> para la pregunta elegida, una por renglón. Nadie comenta todavía.</p>
+      <div class="idealist" id="r1list"></div>
+    </div>
+
+    <!-- Ronda 2 -->
+    <div class="round">
+      <div class="rh"><span class="rnum">Ronda 2</span><h3>Combinar</h3><span class="rtime">10 min</span></div>
+      <p class="rd">Llenen la caja con <b>tres a cinco opciones por columna</b>. Cada combinación —una opción de cada columna— es una idea. Las columnas salen del canvas.</p>
+      <div class="combobox">
+        <div class="combocol dato"><h5>Dato de la NASA</h5><div class="src">Sale de Contexto y Problema</div><div id="colDato"></div></div>
+        <div class="combocol canal"><h5>Cómo le llega a la persona</h5><div class="src">Sale de Clientes y Alternativas</div><div id="colCanal"></div></div>
+        <div class="combocol mom"><h5>En qué momento</h5><div class="src">Sale de Contexto</div><div id="colMom"></div></div>
+      </div>
+    </div>
+
+    <!-- Ronda 3 -->
+    <div class="round">
+      <div class="rh"><span class="rnum">Ronda 3</span><h3>Construir sobre</h3><span class="rtime">5 min</span></div>
+      <p class="rd">Cada quien toma una idea de otra persona y la mejora con <b>“sí, y además…”</b>.</p>
+      <div id="r3list"></div>
+    </div>
+
+    <!-- Elegir -->
+    <div class="round" style="border-color:rgba(215,230,75,.35)">
+      <div class="rh"><span class="rnum">Elegir</span><h3>La idea finalista</h3><span class="rtime">5 min</span></div>
+      <p class="rd">Cada persona vota por tres ideas. Entre las más votadas, quédense con la que <b>puedan demostrar en un prototipo de un día</b>.</p>
+      <div style="margin-bottom:12px"><div class="lb" style="font-size:.76rem;color:var(--mute);margin-bottom:5px;font-family:Archivo;font-weight:700">Idea con la que seguimos</div><textarea data-k="final_idea" placeholder="La combinación / idea elegida para prototipar…"></textarea></div>
+      <div><div class="lb" style="font-size:.76rem;color:var(--mute);margin-bottom:5px;font-family:Archivo;font-weight:700">¿Por qué se puede prototipar en un día?</div><textarea data-k="final_why" placeholder="Qué es lo mínimo que mostraríamos en la demo…"></textarea></div>
+    </div>
+
+    <details class="ex"><summary>Ver ejemplo de la caja de combinaciones</summary>
+      <div class="exbody">
+        <table><tbody>
+          <tr><td class="exrc">Dato</td><td>Humedad del suelo actual · Pronóstico de humedad a 7 días · Histórico de humedad por zona</td></tr>
+          <tr><td class="exrc">Canal</td><td>Mensaje de WhatsApp · Aviso en radio comunitaria · Tablero en la cooperativa</td></tr>
+          <tr><td class="exrc">Momento</td><td>Después de las primeras lluvias · Una semana antes de sembrar · Al planear la temporada</td></tr>
+        </tbody></table>
+        <p style="margin-top:10px"><b>Una combinación:</b> humedad del suelo actual + WhatsApp + después de las primeras lluvias → un mensaje que, tras la primera lluvia, dice si conviene sembrar o esperar unos días.</p>
+      </div>
+    </details>
+  </section>
+
+  <div class="howbar" style="margin:10px 0 40px">
+    <h3>✅ Al terminar</h3>
+    <p>Tienen un <b>problema claro</b>, siete puertas de entrada, una <b>pregunta elegida con argumentos</b> y una <b>idea para prototipar</b>. Exporten todo a Sheets y úsenlo como insumo directo para empezar a prototipar.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+      <button id="copyBtn2" class="pickbtn">⧉ Copiar para Sheets</button>
+      <button id="csvBtn2" class="pickbtn" style="background:var(--lime);color:#071428;border-color:var(--lime)">↓ Exportar CSV</button>
+      <button id="resetBtn" class="pickbtn" style="border-color:rgba(239,106,90,.4);color:var(--crit)">↺ Reiniciar</button>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span class="logo-ring"><svg viewBox="0 0 48 48" fill="none"><circle cx="22" cy="26" r="16" stroke="#9cc1f2" stroke-width="2.4"/><path d="M34 14 C 30 10, 24 9, 20 11" stroke="#d7e64b" stroke-width="2.4" stroke-linecap="round"/><circle cx="35" cy="13" r="2.4" fill="#ef6a5a"/></svg></span>
+  ORBITAL · Taller para aterrizar el reto — 🌮 Tacos de Asada<br/>
+  NASA Space Apps Challenge CDMX 2026 · Método adaptado del kit "Plan de vuelo"
+</footer>
+
+<script>
+/* ---------- data model ---------- */
+var CANVAS = [
+  {k:'contexto', n:1, name:'Contexto', q:'¿Cuándo ocurre el problema?', prompts:[
+    'Reescriban con sus palabras, en una frase, la parte del reto de la NASA que les interesa.',
+    '¿En qué lugar y momento concreto se vuelve un problema para alguien en la Tierra o en el espacio?',
+    '¿Qué evento físico o ambiental lo dispara, y qué dato de la NASA lo registra?',
+    '¿Cuándo <em>no</em> ocurre, aunque todo lo demás sea igual?']},
+  {k:'clientes', n:2, name:'Clientes', q:'¿Quién lo tiene más seguido?', prompts:[
+    'Fuera del equipo y de los jueces, ¿quién toma una decisión peor por no tener esta información?',
+    '¿Es un científico, un gobierno local, una comunidad, un estudiante? Escojan uno solo.',
+    '¿Quién lo padece y quién decide o paga la solución? ¿Son la misma persona?',
+    '¿Ese cliente tiene acceso real a lo que van a construir: internet, idioma, nivel técnico?']},
+  {k:'alternativas', n:3, name:'Alternativas', q:'¿Qué hacen hoy para resolverlo?', prompts:[
+    '¿Qué herramientas de la NASA u otras agencias ya muestran estos datos?',
+    '¿Cómo decide hoy la persona sin esos datos: experiencia, vecinos, avisos oficiales, redes sociales?',
+    '¿Hay quien simplemente no hace nada y lo tolera?']},
+  {k:'desventajas', n:4, name:'Desventajas de las alternativas', q:'¿Qué falla en lo que usan hoy?', prompts:[
+    '¿Por qué esas herramientas no le sirven a <em>su</em> cliente? ¿Son muy técnicas, están en inglés, llegan tarde, son demasiado generales?',
+    '¿En qué situaciones deja de funcionar lo que usa hoy?',
+    '¿Esas desventajas bastan para que cambie de hábito, o solo son incómodas?']},
+  {k:'emocional', n:5, name:'Impacto emocional', q:'¿Cómo se siente la persona?', prompts:[
+    '¿Qué siente cuando la decisión le sale mal: incertidumbre, impotencia, sensación de que la información “no es para ella”?',
+    '¿Qué teme que pase después?',
+    '¿Hay una nota, testimonio o publicación real que lo muestre, o lo estamos imaginando?']},
+  {k:'cuantificable', n:6, name:'Impacto cuantificable', q:'¿Qué se puede medir? (con unidades)', prompts:[
+    '¿Qué pierde la persona cada vez que ocurre: tiempo, dinero, cosechas, salud, oportunidades?',
+    '¿Qué pueden medir con los propios datos de la NASA? Hectáreas, personas expuestas, días de anticipación, grados, toneladas.',
+    '¿Cuántas veces al año ocurre y a cuántas personas o lugares alcanza?',
+    'Si no tienen el número exacto, ¿cuál es una estimación defendible y de dónde sale?']},
+  {k:'problema', n:7, name:'Problema (causa raíz)', q:'¿Cuál es la causa raíz? — llénenlo al final', prompts:[
+    '¿Los datos existen pero nadie los usa? ¿Por qué: son difíciles de encontrar, de leer, llegan tarde, están en otra escala?',
+    'Pregunten “¿por qué?” hasta que la respuesta deje de ser un síntoma.',
+    'Completen la frase: <em>[Cliente] no puede [decidir o hacer X] porque [causa], aunque la NASA ya tiene [dato].</em>',
+    '¿Lo que escribieron es un problema o el nombre de su app disfrazado?']}
+];
+var HMW_START = {
+  contexto:'¿Cómo podríamos cambiar cuándo o dónde pasa esto?',
+  clientes:'¿Cómo podríamos usar lo que ellos ya saben o hacen?',
+  alternativas:'¿Cómo podríamos construir sobre lo que ya funciona?',
+  desventajas:'¿Cómo podríamos resolver lo que lo existente hace mal?',
+  emocional:'¿Cómo podríamos cambiar este sentimiento por otro?',
+  cuantificable:'¿Cómo podríamos mover este número, y en qué dirección?',
+  problema:'¿Cómo podríamos eliminar la causa, no el síntoma?'
+};
+var AR_Q = [
+  {t:'¿Sirve para cualquier reto?', help:'Si sí → demasiado amplia. Agreguen cliente y contexto.'},
+  {t:'¿Ya dice qué van a construir?', help:'Si sí → demasiado estrecha. Quiten la solución y quédense con el “para qué”.'},
+  {t:'¿Se les ocurren tres ideas distintas en un minuto?', help:'Si sí → está bien calibrada.'}
+];
+
+/* ---------- render ---------- */
+function el(h){var d=document.createElement('div');d.innerHTML=h.trim();return d.firstChild;}
+
+/* Step 1 canvas */
+var cv=document.getElementById('canvas');
+CANVAS.forEach(function(f){
+  var li=f.prompts.map(function(p){return '<li>'+p+'</li>'}).join('');
+  cv.appendChild(el(
+   '<div class="field">'+
+    '<div class="fhead"><span class="fn">'+f.n+'</span><h4>'+f.name+'</h4></div>'+
+    '<div class="fq">'+f.q+'</div>'+
+    '<ul class="prompts">'+li+'</ul>'+
+    '<textarea data-k="c_'+f.k+'" placeholder="Lo que encontramos…"></textarea>'+
+    '<div class="ds"><label><input type="radio" name="ds_'+f.k+'" data-k="ds_'+f.k+'" value="D"><span class="d">Dato</span></label>'+
+    '<label><input type="radio" name="ds_'+f.k+'" data-k="ds_'+f.k+'" value="S"><span class="s">Supuesto</span></label>'+
+    '<span class="dshelp">Dato = lo vimos/medimos · Supuesto = lo creemos</span></div>'+
+   '</div>'));
+});
+
+/* Step 2 HMW */
+var hm=document.getElementById('hmw');
+CANVAS.forEach(function(f){
+  hm.appendChild(el(
+   '<div class="hmwrow">'+
+    '<div class="rc">'+f.name+'<span class="st">Empiecen con: <em>'+HMW_START[f.k]+'</em></span></div>'+
+    '<textarea data-k="hmw_'+f.k+'" placeholder="Su “¿Cómo podríamos…?” para '+f.name.toLowerCase()+'…"></textarea>'+
+   '</div>'));
+});
+
+/* Step 3 autorev */
+var ar=document.getElementById('autorev');
+CANVAS.forEach(function(f){
+  var checks=AR_Q.map(function(q,i){
+    return '<label class="chk"><input type="checkbox" data-k="ar'+(i+1)+'_'+f.k+'" data-ar="'+f.k+'"><span><b>'+q.t+'</b> — '+q.help+'</span></label>';
+  }).join('');
+  ar.appendChild(el(
+   '<div class="arrow">'+
+    '<div class="q">'+f.name+'</div>'+
+    '<div class="qt" data-hmwecho="'+f.k+'">—</div>'+
+    '<div class="checks">'+checks+'</div>'+
+    '<span class="verdict none" id="verd_'+f.k+'">Sin revisar</span>'+
+   '</div>'));
+});
+
+/* Step 4 matrix */
+var mx=document.getElementById('matrix');
+CANVAS.forEach(function(f){
+  function opts(){return '<option value="0">–</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>';}
+  mx.insertAdjacentHTML('beforeend',
+   '<tr>'+
+    '<td class="mhmw"><span class="rcname">'+f.name+'</span><span data-mhmw="'+f.k+'">—</span></td>'+
+    '<td><select data-k="m1_'+f.k+'" data-m="'+f.k+'">'+opts()+'</select></td>'+
+    '<td><select data-k="m2_'+f.k+'" data-m="'+f.k+'">'+opts()+'</select></td>'+
+    '<td class="total" id="tot_'+f.k+'">0</td>'+
+    '<td><button type="button" class="pickbtn" data-pick="'+f.k+'">Elegir</button></td>'+
+   '</tr>');
+});
+
+/* Step 5 lists */
+var r1=document.getElementById('r1list');
+for(var i=1;i<=8;i++){
+  r1.appendChild(el('<div class="idearow"><span class="num">'+i+'</span><input type="text" data-k="r1_'+i+'" placeholder="Idea '+i+'…"></div>'));
+}
+['Dato','Canal','Mom'].forEach(function(col){
+  var box=document.getElementById('col'+col);
+  for(var j=1;j<=5;j++){ box.appendChild(el('<div class="col-in"><input type="text" data-k="co_'+col.toLowerCase()+'_'+j+'" placeholder="Opción '+j+'"></div>')); }
+});
+var r3=document.getElementById('r3list');
+for(var k=1;k<=3;k++){
+  r3.appendChild(el('<div class="r3row"><div><div class="lb">Idea de base</div><input type="text" data-k="r3base_'+k+'" placeholder="Idea de otra persona…"></div><div><div class="lb">Sí, y además…</div><input type="text" data-k="r3add_'+k+'" placeholder="Cómo la mejoran…"></div></div>'));
+}
+
+/* ---------- state: collect / restore / autosave ---------- */
+var KEY='aterrizar_orbital_v1';
+function collect(){
+  var m={};
+  document.querySelectorAll('[data-k]').forEach(function(elm){
+    var k=elm.getAttribute('data-k');
+    if(elm.type==='checkbox'){ m[k]=elm.checked; }
+    else if(elm.type==='radio'){ if(elm.checked) m[k]=elm.value; if(!(k in m)) m[k]=m[k]||''; }
+    else { m[k]=elm.value; }
+  });
+  m.elegida = window._elegida||'';
+  return m;
+}
+function restore(m){
+  if(!m) return;
+  document.querySelectorAll('[data-k]').forEach(function(elm){
+    var k=elm.getAttribute('data-k'); if(!(k in m)) return;
+    if(elm.type==='checkbox'){ elm.checked=!!m[k]; }
+    else if(elm.type==='radio'){ elm.checked=(elm.value===m[k]); }
+    else { elm.value=m[k]||''; }
+  });
+  if(m.elegida){ setPick(m.elegida,true); }
+}
+var saveT;
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(collect())); showSaved(); }catch(e){}
+}
+function queueSave(){ clearTimeout(saveT); saveT=setTimeout(save,450); }
+var savedMsg=document.getElementById('savedMsg'), savedT;
+function showSaved(){ savedMsg.classList.add('show'); clearTimeout(savedT); savedT=setTimeout(function(){savedMsg.classList.remove('show')},1400); }
+
+/* ---------- live sync ---------- */
+function syncHMW(){
+  CANVAS.forEach(function(f){
+    var v=(document.querySelector('[data-k="hmw_'+f.k+'"]')||{}).value||'';
+    var txt=v.trim()||'—';
+    var echo=document.querySelector('[data-hmwecho="'+f.k+'"]'); if(echo) echo.textContent=txt;
+    var mh=document.querySelector('[data-mhmw="'+f.k+'"]'); if(mh) mh.textContent=txt;
+  });
+  syncChosen();
+}
+function syncTotals(){
+  CANVAS.forEach(function(f){
+    var a=+(document.querySelector('[data-k="m1_'+f.k+'"]')||{}).value||0;
+    var b=+(document.querySelector('[data-k="m2_'+f.k+'"]')||{}).value||0;
+    var t=document.getElementById('tot_'+f.k); if(t) t.textContent=(a+b);
+  });
+}
+function syncVerdict(ar){
+  var c1=document.querySelector('[data-k="ar1_'+ar+'"]').checked;
+  var c2=document.querySelector('[data-k="ar2_'+ar+'"]').checked;
+  var c3=document.querySelector('[data-k="ar3_'+ar+'"]').checked;
+  var v=document.getElementById('verd_'+ar); if(!v) return;
+  v.className='verdict';
+  if(c3 && !c1 && !c2){ v.classList.add('good'); v.textContent='Bien calibrada ✓'; }
+  else if(c1||c2){ v.classList.add('warn'); v.textContent=(c1&&c2)?'Ajustar: amplia y estrecha':(c1?'Ajustar: muy amplia':'Ajustar: muy estrecha'); }
+  else { v.classList.add('none'); v.textContent='Sin revisar'; }
+}
+function setPick(k,on){
+  document.querySelectorAll('[data-pick]').forEach(function(b){ b.classList.remove('on'); b.textContent='Elegir'; });
+  if(on){
+    var b=document.querySelector('[data-pick="'+k+'"]'); if(b){ b.classList.add('on'); b.textContent='Elegida ✓'; }
+    window._elegida=k;
+  } else { window._elegida=''; }
+  syncChosen();
+}
+function syncChosen(){
+  var box=document.getElementById('chosenHMW'); if(!box) return;
+  var k=window._elegida;
+  if(k){
+    var v=(document.querySelector('[data-k="hmw_'+k+'"]')||{}).value||'';
+    var f=CANVAS.filter(function(x){return x.k===k})[0];
+    if(v.trim()){ box.className='txt'; box.textContent=v.trim(); }
+    else { box.className='txt empty'; box.textContent='Escribe la pregunta "'+(f?f.name:'')+'" en el paso 2 para verla aquí.'; }
+  } else { box.className='txt empty'; box.textContent='Marca “Elegir” en una pregunta del paso 4 y aparecerá aquí.'; }
+}
+
+/* ---------- events ---------- */
+document.addEventListener('input', function(e){
+  if(e.target.matches('[data-k]')){
+    queueSave();
+    if(e.target.getAttribute('data-k').indexOf('hmw_')===0) syncHMW();
+    if(e.target.getAttribute('data-m')) syncTotals();
+  }
+});
+document.addEventListener('change', function(e){
+  if(e.target.matches('[data-k]')){
+    queueSave();
+    if(e.target.getAttribute('data-ar')) syncVerdict(e.target.getAttribute('data-ar'));
+    if(e.target.getAttribute('data-m')) syncTotals();
+  }
+});
+document.addEventListener('click', function(e){
+  var b=e.target.closest('[data-pick]');
+  if(b){ var k=b.getAttribute('data-pick'); setPick(k, !b.classList.contains('on')); queueSave(); }
+});
+
+/* ---------- export ---------- */
+function buildRows(){
+  var m=collect(); var rows=[['Sección','Campo','Valor','D/S']];
+  rows.push(['Paso 1 · Canvas','','','']);
+  CANVAS.forEach(function(f){ rows.push(['Canvas', f.name, m['c_'+f.k]||'', m['ds_'+f.k]||'']); });
+  rows.push(['Paso 2 · ¿Cómo podríamos?','','','']);
+  CANVAS.forEach(function(f){ rows.push(['¿Cómo podríamos?', f.name, m['hmw_'+f.k]||'','']); });
+  rows.push(['Paso 3 · Autorrevisión','','','']);
+  CANVAS.forEach(function(f){
+    var v=[m['ar1_'+f.k]?'amplia':'', m['ar2_'+f.k]?'estrecha':'', m['ar3_'+f.k]?'3 ideas en 1 min':''].filter(Boolean).join('; ');
+    rows.push(['Autorrevisión', f.name, v||'sin revisar','']);
+  });
+  rows.push(['Paso 4 · Matriz','','','']);
+  CANVAS.forEach(function(f){
+    var a=+m['m1_'+f.k]||0,b=+m['m2_'+f.k]||0;
+    rows.push(['Matriz', f.name, 'dato='+a+' prototipo='+b+' total='+(a+b)+(m.elegida===f.k?' · ELEGIDA':''),'']);
+  });
+  rows.push(['Paso 5 · Ideación','','','']);
+  rows.push(['Ideación','Pregunta elegida', (m.elegida?(m['hmw_'+m.elegida]||''):''),'']);
+  for(var i=1;i<=8;i++){ if(m['r1_'+i]) rows.push(['Ronda 1 · ideas','Idea '+i, m['r1_'+i],'']); }
+  ['dato','canal','mom'].forEach(function(c){ for(var j=1;j<=5;j++){ if(m['co_'+c+'_'+j]) rows.push(['Ronda 2 · '+c, 'Opción '+j, m['co_'+c+'_'+j],'']); } });
+  for(var k=1;k<=3;k++){ if(m['r3base_'+k]||m['r3add_'+k]) rows.push(['Ronda 3', m['r3base_'+k]||'', 'sí y además: '+(m['r3add_'+k]||''),'']); }
+  rows.push(['Elegir','Idea finalista', m['final_idea']||'','']);
+  rows.push(['Elegir','Por qué 1 día', m['final_why']||'','']);
+  return rows;
+}
+function csvEsc(s){ s=(s==null?'':String(s)); return /[",\n]/.test(s)? '"'+s.replace(/"/g,'""')+'"' : s; }
+function exportCSV(){
+  var rows=buildRows().map(function(r){return r.map(csvEsc).join(',')}).join('\r\n');
+  var blob=new Blob(['﻿'+rows],{type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='aterrizar-orbital.csv'; document.body.appendChild(a); a.click(); a.remove();
+}
+function copyTSV(btn){
+  var rows=buildRows().map(function(r){return r.map(function(s){return String(s==null?'':s).replace(/[\t\n\r]+/g,' ')}).join('\t')}).join('\n');
+  function done(ok){ var t=btn.textContent; btn.textContent= ok?'Copiado ✓':'Copia manual'; setTimeout(function(){btn.textContent=t},1500); }
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(rows).then(function(){done(true)},function(){done(false)}); }
+  else { try{ var ta=document.createElement('textarea'); ta.value=rows; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done(true);}catch(e){done(false);} }
+}
+document.getElementById('csvBtn').onclick=exportCSV;
+document.getElementById('csvBtn2').onclick=exportCSV;
+document.getElementById('copyBtn').onclick=function(){copyTSV(this)};
+document.getElementById('copyBtn2').onclick=function(){copyTSV(this)};
+document.getElementById('resetBtn').onclick=function(){
+  if(confirm('¿Borrar todo lo escrito en este navegador? No se puede deshacer.')){
+    try{localStorage.removeItem(KEY)}catch(e){}; location.reload();
+  }
+};
+
+/* ---------- sticky nav active state ---------- */
+var chips=[].slice.call(document.querySelectorAll('.snav .chip'));
+var secs=['p1','p2','p3','p4','p5'].map(function(id){return document.getElementById(id)});
+if('IntersectionObserver' in window){
+  var io=new IntersectionObserver(function(ents){
+    ents.forEach(function(en){
+      if(en.isIntersecting){
+        var id=en.target.id;
+        chips.forEach(function(c){ c.classList.toggle('on', c.getAttribute('href')==='#'+id); });
+      }
+    });
+  },{rootMargin:'-45% 0px -50% 0px'});
+  secs.forEach(function(s){io.observe(s)});
+}
+
+/* ---------- init ---------- */
+(function(){
+  var raw; try{ raw=localStorage.getItem(KEY); }catch(e){}
+  if(raw){ try{ restore(JSON.parse(raw)); }catch(e){} }
+  syncHMW(); syncTotals(); CANVAS.forEach(function(f){syncVerdict(f.k)}); syncChosen();
+})();
+</script>
+</body>
+</html>
