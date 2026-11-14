@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ORBITAL · Mapa de empatía (Katya E.)</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="description" content="Mapa de empatía colaborativo para Katya E., la tripulante del escenario. Cada quien agrega notas desde su dispositivo y se sincroniza en Google. NASA Space Apps CDMX 2026." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=Overpass:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy-900:#071428;--navy-800:#0a1a33;--navy-700:#0d2244;--navy-600:#102a55;
+    --royal:#1e52c8;--royal-bright:#2a66e6;--blue-soft:#4e8fe6;--blue-pale:#9cc1f2;
+    --lime:#d7e64b;--white:#f4f8ff;--mute:#a9bbd6;--line:rgba(156,193,242,.16);
+    --card:rgba(18,38,74,.55);--ok:#4ccb8f;--warn:#f2c14e;--crit:#ef6a5a;
+    --maxw:1080px;--r:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"Overpass",system-ui,sans-serif;background:var(--navy-900);color:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  h1,h2,h3,h4{font-family:"Archivo",sans-serif;letter-spacing:-.01em}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  a{color:var(--blue-soft)}
+  .eyebrow{font-family:"Archivo";font-weight:800;text-transform:uppercase;letter-spacing:.14em;font-size:.72rem;color:var(--lime);display:inline-flex;align-items:center;gap:10px}
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--lime);display:inline-block}
+  .rings{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .rings span{position:absolute;border-radius:50%;border:1px solid rgba(120,160,230,.10)}
+
+  header.hero{position:relative;padding:54px 0 36px;background:
+      radial-gradient(1100px 680px at 82% 10%, rgba(30,82,200,.4), transparent 60%),
+      linear-gradient(180deg,var(--navy-800),var(--navy-900))}
+  .brandmark{display:flex;align-items:center;gap:13px;margin-bottom:22px}
+  .logo-ring{width:44px;height:44px;flex:0 0 auto}
+  .brandmark small{display:block;font-size:.58rem;letter-spacing:.3em;color:var(--mute);font-weight:700;font-family:"Archivo"}
+  .brandmark b{font-size:.95rem;letter-spacing:.04em;font-family:"Archivo";font-weight:900;text-transform:uppercase}
+  header.hero h1{font-weight:900;font-size:clamp(2rem,5vw,3.2rem);line-height:1;margin:12px 0 10px}
+  header.hero .lead{color:var(--blue-pale);font-size:clamp(1rem,2vw,1.2rem);max-width:60ch}
+
+  .persona{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-top:24px}
+  .persona .av{width:62px;height:62px;flex:0 0 auto}
+  .persona h3{font-size:1.15rem;font-weight:800}
+  .persona .meta{color:var(--blue-soft);font-size:.86rem;font-weight:600;margin:3px 0 6px}
+  .persona .desc{color:var(--mute);font-size:.9rem}
+  .persona .src{color:var(--mute);opacity:.72;font-size:.78rem;margin-top:6px}
+  .banner{display:flex;gap:12px;align-items:flex-start;background:rgba(239,106,90,.1);border:1px solid rgba(239,106,90,.3);border-radius:14px;padding:15px 18px;margin-top:16px;font-size:.92rem;color:var(--white)}
+  .banner b{color:#ffb4a8}
+  .dyn{color:var(--mute);font-size:.9rem;margin-top:16px;background:rgba(215,230,75,.07);border-left:3px solid var(--lime);border-radius:0 10px 10px 0;padding:12px 15px}
+  .dyn b{color:var(--lime)}
+
+  .xbtns{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+  .xbtn{display:inline-flex;align-items:center;gap:9px;font-family:"Archivo",sans-serif;font-weight:800;font-size:.9rem;padding:12px 20px;border-radius:11px;text-decoration:none}
+  .xbtn.prime{background:var(--lime);color:#071428}
+  .xbtn.ghost{background:transparent;color:var(--lime);border:1px solid rgba(215,230,75,.5)}
+
+  /* grid */
+  .board{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:30px 0}
+  .zone{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;border-top:3px solid var(--blue-soft);display:flex;flex-direction:column}
+  .zone .zh{display:flex;align-items:center;gap:9px;margin-bottom:3px}
+  .zone .zh h4{font-size:1.02rem;font-weight:800}
+  .zone .zhint{color:var(--mute);font-size:.78rem;margin-bottom:12px}
+  .addrow{display:flex;gap:7px;margin-bottom:12px}
+  .addrow input{flex:1;background:rgba(7,20,40,.5);border:1px solid var(--line);border-radius:9px;color:var(--white);font-family:"Overpass";font-size:.88rem;padding:9px 11px}
+  .addrow input:focus{outline:none;border-color:var(--lime)}
+  .addrow button{flex:0 0 auto;width:38px;border:none;border-radius:9px;background:var(--lime);color:#071428;font-size:1.1rem;font-weight:800;cursor:pointer}
+  .notes{display:flex;flex-direction:column;gap:9px;min-height:30px}
+  .note{background:rgba(7,20,40,.5);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .note .nt{font-size:.9rem;color:var(--white);line-height:1.4;white-space:pre-wrap;word-break:break-word}
+  .note .nf{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:.74rem;color:var(--mute)}
+  .note .au{font-family:"Archivo";font-weight:700;color:var(--blue-pale)}
+  .note .sp{flex:1}
+  .note .vote{cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--mute);border-radius:999px;padding:3px 9px;font-size:.74rem;font-family:"Archivo";font-weight:800;transition:.15s}
+  .note .vote:hover{border-color:var(--lime);color:var(--lime)}
+  .note .vote.hot{border-color:rgba(215,230,75,.5);color:var(--lime);background:rgba(215,230,75,.1)}
+  .note .del{cursor:pointer;border:none;background:transparent;color:var(--mute);font-size:.9rem;opacity:.6}
+  .note .del:hover{color:var(--crit);opacity:1}
+  .empty{color:var(--mute);opacity:.5;font-size:.82rem;font-style:italic;padding:4px 2px}
+
+  .pov{background:linear-gradient(135deg,rgba(30,82,200,.26),var(--navy-700));border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;margin:10px 0 40px}
+  .pov h3{font-size:1.2rem;font-weight:800;margin-bottom:6px}
+  .pov p{color:var(--mute);font-size:.9rem;margin-bottom:12px}
+  .pov p em{color:var(--blue-soft)}
+  .pov textarea{width:100%;min-height:70px;background:rgba(7,20,40,.5);border:1px solid var(--line);border-radius:10px;color:var(--white);font-family:"Overpass";font-size:.96rem;padding:12px 14px;resize:vertical}
+  .pov textarea:focus{outline:none;border-color:var(--lime)}
+
+  footer{padding:44px 0;text-align:center;color:var(--mute);font-size:.82rem;border-top:1px solid var(--line)}
+  footer .logo-ring{width:34px;height:34px;margin:0 auto 12px;display:block}
+
+  @media(max-width:860px){ .board{grid-template-columns:1fr 1fr} .persona{grid-template-columns:1fr;text-align:left} }
+  @media(max-width:560px){ .board{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="rings"><span style="width:600px;height:600px;top:-140px;right:-160px"></span><span style="width:900px;height:900px;top:-260px;right:-300px"></span></div>
+  <div class="wrap" style="position:relative;z-index:1">
+    <div class="brandmark">
+      <span class="logo-ring"><svg viewBox="0 0 48 48" fill="none"><circle cx="22" cy="26" r="16" stroke="#f4f8ff" stroke-width="2.4"/><path d="M34 14 C 30 10, 24 9, 20 11" stroke="#d7e64b" stroke-width="2.4" stroke-linecap="round"/><circle cx="35" cy="13" r="2.4" fill="#ef6a5a"/></svg></span>
+      <span><small>NASA Space Apps · CDMX 2026 · Equipo ORBITAL</small><b>Empatizar · Mapa de empatía</b></span>
+    </div>
+    <div class="eyebrow">Paso previo · diseñar para alguien concreto</div>
+    <h1>Mapa de empatía — Katya E.</h1>
+    <p class="lead">No diseñamos para “un astronauta” genérico. Diseñamos para alguien concreto, aislado, sin médico al otro lado de la línea. Cada quien agrega notas desde su dispositivo; se juntan aquí y en el Google Sheet.</p>
+
+    <div class="persona">
+      <div class="av"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="14" fill="#0a1a33" stroke="#9cc1f2" stroke-width="1.5"/><circle cx="24" cy="24" r="9" fill="none" stroke="#4e8fe6" stroke-width="1.5"/><path d="M19 22a5 5 0 0110 0" stroke="#d7e64b" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div>
+        <h3>Katya E. · 30 años</h3>
+        <div class="meta">Ingeniera electrónica y comunicadora científica · Guadalajara, México · misión a Marte (~18 meses)</div>
+        <div class="desc">UCLA · NASA JPL (Europa Clipper) · vuelo suborbital NS-21 (2022). Competente con la tecnología, no es clínica. Sin médico a bordo; delay de hasta 20 min con la Tierra. Su miedo: no notar algo serio a tiempo.</div>
+        <div class="src">Persona inspirada en la trayectoria pública de Katya Echazarreta (Wikipedia). Lo que dice, piensa y siente son hipótesis del equipo, no declaraciones suyas.</div>
+      </div>
+    </div>
+
+    <div class="banner">🎬 <div><b>Escenario para arrancar:</b> a Katya le empieza a doler el pecho. Nadie a bordo es médico y Houston está a 20 min. Recuerden que el estrés crónico también causa dolor de pecho y migrañas — empaticen con esa duda antes de pegar sus notas.</div></div>
+
+    <div class="dyn">🗳️ <b>Dinámica (5 min):</b> escriban en silencio (una idea por nota) → agrupen las parecidas → marquen los dolores más fuertes votando (👍). De los dolores más votados salen las necesidades del paso siguiente.</div>
+
+    <div id="syncbar" style="margin-top:20px"></div>
+    <p style="color:var(--mute);font-size:.82rem;margin-top:8px">Pon tu nombre y conéctate (⚙️) para que todos agreguen notas a la vez desde su compu o celular. Sin conectar, las notas se guardan en este dispositivo.</p>
+
+    <div class="xbtns">
+      <a class="xbtn prime" href="aterrizar.html">Siguiente: Aterrizar el reto →</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="board" id="board"></div>
+
+  <div class="pov">
+    <h3>🎯 Definir — la necesidad</h3>
+    <p>De los dolores más votados sale una necesidad. Plantilla POV: <em>Katya necesita [necesidad] porque [insight]</em>. Escríbanla aquí y llévenla al paso de “Aterrizar”.</p>
+    <textarea id="pov" placeholder="Katya necesita… porque…"></textarea>
+  </div>
+
+  <div class="xbtns" style="margin-bottom:40px">
+    <a class="xbtn prime" href="aterrizar.html">Continuar al taller · Aterrizar el reto →</a>
+    <a class="xbtn ghost" href="proyecto.html">Descripción del proyecto</a>
+  </div>
+</main>
+
+<footer>
+  <span class="logo-ring"><svg viewBox="0 0 48 48" fill="none"><circle cx="22" cy="26" r="16" stroke="#9cc1f2" stroke-width="2.4"/><path d="M34 14 C 30 10, 24 9, 20 11" stroke="#d7e64b" stroke-width="2.4" stroke-linecap="round"/><circle cx="35" cy="13" r="2.4" fill="#ef6a5a"/></svg></span>
+  ORBITAL · Mapa de empatía — 🌮 Tacos de Asada<br/>
+  NASA Space Apps Challenge CDMX 2026
+</footer>
+
+<script src="sync.js"></script>
+<script>
+var ZONES=[
+  {k:'dice', t:'Dice', ic:'🗣️', c:'#4e8fe6', hint:'Frases textuales que diría en voz alta.'},
+  {k:'piensa', t:'Piensa', ic:'💭', c:'#2a66e6', hint:'Lo que cree pero no dice.'},
+  {k:'hace', t:'Hace', ic:'🏃', c:'#d7e64b', hint:'Acciones y comportamientos observables.'},
+  {k:'siente', t:'Siente', ic:'❤️', c:'#ef6a5a', hint:'Emociones que la mueven.'},
+  {k:'dolores', t:'Dolores', ic:'⚡', c:'#f2c14e', hint:'Miedos, frustraciones, obstáculos.'},
+  {k:'ganancias', t:'Ganancias', ic:'🌱', c:'#4ccb8f', hint:'Deseos, metas, qué sería un éxito.'}
+];
+var SEED=[
+  {zone:'dice', value:'“¿Esto es normal o debería preocuparme?”', author:'Ejemplo'},
+  {zone:'piensa', value:'“No quiero alarmar a Tierra por nada.”', author:'Ejemplo'},
+  {zone:'hace', value:'Minimiza molestias para no hacer drama.', author:'Ejemplo'},
+  {zone:'siente', value:'Incertidumbre y aislamiento.', author:'Ejemplo'},
+  {zone:'dolores', value:'Un número crudo sin contexto le genera ansiedad.', author:'Ejemplo'},
+  {zone:'ganancias', value:'Confianza para decidir sola y a tiempo.', author:'Ejemplo'}
+];
+var TOOL='empatia';
+var LS_NOTES='empatia_notes_v1', LS_MINE='empatia_mine_v1', LS_POV='empatia_pov_v1';
+function lget(k,d){ try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d} }
+function lset(k,v){ try{localStorage.setItem(k,JSON.stringify(v))}catch(e){} }
+function uid(){ return 'n'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+var mine = lget(LS_MINE,{});
+
+/* build board */
+var board=document.getElementById('board');
+ZONES.forEach(function(z){
+  var el=document.createElement('div'); el.className='zone'; el.style.borderTopColor=z.c;
+  el.innerHTML='<div class="zh"><span style="font-size:1.1rem">'+z.ic+'</span><h4>'+z.t+'</h4></div>'+
+    '<div class="zhint">'+z.hint+'</div>'+
+    '<div class="addrow"><input type="text" data-zone="'+z.k+'" placeholder="Agregar nota…" maxlength="160"><button type="button" data-add="'+z.k+'">＋</button></div>'+
+    '<div class="notes" id="notes_'+z.k+'"></div>';
+  board.appendChild(el);
+});
+
+/* ---------- data layer (server o local) ---------- */
+function connected(){ return window.Sync && Sync.isConnected(); }
+function localNotes(){ var n=lget(LS_NOTES,null); if(n===null){ n=SEED.map(function(s){return {id:uid(),zone:s.zone,author:s.author,value:s.value,votes:0}}); lset(LS_NOTES,n);} return n; }
+var serverNotes=[];
+
+function render(notes, pov){
+  ZONES.forEach(function(z){
+    var box=document.getElementById('notes_'+z.k); box.innerHTML='';
+    var list=notes.filter(function(n){return n.zone===z.k}).sort(function(a,b){ return (Number(b.votes||0)-Number(a.votes||0)) || String(a.id).localeCompare(String(b.id)); });
+    if(!list.length){ box.innerHTML='<div class="empty">Sin notas aún.</div>'; return; }
+    list.forEach(function(n){
+      var card=document.createElement('div'); card.className='note';
+      var isMine = mine[n.id] || (Sync && n.author && n.author===Sync.getName() && Sync.getName());
+      card.innerHTML='<div class="nt"></div><div class="nf"><span class="au"></span><span class="sp"></span>'+
+        '<button class="vote'+(Number(n.votes)>0?' hot':'')+'" data-vote="'+n.id+'">👍 '+(Number(n.votes)||0)+'</button>'+
+        (isMine?'<button class="del" data-del="'+n.id+'" title="Borrar">✕</button>':'')+'</div>';
+      card.querySelector('.nt').textContent=n.value;
+      card.querySelector('.au').textContent=n.author||'anónimo';
+      box.appendChild(card);
+    });
+  });
+  if(typeof pov==='string'){ var t=document.getElementById('pov'); if(t && document.activeElement!==t && t.value!==pov) t.value=pov; }
+}
+
+function refresh(){
+  if(connected()){
+    Sync.read(TOOL).then(function(j){
+      if(!j||!j.ok||!j.rows) return;
+      serverNotes = j.rows.filter(function(r){return r.id && r.zone}).map(function(r){return {id:String(r.id),zone:String(r.zone),author:String(r.author||''),value:String(r.value||''),votes:Number(r.votes)||0}});
+      var povRow = j.rows.filter(function(r){return r.key==='pov'})[0];
+      render(serverNotes, povRow? String(povRow.value||'') : undefined);
+    }).catch(function(){ render(localNotes(), lget(LS_POV,'')); });
+  } else {
+    render(localNotes(), lget(LS_POV,''));
+  }
+}
+
+function addNote(zone, text){
+  text=(text||'').trim(); if(!text) return;
+  if(connected()){
+    Sync.post({op:'add', tool:TOOL, zone:zone, value:text}).then(function(j){ if(j&&j.id){ mine[j.id]=1; lset(LS_MINE,mine); } refresh(); }).catch(function(){});
+  } else {
+    var n=localNotes(); var id=uid(); n.push({id:id,zone:zone,author:(Sync?Sync.getName():'')||'yo',value:text,votes:0}); lset(LS_NOTES,n); mine[id]=1; lset(LS_MINE,mine); render(n, lget(LS_POV,''));
+  }
+}
+function voteNote(id){
+  if(connected()){ Sync.post({op:'vote', id:id, delta:1}).then(refresh).catch(function(){}); }
+  else { var n=localNotes(); n.forEach(function(x){ if(x.id===id) x.votes=(Number(x.votes)||0)+1; }); lset(LS_NOTES,n); render(n, lget(LS_POV,'')); }
+}
+function delNote(id){
+  if(connected()){ Sync.post({op:'del', id:id}).then(refresh).catch(function(){}); }
+  else { var n=localNotes().filter(function(x){return x.id!==id}); lset(LS_NOTES,n); render(n, lget(LS_POV,'')); }
+}
+
+/* events */
+board.addEventListener('click', function(e){
+  var a=e.target.closest('[data-add]'); if(a){ var z=a.getAttribute('data-add'); var inp=board.querySelector('input[data-zone="'+z+'"]'); addNote(z, inp.value); inp.value=''; inp.focus(); return; }
+  var v=e.target.closest('[data-vote]'); if(v){ voteNote(v.getAttribute('data-vote')); return; }
+  var d=e.target.closest('[data-del]'); if(d){ delNote(d.getAttribute('data-del')); return; }
+});
+board.addEventListener('keydown', function(e){
+  if(e.key==='Enter' && e.target.matches('input[data-zone]')){ var z=e.target.getAttribute('data-zone'); addNote(z, e.target.value); e.target.value=''; }
+});
+
+/* POV */
+var povEl=document.getElementById('pov');
+povEl.value = lget(LS_POV,'');
+var povT;
+povEl.addEventListener('input', function(){
+  lset(LS_POV, povEl.value);
+  if(connected()){ clearTimeout(povT); povT=setTimeout(function(){ Sync.post({op:'set', tool:TOOL, key:'pov', value:povEl.value}).catch(function(){}); },600); }
+});
+
+/* seed on first connect if server empty */
+var firstPull=true;
+function onConnected(){
+  if(!connected()) { refresh(); return; }
+  Sync.read(TOOL).then(function(j){
+    var rows=(j&&j.rows)||[];
+    var hasNotes = rows.filter(function(r){return r.id&&r.zone}).length>0;
+    if(firstPull && !hasNotes){
+      firstPull=false;
+      // sube las notas locales (incluye el ejemplo) para arrancar el tablero del equipo
+      localNotes().forEach(function(n){ Sync.post({op:'add',tool:TOOL,zone:n.zone,value:n.value}).then(function(r){ if(r&&r.id) mine[r.id]=1; }).catch(function(){}); });
+      var pv=lget(LS_POV,''); if(pv) Sync.post({op:'set',tool:TOOL,key:'pov',value:pv}).catch(function(){});
+      setTimeout(refresh, 900);
+    } else { firstPull=false; refresh(); }
+  }).catch(function(){ refresh(); });
+}
+
+/* init */
+(function(){
+  var barEl=document.getElementById('syncbar'); if(window.Sync && barEl) Sync.mountBar(barEl);
+  if(window.Sync){ Sync.onContext(function(){ firstPull=true; onConnected(); }); }
+  refresh();
+  if(connected()) onConnected();
+  setInterval(function(){ if(connected()) refresh(); }, 6000);
+})();
+</script>
+</body>
+</html>

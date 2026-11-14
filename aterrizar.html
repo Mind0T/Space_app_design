@@ -207,7 +207,10 @@
     </div>
     <div class="eyebrow">Plan de vuelo · ~90 min</div>
     <h1>Aterrizar el reto en un problema potente</h1>
-    <p class="lead">Una secuencia de cinco herramientas para convertir el reto de la NASA en un problema claro —centrado en una persona y conectado con un dato— y en una idea elegida para prototipar. Llénenla en equipo, paso a paso; se guarda sola y se exporta a Sheets.</p>
+    <p class="lead">Una secuencia de cinco herramientas para convertir el reto de la NASA en un problema claro —centrado en una persona y conectado con un dato— y en una idea elegida para prototipar. Llénenla en equipo, paso a paso; se guarda sola y se sincroniza en Google.</p>
+    <div style="margin-top:18px;display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+      <a href="empatia.html" style="display:inline-flex;align-items:center;gap:9px;background:transparent;color:var(--lime);border:1px solid rgba(215,230,75,.5);font-family:'Archivo',sans-serif;font-weight:800;font-size:.9rem;padding:12px 20px;border-radius:11px;text-decoration:none">🧠 Antes de definir, empaticen · Mapa de empatía (Katya E.) →</a>
+    </div>
 
     <div class="plan">
       <a href="#p1"><div class="pn">1 · 30 min</div><div class="pt">Entender</div><div class="pm">Canvas del problema</div></a>
@@ -226,6 +229,8 @@
         <div class="trap"><div class="tt">Trampa 2 · no empezar por los datos</div><p>“Tenemos este dataset, ¿qué hacemos?” lleva a una solución buscando problema. Primero la persona, luego el dato.</p></div>
       </div>
     </div>
+    <div id="syncbar" style="margin-top:20px"></div>
+    <p style="color:var(--mute);font-size:.82rem;margin-top:8px">Pon tu nombre y conéctate (⚙️) para llenarlo en equipo desde cualquier dispositivo y que todo caiga en el mismo Google Sheet. Sin conectar, funciona en este dispositivo.</p>
   </div>
 </header>
 
@@ -456,6 +461,7 @@
   NASA Space Apps Challenge CDMX 2026 · Método adaptado del kit "Plan de vuelo"
 </footer>
 
+<script src="sync.js"></script>
 <script>
 /* ---------- data model ---------- */
 var CANVAS = [
@@ -745,6 +751,48 @@ if('IntersectionObserver' in window){
   var raw; try{ raw=localStorage.getItem(KEY); }catch(e){}
   if(raw){ try{ restore(JSON.parse(raw)); }catch(e){} }
   syncHMW(); syncTotals(); CANVAS.forEach(function(f){syncVerdict(f.k)}); syncChosen();
+})();
+
+/* ---------- live sync con Google Sheets ---------- */
+(function(){
+  if(!window.Sync) return;
+  var barEl=document.getElementById('syncbar'); if(barEl) Sync.mountBar(barEl);
+  var TOOL='aterrizar', pushTimers={}, firstPull=true;
+  function val(t){ return t.type==='checkbox' ? (t.checked?'true':'false') : t.value; }
+  function pushNow(key,value){ if(Sync.isConnected()) Sync.post({op:'set',tool:TOOL,key:key,value:value}).catch(function(){}); }
+  function pushDeb(key,value){ if(!Sync.isConnected()) return; clearTimeout(pushTimers[key]); pushTimers[key]=setTimeout(function(){pushNow(key,value)},600); }
+  document.addEventListener('input', function(e){ var t=e.target; if(t.matches&&t.matches('[data-k]')) pushDeb(t.getAttribute('data-k'), val(t)); });
+  document.addEventListener('change', function(e){ var t=e.target; if(t.matches&&t.matches('[data-k]')) pushNow(t.getAttribute('data-k'), val(t)); });
+  document.addEventListener('click', function(e){ var b=e.target.closest&&e.target.closest('[data-pick]'); if(b) setTimeout(function(){ pushNow('elegida', window._elegida||''); },0); });
+
+  function applyServerValue(key,value){
+    if(key==='elegida'){ if((window._elegida||'')!==value) setPick(value, !!value); return; }
+    var els=document.querySelectorAll('[data-k="'+key+'"]'); if(!els.length) return;
+    var e0=els[0];
+    if(e0.type==='radio'){ [].forEach.call(els,function(r){ r.checked=(r.value===value); }); return; }
+    if(e0.type==='checkbox'){ var b=(value==='true'); if(e0.checked!==b){ e0.checked=b; if(e0.getAttribute('data-ar')) syncVerdict(e0.getAttribute('data-ar')); } return; }
+    if(e0===document.activeElement) return;
+    if(e0.value===value) return;
+    e0.value=value;
+    if(key.indexOf('hmw_')===0) syncHMW();
+    if(e0.getAttribute('data-m')) syncTotals();
+  }
+  function seedLocal(){
+    var m=collect(), items=[];
+    for(var k in m){ if(!m.hasOwnProperty(k)) continue; var v=m[k]; if(v===false||v===''||v==null) continue; items.push({key:k, value:(v===true?'true':String(v))}); }
+    if(items.length) Sync.post({op:'bulkset',tool:TOOL,items:items}).catch(function(){});
+  }
+  function pull(){
+    if(!Sync.isConnected()) return;
+    Sync.read(TOOL).then(function(j){
+      if(!j||!j.ok||!j.rows) return;
+      var has=j.rows.length>0;
+      j.rows.forEach(function(r){ if(r.key!=null&&r.key!=='') applyServerValue(String(r.key), r.value==null?'':String(r.value)); save(); });
+      if(firstPull){ firstPull=false; if(!has) seedLocal(); }
+    }).catch(function(){});
+  }
+  Sync.onContext(function(){ firstPull=true; pull(); });
+  setInterval(pull, 8000);
 })();
 </script>
 </body>
