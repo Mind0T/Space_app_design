@@ -192,15 +192,64 @@ function maybeBuildViews_(room) {
   } catch (_) {}
 }
 
+/* Integrantes del equipo: cada quien tiene su propia columna en las vistas.
+   El "slug" debe coincidir con el que generan las páginas (minúsculas, sin acentos ni espacios). */
+var PP_SEP = '~~';
+var ROSTER = [
+  { slug: 'irvin', name: 'Irvin' },
+  { slug: 'grace', name: 'Grace' },
+  { slug: 'ruben', name: 'Ruben' },
+  { slug: 'rodrigo', name: 'Rodrigo' },
+  { slug: 'jona', name: 'Jona' }
+];
+function rosterNames_() { return ROSTER.map(function (p) { return p.name; }); }
+
+/* kv_: mapa clave→valor. Las claves por persona (clave~~slug) se juntan en la clave
+   base como texto "Nombre: valor" para que Insumos y vistas de valor único no queden vacíos. */
 function kv_(rows, tool) {
-  var m = {};
+  var m = {}, pp = {};
   rows.forEach(function (r) {
     if (String(r[2]) !== tool || !r[6]) return;
-    m[String(r[6])] = { v: r[7] == null ? '' : String(r[7]), a: String(r[5] || ''), t: r[0] };
+    var key = String(r[6]);
+    var e = { v: r[7] == null ? '' : String(r[7]), a: String(r[5] || ''), t: r[0] };
+    m[key] = e;
+    var si = key.indexOf(PP_SEP);
+    if (si >= 0 && e.v !== '') {
+      var base = key.slice(0, si);
+      (pp[base] = pp[base] || []).push({ who: e.a || key.slice(si + PP_SEP.length), v: e.v, t: e.t });
+    }
+  });
+  Object.keys(pp).forEach(function (base) {
+    var arr = pp[base].sort(function (a, b) { return (a.t || 0) - (b.t || 0); });
+    var joined = arr.map(function (x) { return (x.who || '—') + ': ' + x.v; }).join('\n');
+    var last = arr[arr.length - 1];
+    m[base] = { v: joined, a: last.who, t: last.t, pp: arr };
   });
   return m;
 }
 function v_(m, k) { return m[k] ? m[k].v : ''; }
+
+/* pp_: valores separados por persona → { claveBase: { slug: valor } }, para las vistas por integrante. */
+function pp_(rows, tool) {
+  var o = {};
+  rows.forEach(function (r) {
+    if (String(r[2]) !== tool || !r[6]) return;
+    var key = String(r[6]), si = key.indexOf(PP_SEP);
+    if (si < 0) return;
+    var base = key.slice(0, si), sl = key.slice(si + PP_SEP.length);
+    (o[base] = o[base] || {})[sl] = (r[7] == null ? '' : String(r[7]));
+  });
+  return o;
+}
+/* fila-matriz: etiqueta + una celda por integrante con su respuesta a esa clave base */
+function ppRow_(o, label, base, fmt) {
+  var row = [label];
+  ROSTER.forEach(function (p) {
+    var v = (o[base] && o[base][p.slug] != null) ? o[base][p.slug] : '';
+    row.push(fmt ? fmt(v) : v);
+  });
+  return row;
+}
 function fmtDate_(d) {
   if (!d) return '';
   try { return Utilities.formatDate(new Date(d), Session.getScriptTimeZone(), 'yyyy-MM-dd HH:mm'); } catch (_) { return String(d); }
@@ -229,6 +278,8 @@ function buildViews_(room) {
   var store = sheet_(); plainText_(store);
   var all = data_(store).filter(function (r) { return String(r[1]) === room; });
   var at = kv_(all, 'aterrizar'), ce = kv_(all, 'riesgo_cedulas'), em = kv_(all, 'empatia');
+  var atp = pp_(all, 'aterrizar'), cep = pp_(all, 'riesgo_cedulas'), emp = pp_(all, 'empatia');
+  var NM = rosterNames_(), headPP = ['Recuadro / campo'].concat(NM);
   var notes = all.filter(function (r) { return String(r[2]) === 'empatia' && r[3] && r[4]; });
   var events = [], reports = [];
   all.forEach(function (r) {
@@ -255,16 +306,19 @@ function buildViews_(room) {
   var combo = []; for (var j = 1; j <= 5; j++) combo.push([j, v_(at, 'co_dato_' + j), v_(at, 'co_canal_' + j), v_(at, 'co_mom_' + j)]);
   var r3 = []; for (var k = 1; k <= 3; k++) if (v_(at, 'r3base_' + k) || v_(at, 'r3add_' + k)) r3.push([k, v_(at, 'r3base_' + k), v_(at, 'r3add_' + k)]);
   var chosenName = ''; CANVAS.forEach(function (c) { if (c[0] === eleg) chosenName = c[1]; });
+  var canvasPP = CANVAS.map(function (c) { return ppRow_(atp, c[1], 'c_' + c[0]); });
+  var dsPP = CANVAS.map(function (c) { return ppRow_(atp, c[1], 'ds_' + c[0], function (v) { return v === 'D' ? 'Dato' : (v === 'S' ? 'Supuesto' : ''); }); });
+  var hmwPP = CANVAS.map(function (c) { return ppRow_(atp, c[1], 'hmw_' + c[0]); });
+  var pickName = function (v) { var f = CANVAS.filter(function (x) { return x[0] === v; })[0]; return f ? f[1] : v; };
+  var finPP = [ppRow_(atp, 'Idea a prototipar', 'final_idea'), ppRow_(atp, '¿Por qué en 1 día?', 'final_why'), ppRow_(atp, 'Pregunta elegida', 'elegida', pickName)];
   writeTab_(TAB.aterrizar, '#d7e64b', [
-    { title: 'Aterrizar el reto · ' + updated },
-    { title: 'Paso 1 · Canvas del problema (' + nD + ' con dato, ' + nS + ' supuestos)', header: ['#', 'Recuadro', 'Pregunta guía', 'Lo que encontramos', 'Dato / Supuesto', 'Última edición', 'Fecha'], rows: canvasRows },
-    { title: 'Pasos 2, 3 y 4 · ¿Cómo podríamos…?, autorrevisión y matriz de elección', header: ['Recuadro', 'Pregunta “¿Cómo podríamos…?”', 'Autorrevisión', '¿Dato NASA? (1–3)', '¿Prototipo en 1 día? (1–3)', 'Total', 'Elegida'], rows: hmwRows },
-    { title: 'Paso 5 · Pregunta elegida', rows: [[chosenName ? chosenName + ': ' + v_(at, 'hmw_' + eleg) : '(todavía no eligen una pregunta)']] },
-    { title: 'Ronda 1 · Ideas en silencio', header: ['#', 'Idea'], rows: ideas.length ? ideas : [['', '(sin ideas)']] },
-    { title: 'Ronda 2 · Caja de combinaciones', header: ['Opción', 'Dato de la NASA', 'Cómo le llega a la persona', 'En qué momento'], rows: combo },
-    { title: 'Ronda 3 · Construir sobre', header: ['#', 'Idea de base', 'Sí, y además…'], rows: r3.length ? r3 : [['', '', '']] },
-    { title: 'Elegir · Idea finalista', header: ['Idea con la que seguimos', '¿Por qué se puede prototipar en un día?'], rows: [[v_(at, 'final_idea'), v_(at, 'final_why')]] }
-  ], [40, 190, 230, 380, 120, 130, 130]);
+    { title: 'Aterrizar el reto · una columna por integrante · ' + updated },
+    { title: 'Canvas del problema — lo que escribió cada quien', header: headPP, rows: canvasPP },
+    { title: '¿Dato o Supuesto? — según cada integrante', header: headPP, rows: dsPP },
+    { title: '¿Cómo podríamos…? — la pregunta de cada integrante', header: headPP, rows: hmwPP },
+    { title: 'Idea finalista y pregunta elegida — por integrante', header: headPP, rows: finPP },
+    { title: '¿Enviaron sus respuestas? (botón “Enviar mis respuestas”)', header: headPP, rows: [ppRow_(atp, 'Última vez que envió', '_enviado')] }
+  ], [210, 160, 160, 160, 160, 160]);
 
   /* ---------- 2 · Empatía ---------- */
   var zoneName = {}; ZONES.forEach(function (z) { zoneName[z[0]] = z[1]; });
@@ -272,11 +326,12 @@ function buildViews_(room) {
   var noteRows = notes.slice().sort(function (a, b) { return (order[a[4]] - order[b[4]]) || ((Number(b[8]) || 0) - (Number(a[8]) || 0)); })
     .map(function (r) { return [zoneName[r[4]] || r[4], String(r[7]), Number(r[8]) || 0, String(r[5] || ''), fmtDate_(r[0])]; });
   writeTab_(TAB.empatia, '#9cc1f2', [
-    { title: 'Mapa de empatía · Katya E. · ' + updated },
-    { title: 'Escenario que se empatizó', rows: [[v_(em, 'escenario') || '(sin escenario todavía)']] },
-    { title: 'Punto de vista (POV) · la necesidad', rows: [[v_(em, 'pov') || '(sin POV todavía)']] },
-    { title: 'Notas por zona (las más votadas primero)', header: ['Zona', 'Nota', 'Votos', 'Autor', 'Fecha'], rows: noteRows.length ? noteRows : [['', '(sin notas)', '', '', '']] }
-  ], [110, 460, 70, 130, 130]);
+    { title: 'Mapa de empatía · Katya E. · por persona · ' + updated },
+    { title: 'Escenario que empatizó cada integrante', header: headPP, rows: [ppRow_(emp, 'Escenario', 'escenario')] },
+    { title: 'POV (la necesidad) de cada integrante', header: headPP, rows: [ppRow_(emp, 'POV', 'pov')] },
+    { title: '¿Enviaron?', header: headPP, rows: [ppRow_(emp, 'Última vez que envió', '_enviado')] },
+    { title: 'Notas por zona — de todo el equipo (las más votadas primero)', header: ['Zona', 'Nota', 'Votos', 'Autor', 'Fecha'], rows: noteRows.length ? noteRows : [['', '(sin notas)', '', '', '']] }
+  ], [150, 300, 150, 150, 150, 150]);
 
   /* ---------- 3 · Riesgo · Cédulas ---------- */
   var c1 = [], placed = [];
@@ -298,13 +353,35 @@ function buildViews_(room) {
                ['C · Automatización', '¿Qué hacen el software, el hardware y la interfaz?', v_(ce, 'c4_C')],
                ['E · Entorno', '¿Dónde ocurre: confinado, lejos, con retraso en la comunicación?', v_(ce, 'c4_E')],
                ['I · Interacciones', '¿Cómo se afectan los cuatro anteriores entre sí? ¿Qué pasa si uno falla?', v_(ce, 'c4_I')]];
+  var genPP = [ppRow_(cep, 'Equipo', 'equipo'), ppRow_(cep, 'Tarea elegida', 'c1_tarea')];
+  var c1PP = [];
+  for (var hi = 1; hi <= 6; hi++) {
+    c1PP.push(ppRow_(cep, 'P' + hi + ' · Peligro', 'c1_r' + hi + '_pel'));
+    c1PP.push(ppRow_(cep, 'P' + hi + ' · Amenaza', 'c1_r' + hi + '_ame'));
+    c1PP.push(ppRow_(cep, 'P' + hi + ' · ¿Quién es vulnerable?', 'c1_r' + hi + '_vul'));
+    c1PP.push(ppRow_(cep, 'P' + hi + ' · Daño posible', 'c1_r' + hi + '_dan'));
+    c1PP.push(ppRow_(cep, 'P' + hi + ' · Probabilidad', 'c2_p_' + hi, function (v) { return (v !== '' && !isNaN(v)) ? PROBS[Number(v)] : ''; }));
+    c1PP.push(ppRow_(cep, 'P' + hi + ' · Severidad', 'c2_s_' + hi));
+  }
+  var prioPP = [];
+  for (var pk = 1; pk <= 3; pk++) {
+    prioPP.push(ppRow_(cep, 'Prioridad ' + pk + ' · Peligro', 'c2_pr' + pk + '_pel'));
+    prioPP.push(ppRow_(cep, 'Prioridad ' + pk + ' · Control', 'c2_pr' + pk + '_ctrl', function (v) { var n = Number(v) || 0; return n ? n + ' · ' + CONTROLS[n] : ''; }));
+    prioPP.push(ppRow_(cep, 'Prioridad ' + pk + ' · Por qué', 'c2_pr' + pk + '_why'));
+  }
+  var tuceiPP = [
+    ppRow_(cep, 'T · Tareas', 'c4_T'), ppRow_(cep, 'U · Usuario', 'c4_U'),
+    ppRow_(cep, 'C · Automatización', 'c4_C'), ppRow_(cep, 'E · Entorno', 'c4_E'),
+    ppRow_(cep, 'I · Interacciones', 'c4_I')
+  ];
   writeTab_(TAB.cedulas, '#ef6a5a', [
-    { title: 'Evaluación de riesgos · Cédulas · ' + updated },
-    { title: 'Equipo y tarea elegida', rows: [['Equipo: ' + (v_(ce, 'equipo') || '—') + '   ·   Tarea elegida: ' + (v_(ce, 'c1_tarea') || '—')]] },
-    { title: 'Cédula 1 · Identificación de peligros + Cédula 2 · ubicación en la matriz', header: ['#', 'Peligro', 'Amenaza', '¿Quién es vulnerable? Y por qué', 'Daño posible', 'Probabilidad', 'Severidad', 'Nivel'], rows: c1.length ? c1 : [['', '(sin peligros)', '', '', '', '', '', '']] },
-    { title: 'Cédula 2 · Prioridades y control elegido', header: ['#', 'Peligro', 'Control elegido', 'Por qué'], rows: prio.length ? prio : [['', '(sin prioridades)', '', '']] },
-    { title: 'Cédula 4 · Lienzo del sistema (HAS = T, U, C, E, I)', header: ['Caja', 'Pregunta', 'Respuesta del equipo'], rows: tucei }
-  ], [60, 240, 240, 240, 220, 100, 100, 80]);
+    { title: 'Evaluación de riesgos · Cédulas · una columna por integrante · ' + updated },
+    { title: 'Datos generales', header: headPP, rows: genPP },
+    { title: 'Cédula 1 y 2 · Peligros, probabilidad y severidad — por integrante', header: headPP, rows: c1PP },
+    { title: 'Cédula 2 · Prioridades y control elegido — por integrante', header: headPP, rows: prioPP },
+    { title: 'Cédula 4 · Lienzo del sistema T·U·C·E·I — por integrante', header: headPP, rows: tuceiPP },
+    { title: '¿Enviaron su cédula? (botón “Enviar mi cédula”)', header: headPP, rows: [ppRow_(cep, 'Última vez que envió', '_enviado')] }
+  ], [210, 170, 170, 170, 170, 170]);
 
   /* ---------- 4 · Riesgo · Eventos ---------- */
   var evRows = events.slice().sort(function (a, b) { return (Number(b.GP) || 0) - (Number(a.GP) || 0); }).map(function (e) {
