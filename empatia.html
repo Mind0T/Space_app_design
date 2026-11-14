@@ -329,6 +329,9 @@ var ZONES=[
 var ZORDER={}; ZONES.forEach(function(z,i){ ZORDER[z.k]=i; });
 var ZMETA={}; ZONES.forEach(function(z){ ZMETA[z.k]=z; });
 var TOOL='empatia';
+/* escenario y POV: compartidos (se guardan en el sheet del equipo), pero sin que se
+   pisen — no se sobrescribe lo que acabas de escribir en los últimos 10 s. */
+var povEdit=0, escEdit=0;
 var LS_NOTES='empatia_notes_v1', LS_MINE='empatia_mine_v1', LS_POV='empatia_pov_v1', LS_ESC='empatia_escenario_v1';
 var ESC_DEFAULT='A Katya le empieza a doler el pecho durante el turno nocturno. Nadie a bordo es médico y Houston está a 20 min; el estrés crónico también causa dolor de pecho, así que no sabe si es grave.';
 
@@ -399,8 +402,8 @@ function renderRank(){
   var hint=$('#povHint'); if(hint) hint.innerHTML=dolores.length?'Dolores más votados para inspirar la necesidad: '+dolores.map(function(d){return '<b style="color:var(--blue-pale)">“'+d.replace(/</g,'&lt;')+'”</b>'}).join(' · '):'Voten los dolores en las zonas para ver aquí los candidatos.';
 }
 function syncText(){
-  var p=$('#pov'); if(p&&document.activeElement!==p&&p.value!==CUR.pov) p.value=CUR.pov;
-  var e=$('#escenario'); if(e&&document.activeElement!==e&&e.value!==CUR.esc) e.value=CUR.esc;
+  var p=$('#pov'); if(p&&document.activeElement!==p&&Date.now()-povEdit>10000&&p.value!==CUR.pov) p.value=CUR.pov;
+  var e=$('#escenario'); if(e&&document.activeElement!==e&&Date.now()-escEdit>10000&&e.value!==CUR.esc) e.value=CUR.esc;
 }
 
 function refresh(){
@@ -409,9 +412,9 @@ function refresh(){
     Sync.read(TOOL).then(function(j){
       if(!j||!j.ok||!j.rows) return;
       CUR.notes=j.rows.filter(function(r){return r.id&&r.zone}).map(function(r){return {id:String(r.id),zone:String(r.zone),author:String(r.author||''),value:String(r.value||''),votes:Number(r.votes)||0}});
-      var pov=j.rows.filter(function(r){return r.key==='pov'})[0]; if(pov) CUR.pov=String(pov.value||'');
+      var pov=j.rows.filter(function(r){return r.key==='pov'})[0]; if(pov && Date.now()-povEdit>10000) CUR.pov=String(pov.value||''); /* no pises mi edición reciente */
       var es=j.rows.filter(function(r){return r.key==='escenario'})[0];
-      if(es){ CUR.esc=String(es.value||''); firstEsc=false; }
+      if(es){ if(Date.now()-escEdit>10000) CUR.esc=String(es.value||''); firstEsc=false; }
       else if(firstEsc){ firstEsc=false; CUR.esc=ESC_DEFAULT; Sync.post({op:'set',tool:TOOL,key:'escenario',value:ESC_DEFAULT}).catch(function(){}); }
       renderNotes(); syncText();
     }).catch(function(){ loadLocal(); });
@@ -445,8 +448,8 @@ document.addEventListener('keydown',function(e){
 
 /* ---- POV y escenario (debounce) ---- */
 var povT,escT;
-$('#pov').addEventListener('input',function(){ CUR.pov=this.value; lset(LS_POV,this.value); if(connected()){ clearTimeout(povT); var val=this.value; povT=setTimeout(function(){ Sync.post({op:'set',tool:TOOL,key:'pov',value:val}).catch(function(){}); },600); } });
-$('#escenario').addEventListener('input',function(){ CUR.esc=this.value; lset(LS_ESC,this.value); if(connected()){ clearTimeout(escT); var val=this.value; escT=setTimeout(function(){ Sync.post({op:'set',tool:TOOL,key:'escenario',value:val}).catch(function(){}); },600); } });
+$('#pov').addEventListener('input',function(){ CUR.pov=this.value; povEdit=Date.now(); lset(LS_POV,this.value); if(connected()){ clearTimeout(povT); var val=this.value; povT=setTimeout(function(){ Sync.post({op:'set',tool:TOOL,key:'pov',value:val}).catch(function(){}); },600); } });
+$('#escenario').addEventListener('input',function(){ CUR.esc=this.value; escEdit=Date.now(); lset(LS_ESC,this.value); if(connected()){ clearTimeout(escT); var val=this.value; escT=setTimeout(function(){ Sync.post({op:'set',tool:TOOL,key:'escenario',value:val}).catch(function(){}); },600); } });
 
 /* ---- navegación ---- */
 var slides=$$('.slide'), N=slides.length, idx=0, prog=$('#prog'), cur=$('#cur'), prevB=$('#prev'), nextB=$('#next'), tchips=$$('.tchip');
