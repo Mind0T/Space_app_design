@@ -65,6 +65,7 @@
   .quiet{font-size:clamp(.82rem,1.2vw,.92rem);color:var(--ink-soft);margin-top:14px;font-style:italic}
 
   .cols{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(22px,4vw,56px);align-items:center}
+  .cols>*{min-width:0}   /* evita que un video/imagen desborde su columna y se empalme con la otra */
   .two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
   .three{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
   .stack{display:grid;gap:14px}
@@ -253,7 +254,7 @@
     <div class="wrap">
       <div class="eyebrow r" style="--d:.05s">1:35–3:00 · Demo · Día 3</div>
       <h2 class="t r" style="--d:.13s">Una esfera tranquila y una sola frase.</h2>
-      <div class="cols" style="align-items:stretch">
+      <div class="cols" style="align-items:start">
         <div class="ph video r" style="--d:.26s" data-video="assets/video/demo.mp4" data-poster="assets/video/demo-poster.jpg">
           <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M10 9l5 3-5 3V9z" fill="currentColor"/></svg>
           <span class="lab">Video de la demo — recorrido en ORBITAL</span>
