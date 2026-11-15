@@ -105,7 +105,9 @@
   /* cuando el recurso existe, se rellena y se oculta el placeholder */
   .ph.filled{border-style:solid;border-color:transparent;background:#0c203c center/cover no-repeat;padding:0;overflow:hidden;position:relative}
   .ph.filled > *{display:none}
-  .ph.filled video,.ph.filled img{display:block;width:100%;height:100%;object-fit:cover}
+  .ph.filled img{display:block;width:100%;height:100%;object-fit:cover}
+  /* el video de la demo se ve completo (sin recortar) y sobre fondo oscuro; con controles nativos */
+  .ph.filled video{display:block;width:100%;height:100%;object-fit:contain;background:#0c203c}
 
   /* measure mini cards (demo) */
   .meas{display:flex;align-items:baseline;gap:8px}
@@ -397,12 +399,12 @@
       var w=canvas.clientWidth, h=canvas.clientHeight, dpr=window.devicePixelRatio||1;
       if(canvas.width!==w*dpr){ canvas.width=w*dpr; canvas.height=h*dpr; }
       ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
-      var t=(now-t0)/1000, cx=w/2, cy=h/2, R=Math.min(w,h)*.42*(1+(reduce?0:.02*Math.sin(t*1.1)));
+      var t=(now-t0)/1000, cx=w/2, cy=h/2, R=Math.min(w,h)*.35*(1+(reduce?0:.02*Math.sin(t*1.1)));
       var ry=reduce?0.2:t*.18, cy1=Math.cos(ry), sy=Math.sin(ry), tx=.42, cx1=Math.cos(tx), sx=Math.sin(tx);
       var cr=col[0], cg=col[1], cb=col[2];
       var proj = pts.map(function(p){ var x=p[0]*cy1 - p[2]*sy, z=p[0]*sy + p[2]*cy1, y=p[1]*cx1 - z*sx; z=p[1]*sx + z*cx1; return [cx+x*R, cy+y*R, (z+1)/2]; });
       // halo
-      var g=ctx.createRadialGradient(cx,cy,R*.2,cx,cy,R*1.5); g.addColorStop(0,'rgba('+cr+','+cg+','+cb+',.18)'); g.addColorStop(1,'rgba('+cr+','+cg+','+cb+',0)');
+      var g=ctx.createRadialGradient(cx,cy,R*.2,cx,cy,R*1.35); g.addColorStop(0,'rgba('+cr+','+cg+','+cb+',.18)'); g.addColorStop(1,'rgba('+cr+','+cg+','+cb+',0)');
       ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
       // aristas
       for(var e=0;e<edges.length;e++){ var A=proj[edges[e][0]], B=proj[edges[e][1]]; var dep=(A[2]+B[2])/2; ctx.strokeStyle='rgba('+cr+','+cg+','+cb+','+(.05+.22*dep)+')'; ctx.lineWidth=.6; ctx.beginPath(); ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); ctx.stroke(); }
@@ -454,6 +456,7 @@
   // Video de la demo (slide 4)
   document.querySelectorAll('[data-video]').forEach(function(box){
     var v=document.createElement('video'); v.src=box.getAttribute('data-video'); v.muted=true; v.loop=true; v.playsInline=true; v.autoplay=true; v.preload='metadata';
+    v.controls=true;                       // play/pausa, línea de tiempo y pantalla completa (controles nativos)
     var poster=box.getAttribute('data-poster'); if(poster) v.setAttribute('poster', poster);
     v.onloadeddata=function(){ box.classList.add('filled'); box.appendChild(v); v.play().catch(function(){}); };
     // si el archivo no existe, onloadeddata no dispara y el placeholder se queda
