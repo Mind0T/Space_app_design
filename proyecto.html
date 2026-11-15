@@ -150,6 +150,7 @@
       <a class="lnk" href="empatia.html">🧠 Mapa de empatía (Katya E.) →</a>
       <a class="lnk" href="manual-pitch.html">🎤 Manual de pitch ganador →</a>
       <a class="lnk prime" href="insights.html">📊 Insights para mentores →</a>
+      <a class="lnk prime" href="https://github.com/Taquit/Space-Challenge" target="_blank" rel="noopener">💻 Repositorio de la solución (GitHub) →</a>
     </div>
   </div>
 </header>
@@ -215,8 +216,8 @@
     </div>
     <div class="sub">División de responsabilidades</div>
     <div class="grid2">
-      <div class="card"><h3>📊 Machine Learning</h3><p>Procesa datos, pronostica valores y detecta anomalías (Rolling Mean/EWMA, Exponential Smoothing, ARIMA, Isolation Forest). Se empieza con modelos interpretables y se compara su desempeño.</p></div>
-      <div class="card"><h3>💬 Asistente (LLM)</h3><p>Explica las alertas, interpreta los cambios, da instrucciones simples para tomar mediciones, consulta protocolos documentados (RAG) y acompaña el seguimiento. No diagnostica: traduce y guía.</p></div>
+      <div class="card"><h3>📊 Series de tiempo (Chronos-2)</h3><p>Aprende la línea base de cada tripulante combinando un baseline simple (media móvil exponencial) con el modelo <b>Chronos-2</b>, que pronostica los valores esperados. Marca una <b>anomalía</b> cuando varias lecturas reales seguidas caen fuera del rango predicho (cuantiles 5%–95%) y, si hace falta, afina el modelo por usuario.</p></div>
+      <div class="card"><h3>💬 Asistente con RAG (LLM local)</h3><p>Responde dudas consultando documentación técnica (NASA y clínica) en PDF: recupera los fragmentos más relevantes con embeddings <b>BGE-M3</b> + índice <b>FAISS</b> y los pasa a un LLM servido en local por <b>LM Studio</b>, que contesta <b>citando la fuente</b> [archivo, pág.]. No diagnostica: traduce, explica y guía.</p></div>
     </div>
   </div>
 </section>
@@ -264,17 +265,17 @@
     <span class="numtag">07</span>
     <div class="eyebrow" style="margin-top:8px">Alcance y tecnología</div>
     <h2>Un MVP pequeño, fundamentado y funcional</h2>
-    <p>Para el tiempo del hackathon nos concentramos en dos indicadores principales — <b>frecuencia cardíaca en reposo</b> y <b>patrones de sueño</b> — trabajando con datos sintéticos que simulan ~14 días de mediciones, con patrones habituales y escenarios de anomalía. La arquitectura queda preparada para integrar dispositivos reales (Actiwatch, smartwatch) posteriormente.</p>
+    <p>Para el tiempo del hackathon trabajamos con tres frentes — <b>signos fisiológicos</b> (frecuencia cardíaca, SpO₂), <b>patrones de sueño</b> (dataset real de actigrafía) y <b>pruebas cognitivas</b> (PVT, DSST y Matrix) — sobre tres tripulantes de demostración (astro_1, astro_2, astro_3) cuyas lecturas se reproducen como si fueran en vivo mediante <em>streaming</em> (SSE). Todo corre <b>en local, sin internet y en CPU</b>, pensado para un entorno con retrasos de comunicación con la Tierra; la arquitectura queda lista para integrar dispositivos reales (Actiwatch, smartwatch).</p>
     <div class="sub">Stack tecnológico</div>
     <div class="stack">
       <span class="tech"><b>Python</b> · procesamiento</span>
       <span class="tech"><b>Pandas / NumPy</b></span>
-      <span class="tech"><b>Scikit-learn / Statsmodels</b> · forecasting</span>
+      <span class="tech"><b>Chronos-2</b> · forecasting de series</span>
+      <span class="tech"><b>BGE-M3 + FAISS</b> · RAG</span>
+      <span class="tech"><b>LM Studio</b> · LLM local (offline)</span>
+      <span class="tech"><b>FastAPI + SSE</b> · backend</span>
       <span class="tech"><b>React</b> · interfaz</span>
-      <span class="tech"><b>FastAPI</b> · backend</span>
-      <span class="tech"><b>Plotly</b> · visualización</span>
-      <span class="tech"><b>SQLite</b> · almacenamiento</span>
-      <span class="tech"><b>LLM + RAG</b> · asistente</span>
+      <span class="tech"><b>PyTorch (CPU)</b> · modelos</span>
     </div>
   </div>
 </section>
