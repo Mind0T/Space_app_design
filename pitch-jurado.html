@@ -153,6 +153,15 @@
   .ccard li{color:var(--ink-soft);font-size:.85rem;padding-left:14px;position:relative;line-height:1.36}
   .ccard li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--orbi)}
   .ccard li b{color:var(--ink)}
+  /* roadmap */
+  .road{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;position:relative;margin-top:8px}
+  .road::before{content:"";position:absolute;left:4%;right:4%;top:19px;height:2px;background:linear-gradient(90deg,var(--orbi),rgba(59,111,224,.15))}
+  .step{position:relative;display:flex;flex-direction:column;align-items:flex-start}
+  .step .dot2{width:40px;height:40px;border-radius:50%;background:var(--orbi);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:1rem;box-shadow:0 0 0 6px rgba(59,111,224,.14),0 8px 22px var(--orbi-glow);margin-bottom:14px;position:relative;z-index:1}
+  .step .ccard{width:100%;flex:1}
+  .step .ccard .ico{font-size:1.4rem;margin-bottom:6px}
+  .step .ccard h4{font-size:1.02rem}
+  .step .ccard p{font-size:.88rem}
   .member b{display:block;font-family:var(--font-display);font-weight:600;font-size:1.02rem}
   .member span{font-size:.86rem;color:var(--ink-soft)}
 
@@ -177,7 +186,8 @@
   .khint kbd{background:rgba(255,255,255,.7);border:1px solid var(--hairline);border-radius:6px;padding:2px 7px;font-family:var(--font-display);font-size:.7rem}
 
   @media(max-width:900px){
-    .cols,.two,.three,.team,.refs,.grid6,.grid4{grid-template-columns:1fr}
+    .cols,.two,.three,.team,.refs,.grid6,.grid4,.road{grid-template-columns:1fr}
+    .road::before{display:none}
     .slide{padding:58px 24px 86px}
     .khint{display:none}
   }
@@ -428,6 +438,22 @@
       <div class="two r" style="--d:.32s;margin-top:14px">
         <div class="card"><div class="k">Backend y entrega</div><p><b>FastAPI</b> expone todo y sirve la interfaz. <b>SSE</b> para datos en vivo y chat. Datos y modelos en archivos locales.</p></div>
         <div class="card"><div class="k">Local · offline · open-source</div><p>Cero nube, costo de infraestructura casi nulo. El LLM solo traduce; lo que decide es determinista y auditable.</p></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- 15 · Roadmap -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="tag r" style="--d:.05s">Roadmap</div>
+      <h2 class="qt r" style="--d:.12s">¿Qué sigue para <span class="hl">ORBITAL</span>?</h2>
+      <div class="road r" style="--d:.22s">
+        <div class="step"><div class="dot2">1</div><div class="ccard"><div class="ico">🧠</div><h4>Más baterías cognitivas</h4><p>Integrar más pruebas de evaluación cognitiva: atención, memoria, tiempo de reacción y estado de ánimo.</p></div></div>
+        <div class="step"><div class="dot2">2</div><div class="ccard"><div class="ico">📈</div><h4>Más parámetros que medir</h4><p>Sumar señales como SpO₂, variabilidad cardiaca, actividad y exposición a radiación.</p></div></div>
+        <div class="step"><div class="dot2">3</div><div class="ccard"><div class="ico">📚</div><h4>Más protocolos de salud</h4><p>Alimentar el asistente con más protocolos y guías clínicas, siempre citando la fuente.</p></div></div>
+        <div class="step"><div class="dot2">4</div><div class="ccard"><div class="ico">🎙️</div><h4>Voz a voz</h4><p>Interacción completa <b>speech-to-speech</b>: hablar con Orbi con las manos ocupadas, sin pantalla.</p></div></div>
+        <div class="step"><div class="dot2">5</div><div class="ccard"><div class="ico">⌚</div><h4>Multidispositivo</h4><p>Llevar ORBITAL a <b>móviles, tabletas y smartwatch</b>, sin perder el modo local y offline.</p></div></div>
       </div>
     </div>
   </section>
