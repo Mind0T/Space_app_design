@@ -137,7 +137,8 @@
 
   .team{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
   .member{background:var(--surface);border:1px solid var(--hairline);border-radius:16px;padding:18px 20px}
-  .member .av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--orbi),var(--orbi-deep));margin-bottom:12px}
+  .member .av{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--orbi),var(--orbi-deep));margin-bottom:12px}
+  .gracias{font-family:var(--font-display);font-weight:700;font-size:clamp(2.2rem,5.5vw,3.6rem);letter-spacing:-.02em;color:var(--orbi-deep);text-align:center;margin-top:26px}
   .member b{display:block;font-family:var(--font-display);font-weight:600;font-size:1.02rem}
   .member span{font-size:.86rem;color:var(--ink-soft)}
 
@@ -179,7 +180,6 @@
     <div class="wrap">
       <div class="cols">
         <div>
-          <div class="eyebrow r" style="--d:.05s">Pitch · 0:00–0:30 · El gancho</div>
           <div class="big-time r" style="--d:.15s">02:17</div>
           <h2 class="t r" style="--d:.25s">Katya está despierta en una nave rumbo a <span class="hl">Marte</span>.</h2>
           <p class="sub r" style="--d:.35s">Ninguna alarma ha sonado. Todos sus valores están dentro de lo normal.</p>
@@ -205,7 +205,6 @@
     <div class="wrap">
       <div class="cols">
         <div>
-          <div class="eyebrow r" style="--d:.05s">0:30–0:45 · La propuesta</div>
           <h2 class="t r" style="--d:.15s">Katya es un personaje. <span class="hl">El problema no.</span></h2>
           <p class="sub r" style="--d:.28s">Por eso creamos <b>ORBITAL</b>: un sistema que</p>
           <div class="stack r" style="--d:.4s" style2="margin-top:16px">
@@ -225,7 +224,6 @@
   <!-- 3 · ALCANCE -->
   <section class="slide">
     <div class="wrap">
-      <div class="eyebrow r" style="--d:.05s">0:45–1:35 · Alcance e influencia</div>
       <h2 class="t r" style="--d:.13s">Dos etapas. Toda la tripulación. Siempre <span class="hl">contra su propio patrón.</span></h2>
       <div class="chips r" style="--d:.24s" style2="margin-bottom:6px">
         <span class="chip">🌙 Sueño</span><span class="chip">🫀 Signos vitales</span><span class="chip">🧠 Cognición</span><span class="chip">🌡️ Temperatura</span>
@@ -252,7 +250,6 @@
   <!-- 4 · DEMO -->
   <section class="slide">
     <div class="wrap">
-      <div class="eyebrow r" style="--d:.05s">1:35–3:00 · Demo · Día 3</div>
       <h2 class="t r" style="--d:.13s">Una esfera tranquila y una sola frase.</h2>
       <div class="cols" style="align-items:start">
         <div class="ph video r" style="--d:.26s" data-video="assets/video/demo.mp4" data-poster="assets/video/demo-poster.jpg">
@@ -282,7 +279,6 @@
   <!-- 5 · VENTAJA -->
   <section class="slide">
     <div class="wrap">
-      <div class="eyebrow r" style="--d:.05s">3:00–4:00 · Ventaja y validación</div>
       <h2 class="t r" style="--d:.13s">Muchos sistemas confirman el daño. <span class="hl">ORBITAL mide antes.</span></h2>
       <p class="sub r" style="--d:.22s">Tres decisiones.</p>
       <div class="stack r" style="--d:.32s" style2="margin-top:14px">
@@ -296,7 +292,6 @@
   <!-- 6 · CIERRE (Orbi) -->
   <section class="slide dark" data-bg="dark">
     <div class="wrap" style="text-align:center;display:flex;flex-direction:column;align-items:center">
-      <div class="eyebrow r" style="--d:.05s">4:00–4:30 · Cierre</div>
       <div class="orbi-wrap r" style="--d:.2s;max-width:min(40vh,420px);margin:18px auto 6px"><canvas class="orbi" id="orbi6"></canvas></div>
       <div class="big-time r" style="--d:.3s">02:17</div>
       <p class="sub r" style="--d:.42s;margin-top:14px">No sabemos si ORBITAL habría cambiado el desenlace. Lo que sí sabemos es qué habría tenido en la mano: <b>el día 3, no las 02:17.</b></p>
@@ -308,9 +303,9 @@
   <!-- 7 · EQUIPO -->
   <section class="slide">
     <div class="wrap">
-      <div class="eyebrow r" style="--d:.05s">4:30–4:50 · Equipo</div>
-      <h2 class="t r" style="--d:.13s">Estudiantes del <span class="hl">IPN</span> — Sistemas Computacionales, IA y Ciencia de Datos.</h2>
-      <p class="sub r" style="--d:.22s">Equipo <b>Tacos de Asada</b>. Construimos en horas desde la predicción hasta la interfaz.</p>
+      <h2 class="t r" style="--d:.1s">Nosotros somos <span class="hl">ORBITAL</span>.</h2>
+      <p class="sub r" style="--d:.2s">Inteligencia de salud para la exploración espacial — <b>cuerpo y mente</b>.</p>
+      <p class="sub r" style="--d:.26s" style2="font-size:1rem;color:var(--ink-soft);margin-top:-6px">Equipo <b>Tacos de Asada</b> · IPN — Sistemas Computacionales, IA y Ciencia de Datos.</p>
       <div class="team r" style="--d:.34s">
         <div class="member"><div class="av" data-photo="grace-rojas"></div><b>Grace Rojas</b><span>Speaker · Investigación e ideación</span></div>
         <div class="member"><div class="av" data-photo="irving-soriano"></div><b>Irving Soriano</b><span>UX · Frontend · Design thinking</span></div>
@@ -319,14 +314,13 @@
         <div class="member"><div class="av" data-photo="rodrigo-roldan"></div><b>Rodrigo Roldán</b><span>Ingeniero · Programador</span></div>
         <div class="member"><div class="av" data-photo="rodrigo-ramirez"></div><b>Rodrigo Ramírez</b><span>Ingeniero · Programador</span></div>
       </div>
-      <p class="quiet r" style="--d:.5s">Construido para NASA Space Apps Challenge · CDMX 2026.</p>
+      <div class="gracias r" style="--d:.6s">Gracias.</div>
     </div>
   </section>
 
   <!-- 8 · REFERENCIAS -->
   <section class="slide">
     <div class="wrap">
-      <div class="eyebrow r" style="--d:.05s">Referencias utilizadas</div>
       <h2 class="t r" style="--d:.13s">En qué nos apoyamos.</h2>
       <div class="refs r" style="--d:.24s">
         <a class="ref" href="https://www.nasa.gov/hrp/" target="_blank" rel="noopener"><span class="ri"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>NASA · Human Research Program</b><span>Peligros, riesgos e investigación de salud en vuelos espaciales.</span></span></a>
