@@ -327,7 +327,6 @@
   <button id="next" aria-label="Siguiente"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <button id="fs" aria-label="Pantalla completa"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 9V5a1 1 0 011-1h4M20 9V5a1 1 0 00-1-1h-4M4 15v4a1 1 0 001 1h4M20 15v4a1 1 0 01-1 1h-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 </div>
-<div class="khint" id="khint"><kbd>←</kbd><kbd>→</kbd> avanza · <kbd>F</kbd> pantalla completa</div>
 
 <script>
   // aplicar estilos secundarios de reveals (atributo style2) sin pelear con el inline de --d
@@ -336,7 +335,7 @@
   var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
   var N = slides.length, i = 0;
   var deck = document.getElementById('deck'), prog = document.getElementById('prog'), cur = document.getElementById('cur');
-  var prevB = document.getElementById('prev'), nextB = document.getElementById('next'), kh = document.getElementById('khint');
+  var prevB = document.getElementById('prev'), nextB = document.getElementById('next'), kh = document.getElementById('khint') || {classList:{add:function(){}}};
   document.getElementById('total').textContent = String(N).padStart(2,'0');
   function pad(n){ return String(n+1).padStart(2,'0'); }
   function go(n){
