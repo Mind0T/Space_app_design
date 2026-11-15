@@ -138,6 +138,21 @@
   .member .av{width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,var(--orbi),var(--orbi-deep));margin:0 auto 12px}
   .gracias{font-family:var(--font-display);font-weight:700;font-size:clamp(2.4rem,5vw,3.4rem);letter-spacing:.02em;color:var(--orbi-deep);display:flex;align-items:center;justify-content:center;min-height:100%}
   .logo-inline{height:.9em;width:auto;display:inline-block;position:relative;top:.04em}
+  /* anexo · preguntas del jurado */
+  .tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-display);font-weight:600;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--orbi);background:rgba(59,111,224,.1);border:1px solid rgba(59,111,224,.22);border-radius:999px;padding:5px 13px;margin-bottom:14px}
+  .qt{font-family:var(--font-display);font-weight:700;font-size:clamp(1.5rem,3.2vw,2.3rem);line-height:1.06;margin-bottom:16px;color:var(--ink)}
+  .slide.dark .qt{color:#fff}
+  .grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .grid4{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .ccard{background:var(--surface);border:1px solid var(--hairline);border-radius:16px;padding:16px 18px}
+  .ccard .k{font-family:var(--font-display);font-weight:600;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--orbi);margin-bottom:6px}
+  .ccard h4{font-size:1rem;font-weight:600;margin-bottom:5px;color:var(--ink)}
+  .ccard p{color:var(--ink-soft);font-size:.87rem;line-height:1.42}
+  .ccard p b{color:var(--ink)}
+  .ccard ul{list-style:none;margin-top:4px;display:grid;gap:3px}
+  .ccard li{color:var(--ink-soft);font-size:.85rem;padding-left:14px;position:relative;line-height:1.36}
+  .ccard li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--orbi)}
+  .ccard li b{color:var(--ink)}
   .member b{display:block;font-family:var(--font-display);font-weight:600;font-size:1.02rem}
   .member span{font-size:.86rem;color:var(--ink-soft)}
 
@@ -162,7 +177,7 @@
   .khint kbd{background:rgba(255,255,255,.7);border:1px solid var(--hairline);border-radius:6px;padding:2px 7px;font-family:var(--font-display);font-size:.7rem}
 
   @media(max-width:900px){
-    .cols,.two,.three,.team,.refs{grid-template-columns:1fr}
+    .cols,.two,.three,.team,.refs,.grid6,.grid4{grid-template-columns:1fr}
     .slide{padding:58px 24px 86px}
     .khint{display:none}
   }
@@ -316,6 +331,111 @@
     </div>
   </section>
 
+  <!-- 8 · ANEXO · divisor -->
+  <section class="slide dark" data-bg="dark">
+    <div class="wrap" style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px">
+      <div class="tag r" style="--d:.05s;color:#7fa8f0;background:rgba(126,168,240,.12);border-color:rgba(126,168,240,.25)">Anexo</div>
+      <h2 class="t r" style="--d:.12s;color:#fff">Preguntas del jurado</h2>
+      <p class="sub r" style="--d:.22s;color:#9fb3d6;max-width:48ch;margin:0 auto">Material de respaldo: modelo de negocio, mercado, decisiones, diferenciación, resiliencia y tecnología.</p>
+    </div>
+  </section>
+
+  <!-- 9 · Modelo de negocio -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="tag r" style="--d:.05s">Pregunta · Modelo de negocio</div>
+      <h2 class="qt r" style="--d:.12s">¿Cómo se sostiene el negocio?</h2>
+      <div class="grid6 r" style="--d:.22s">
+        <div class="ccard"><div class="k">Costo del MVP</div><p>≈ <b>$0 en efectivo</b>: open-source y corre local. ~210 h-persona (~$42k MXN de valor).</p></div>
+        <div class="ccard"><div class="k">Capital humano</div><p>Equipo de 6. Para un piloto: ~4 de tiempo completo, 6 meses ≈ <b>$0.9–1.1M MXN</b>.</p></div>
+        <div class="ccard"><div class="k">Precio</div><ul><li>Agencias: <b>$50k–250k USD/año</b></li><li>Terrestre: <b>$500–2,000 USD/sitio·mes</b></li><li>Contratos de I+D (no dilutivo)</li></ul></div>
+        <div class="ccard"><div class="k">Inversión a piloto</div><p>12–18 meses ≈ <b>$105k–165k USD</b>: equipo, wearables, validación, legal, cómputo, comercial.</p></div>
+        <div class="ccard"><div class="k">Financiamiento</div><p>No dilutivo primero (SECIHTI, incubadora IPN, premios) → piloto pagado/LOI → ángel/pre-seed.</p></div>
+        <div class="ccard"><div class="k">Retorno (ROI)</div><p>Equilibrio con 4–6 clientes. Y por <b>valor evitado</b>: una evacuación o EVA abortada paga años de licencia.</p></div>
+      </div>
+      <p class="quiet r" style="--d:.34s">Cifras ilustrativas con supuestos razonables · producto dual-use (espacio + entornos remotos en la Tierra).</p>
+    </div>
+  </section>
+
+  <!-- 10 · Mercado -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="tag r" style="--d:.05s">Pregunta · Mercado</div>
+      <h2 class="qt r" style="--d:.12s">Además de la NASA, ¿dónde más?</h2>
+      <div class="grid4 r" style="--d:.22s">
+        <div class="ccard"><div class="k">Espacio</div><ul><li>Agencias: ESA, CSA, JAXA, ISRO, MBRSC, AEM</li><li>Privado: Axiom, Vast, Sierra, SpaceX, Blue Origin</li><li>Turismo espacial</li></ul></div>
+        <div class="ccard"><div class="k">Entornos análogos (Tierra)</div><ul><li>Estaciones antárticas y polares</li><li>Submarinos y armada</li><li>Offshore, barcos, cruceros</li><li>Minería remota · bases militares</li></ul></div>
+        <div class="ccard"><div class="k">Salud y desempeño</div><ul><li>Telemedicina rural</li><li>Adultos mayores · crónicos</li><li>Salud ocupacional de alto estrés</li><li>Alto rendimiento deportivo</li></ul></div>
+        <div class="ccard"><div class="k">Ángulo México</div><ul><li>Pemex · plataformas en el Golfo</li><li>Minería</li><li>IMSS-Bienestar · comunidades rurales</li><li>Agencia Espacial Mexicana</li></ul></div>
+      </div>
+      <p class="quiet r" style="--d:.34s">El mercado terrestre financia la ambición espacial: mismo problema — aislamiento, sin médico, offline.</p>
+    </div>
+  </section>
+
+  <!-- 11 · Decisiones -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="tag r" style="--d:.05s">Pregunta · Proceso</div>
+      <h2 class="qt r" style="--d:.12s">¿Cómo tomamos las decisiones?</h2>
+      <div class="three r" style="--d:.22s">
+        <div class="card"><div class="k">1 · Empatizar</div><h3>Mapa de empatía de Katya E.</h3><p>El dolor no es falta de datos: es falta de contexto y soledad médica.</p></div>
+        <div class="card"><div class="k">2 · Definir</div><h3>Causa raíz + matriz de decisión</h3><p>Calificamos cada idea (1–3) contra dos restricciones: dato de la NASA y prototipo en un día.</p></div>
+        <div class="card"><div class="k">3 · Idear</div><h3>De 7 ideas a 1</h3><p>Ronda en silencio → Dato · Canal · Momento → idea finalista.</p></div>
+      </div>
+      <div class="card r" style="--d:.34s;margin-top:14px"><div class="k">Base técnica</div><p>Fuentes de la NASA (HRP) y <b>gestión de riesgos</b>: matriz probabilidad × severidad, jerarquía de controles, GP = C × E × P (William Fine) y GR = medido ÷ límite. Cada rasgo de ORBITAL es trazable a un eslabón anterior.</p></div>
+    </div>
+  </section>
+
+  <!-- 12 · Diferenciación -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="tag r" style="--d:.05s">Pregunta · Ventaja</div>
+      <h2 class="qt r" style="--d:.12s">¿Qué tenemos que no tienen otros?</h2>
+      <div class="grid6 r" style="--d:.22s">
+        <div class="ccard"><h4>Línea base individual</h4><p>Te comparamos contigo, no con un promedio.</p></div>
+        <div class="ccard"><h4>Cuerpo y mente</h4><p>Triaje ¿cuerpo o mente?, al mismo nivel.</p></div>
+        <div class="ccard"><h4>Mide antes del daño</h4><p>Indicadores adelantados y deriva lenta.</p></div>
+        <div class="ccard"><h4>Calma por diseño</h4><p>No estresar: una cosa a la vez.</p></div>
+        <div class="ccard"><h4>Local y offline</h4><p>Sin nube, a 200 millones de km.</p></div>
+        <div class="ccard"><h4>Asistente con fuentes</h4><p>Traduce y guía citando documento y página; no diagnostica.</p></div>
+      </div>
+      <p class="quiet r" style="--d:.34s">El foso no es una pieza: es la <b style="color:var(--ink)">combinación</b>, y cada decisión tiene fundamento.</p>
+    </div>
+  </section>
+
+  <!-- 13 · Resiliencia -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="tag r" style="--d:.05s">Pregunta · Resiliencia</div>
+      <h2 class="qt r" style="--d:.12s">¿Y si falla? Cómo lo resuelve la tripulación</h2>
+      <div class="grid6 r" style="--d:.22s">
+        <div class="ccard"><h4>Degrada con gracia</h4><p>Capas independientes: si el asistente cae, la salud sigue.</p></div>
+        <div class="ccard"><h4>Red de seguridad clínica</h4><p>Si el modelo falla, los límites clínicos siguen; nunca anulan un valor peligroso.</p></div>
+        <div class="ccard"><h4>Núcleo determinista</h4><p>Los números se calculan sin IA; el LLM solo redacta y se verifica contra la fuente.</p></div>
+        <div class="ccard"><h4>Local y offline</h4><p>Un corte con la Tierra no lo rompe.</p></div>
+        <div class="ccard"><h4>Reinicio y ajuste simples</h4><p>Se reinicia con un comando; umbrales por archivo, sin tocar código. El estado se guarda.</p></div>
+        <div class="ccard"><h4>Humano + Tierra de respaldo</h4><p>Es orientativo; la tripulación conserva sus protocolos.</p></div>
+      </div>
+      <p class="quiet r" style="--d:.34s">Es un MVP; una versión de vuelo añadiría redundancia y auto-pruebas (watchdog).</p>
+    </div>
+  </section>
+
+  <!-- 14 · Tecnología -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="tag r" style="--d:.05s">Pregunta · Tecnología</div>
+      <h2 class="qt r" style="--d:.12s">¿Cómo está constituida a nivel de tecnología?</h2>
+      <div class="two r" style="--d:.22s">
+        <div class="card"><div class="k">Motor de salud · series de tiempo</div><p><b>Chronos-2</b> + baseline (media móvil exponencial) aprenden la línea base por persona. <b>Isolation Forest</b> y z-score detectan anomalías y deriva lenta. Capa de límites clínicos e inferencias deterministas con códigos.</p></div>
+        <div class="card"><div class="k">Asistente · RAG + LLM local</div><p>PDFs de la NASA → <b>BGE-M3</b> → índice <b>FAISS</b>. Recupera fragmentos y un <b>LLM local</b> (Qwen vía LM Studio) redacta citando archivo y página. Búsqueda obligatoria: no inventa.</p></div>
+      </div>
+      <div class="two r" style="--d:.32s;margin-top:14px">
+        <div class="card"><div class="k">Backend y entrega</div><p><b>FastAPI</b> expone todo y sirve la interfaz. <b>SSE</b> para datos en vivo y chat. Datos y modelos en archivos locales.</p></div>
+        <div class="card"><div class="k">Local · offline · open-source</div><p>Cero nube, costo de infraestructura casi nulo. El LLM solo traduce; lo que decide es determinista y auditable.</p></div>
+      </div>
+      <p class="quiet r" style="--d:.42s">Sensores → modelo personal + límites clínicos → inferencias → interfaz&nbsp;&nbsp;·&nbsp;&nbsp;PDFs → BGE-M3 → FAISS → LLM → respuesta con fuentes</p>
+    </div>
+  </section>
 
 </div>
 
