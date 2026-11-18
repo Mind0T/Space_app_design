@@ -19,3 +19,10 @@ Abrir `index.html` en cualquier navegador. Es una página autocontenida (solo re
 
 ## Identidad visual
 Basada en la presentación oficial *Agenda General* de Space Apps CDMX: navy profundo, azul rey, acento lima-amarillo, anillos concéntricos tipo radar y tipografía grotesca pesada (Archivo + Overpass).
+
+## 👨‍💻 Autor
+
+**Irving Soriano** — Estudiante de la Licenciatura en Ciencia de Datos en la Escuela Superior de Cómputo (ESCOM) del IPN.
+
+* **GitHub**: [Mind0T](https://github.com/Mind0T)
+* **LinkedIn**: [Irving Soriano](https://www.linkedin.com/in/irving-soriano)
